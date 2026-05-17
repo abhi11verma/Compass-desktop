@@ -20,6 +20,7 @@ Detailed rules live in `/context/`. Read the relevant file before starting any t
 | [`context/folder-structure.md`](context/folder-structure.md) | Deciding where a new file goes |
 | [`context/coding-rules.md`](context/coding-rules.md) | TypeScript, imports, component conventions |
 | [`context/shadcn-guide.md`](context/shadcn-guide.md) | Adding UI components or changing the theme |
+| [`context/features.md`](context/features.md) | Full feature inventory — data model, store actions, UI behaviour, CSS namespaces |
 
 ## Critical Rules (inline summary)
 
