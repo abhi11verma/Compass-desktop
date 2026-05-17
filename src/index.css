@@ -225,7 +225,9 @@ html, body, #root {
 .fb-t { background: #3A9190; }
 
 .f-body { flex: 1; min-width: 0; }
-.f-name { font-size: 13px; font-weight: 400; color: var(--ink-1); margin-bottom: 3px; letter-spacing: 0.01em; }
+.f-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 3px; }
+.f-name { font-size: 13px; font-weight: 400; color: var(--ink-1); letter-spacing: 0.01em; }
+.f-tags { display: flex; flex-wrap: wrap; gap: 4px; flex-shrink: 0; }
 .f-proc { font-size: 11.5px; color: var(--ink-2); font-weight: 300; line-height: 1.5; margin-bottom: 8px; }
 .f-tasks { display: flex; flex-direction: column; gap: 2px; margin-bottom: 10px; }
 .ft-row { display: flex; align-items: baseline; gap: 6px; }

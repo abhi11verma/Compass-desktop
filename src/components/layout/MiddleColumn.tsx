@@ -43,7 +43,14 @@ export function MiddleColumn() {
           <div className="focus-card" key={f.id} onClick={() => { openFocusDetail(f.id) }}>
             <div className={`f-bar ${COLOR_CLASS[f.color]}`} />
             <div className="f-body">
-              <div className="f-name">{f.name}</div>
+              <div className="f-top">
+                <div className="f-name">{f.name}</div>
+                {f.tags.length > 0 && (
+                  <div className="f-tags">
+                    {f.tags.map((t) => <span className="chip chip-tag" key={t}>{t}</span>)}
+                  </div>
+                )}
+              </div>
               <div className="f-proc">{f.process}</div>
 
               {topTasks.length > 0 && (
@@ -62,9 +69,6 @@ export function MiddleColumn() {
                 {captureCount > 0 && (
                   <span className="chip chip-info">{captureCount} {captureCount === 1 ? 'capture' : 'captures'}</span>
                 )}
-                {f.tags.length > 0 ? (
-                  f.tags.map((t) => <span className="chip chip-tag" key={t}>{t}</span>)
-                ) : null}
               </div>
             </div>
           </div>
