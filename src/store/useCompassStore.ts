@@ -71,8 +71,12 @@ interface CompassState {
   setCaptureOpen: (open: boolean) => void
   toggleHabit: (id: string) => void
   dismissReminder: (id: string) => void
-  addCapture: (text: string, routedTo: string | null) => void
+  addCapture: (text: string, routedTo: string | null, processed?: boolean) => void
   resetDailyHabits: () => void
+  addFocus: (name: string, process: string) => void
+  addHabit: (name: string) => void
+  addPrinciple: (cue: string) => void
+  addValue: (name: string) => void
 }
 
 const SEED_VALUES: Value[] = [
@@ -187,16 +191,16 @@ export const useCompassStore = create<CompassState>()(
           ),
         })),
 
-      addCapture: (text, routedTo) =>
+      addCapture: (text, routedTo, processed = false) =>
         set((state) => ({
           captures: [
             ...state.captures,
             {
-              id: `cap-${Date.now()}`,
+              id: `cap-${String(Date.now())}`,
               text,
               routedTo,
               createdAt: new Date().toISOString(),
-              processed: false,
+              processed,
             },
           ],
         })),
@@ -204,6 +208,48 @@ export const useCompassStore = create<CompassState>()(
       resetDailyHabits: () =>
         set((state) => ({
           habits: state.habits.map((h) => ({ ...h, completedToday: false })),
+        })),
+
+      addFocus: (name, process) =>
+        set((state) => ({
+          focuses: [
+            ...state.focuses,
+            {
+              id: `f-${String(Date.now())}`,
+              name,
+              process,
+              color: 'green',
+              status: 'active',
+              daysActive: 0,
+              streakDays: [],
+              tasks: [],
+              captures: [],
+            },
+          ],
+        })),
+
+      addHabit: (name) =>
+        set((state) => ({
+          habits: [
+            ...state.habits,
+            { id: `h-${String(Date.now())}`, name, streakCount: 0, completedToday: false, history: [] },
+          ],
+        })),
+
+      addPrinciple: (cue) =>
+        set((state) => ({
+          principles: [
+            ...state.principles,
+            { id: `p-${String(Date.now())}`, cue, daysActive: 0, status: 'queue' },
+          ],
+        })),
+
+      addValue: (name) =>
+        set((state) => ({
+          values: [
+            ...state.values,
+            { id: `v-${String(Date.now())}`, name, description: '' },
+          ],
         })),
     }),
     { name: 'compass-store' }

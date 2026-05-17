@@ -350,6 +350,49 @@ html, body, #root {
 .hd.ful { background: rgba(255,255,255,0.52); }
 .hl-streak { font-family: var(--mono); font-size: 10px; color: var(--ink-3); flex-shrink: 0; }
 
+/* ── ADD ROW (inline forms in What view) ── */
+.add-btn {
+  width: 100%; display: flex; align-items: center; gap: 6px;
+  padding: 10px 15px;
+  background: transparent; border: none; border-top: 1px solid var(--border);
+  color: var(--ink-3); font-size: 12px; font-family: var(--sans);
+  cursor: pointer; text-align: left; transition: color 0.1s, background 0.1s;
+}
+.add-btn:hover { color: var(--ink-2); background: var(--bg-hover); }
+.add-btn-icon { font-size: 14px; line-height: 1; opacity: 0.6; }
+
+.add-form {
+  border-top: 1px solid var(--border);
+  padding: 11px 15px; display: flex; flex-direction: column; gap: 7px;
+  background: var(--bg-active);
+}
+.add-form-input {
+  width: 100%; background: transparent; border: none; outline: none;
+  font-size: 13px; color: var(--ink-1); font-family: var(--sans);
+  font-weight: 300;
+}
+.add-form-input::placeholder { color: var(--ink-3); }
+.add-form-input.sub { font-size: 11.5px; color: var(--ink-2); }
+.add-form-foot {
+  display: flex; align-items: center; gap: 8px; margin-top: 2px;
+}
+.add-form-save {
+  font-size: 11px; color: var(--ink-1);
+  background: var(--bg-hover);
+  border: 1px solid var(--border-mid);
+  border-radius: 5px; padding: 4px 12px;
+  cursor: pointer; font-family: var(--sans);
+  transition: border-color 0.1s;
+}
+.add-form-save:hover { border-color: rgba(255,255,255,0.24); }
+.add-form-cancel {
+  font-size: 11px; color: var(--ink-3);
+  background: transparent; border: none;
+  cursor: pointer; font-family: var(--sans);
+  transition: color 0.1s; padding: 4px 6px;
+}
+.add-form-cancel:hover { color: var(--ink-2); }
+
 /* ══ WHO VIEW ══ */
 .who-view {
   flex: 1;
