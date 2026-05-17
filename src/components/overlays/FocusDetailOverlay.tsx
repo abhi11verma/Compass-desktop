@@ -53,6 +53,7 @@ export function FocusDetailOverlay() {
     updateFocus,
     deleteFocus,
     addTask,
+    updateTask,
     updateTaskStatus,
     deleteTask,
   } = useCompassStore()
@@ -65,6 +66,8 @@ export function FocusDetailOverlay() {
   const [tagsText, setTagsText] = useState('')
   const [newTask, setNewTask] = useState('')
   const [confirmDelete, setConfirmDelete] = useState(false)
+  const [editingTaskId, setEditingTaskId] = useState<string | null>(null)
+  const [editingTaskVal, setEditingTaskVal] = useState('')
 
   const processRef = useRef<HTMLTextAreaElement>(null)
   const addTaskRef = useRef<HTMLInputElement>(null)
@@ -173,7 +176,30 @@ export function FocusDetailOverlay() {
         <div className="fd-tasks">
           {focus.tasks.map((task) => (
             <div className="td-row" key={task.id}>
-              <span className={`td-text${task.status === 'done' ? ' done' : ''}`}>{task.text}</span>
+              {editingTaskId === task.id ? (
+                <input
+                  autoFocus
+                  className="td-edit-input"
+                  value={editingTaskVal}
+                  onChange={(e) => { setEditingTaskVal(e.target.value) }}
+                  onBlur={() => {
+                    const trimmed = editingTaskVal.trim()
+                    if (trimmed) updateTask(focus.id, task.id, trimmed)
+                    setEditingTaskId(null)
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') e.currentTarget.blur()
+                    if (e.key === 'Escape') { setEditingTaskId(null) }
+                  }}
+                />
+              ) : (
+                <span
+                  className={`td-text${task.status === 'done' ? ' done' : ''}`}
+                  onClick={() => { setEditingTaskId(task.id); setEditingTaskVal(task.text) }}
+                >
+                  {task.text}
+                </span>
+              )}
               <select
                 className={`td-status-select ${STATUS_CLASS[task.status]}`}
                 value={task.status}

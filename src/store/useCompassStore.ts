@@ -84,6 +84,7 @@ interface CompassState {
   addTask: (focusId: string, text: string) => void
   updateTaskStatus: (focusId: string, taskId: string, status: TaskStatus) => void
   deleteTask: (focusId: string, taskId: string) => void
+  updateTask: (focusId: string, taskId: string, text: string) => void
   addHabit: (name: string) => void
   addPrinciple: (cue: string) => void
   addValue: (name: string) => void
@@ -286,6 +287,15 @@ export const useCompassStore = create<CompassState>()(
           focuses: state.focuses.map((f) =>
             f.id === focusId
               ? { ...f, tasks: f.tasks.filter((t) => t.id !== taskId) }
+              : f
+          ),
+        })),
+
+      updateTask: (focusId, taskId, text) =>
+        set((state) => ({
+          focuses: state.focuses.map((f) =>
+            f.id === focusId
+              ? { ...f, tasks: f.tasks.map((t) => (t.id === taskId ? { ...t, text } : t)) }
               : f
           ),
         })),
