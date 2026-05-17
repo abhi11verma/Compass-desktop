@@ -1,11 +1,12 @@
-import { useCompassStore } from '@/store/useCompassStore'
-import { useKeyboard } from '@/hooks/useKeyboard'
-import { useDailyReset } from '@/hooks/useDailyReset'
 import { Topbar } from '@/components/layout/Topbar'
+import { CaptureOverlay } from '@/components/overlays/CaptureOverlay'
+import { FocusDetailOverlay } from '@/components/overlays/FocusDetailOverlay'
 import { NowView } from '@/components/views/NowView'
 import { WhatView } from '@/components/views/WhatView'
 import { WhoView } from '@/components/views/WhoView'
-import { CaptureOverlay } from '@/components/overlays/CaptureOverlay'
+import { useDailyReset } from '@/hooks/useDailyReset'
+import { useKeyboard } from '@/hooks/useKeyboard'
+import { useCompassStore } from '@/store/useCompassStore'
 
 export function App() {
   const view = useCompassStore((s) => s.view)
@@ -19,6 +20,7 @@ export function App() {
       {view === 'what' && <WhatView />}
       {view === 'who' && <WhoView />}
       <CaptureOverlay />
+      <FocusDetailOverlay />
     </div>
   )
 }

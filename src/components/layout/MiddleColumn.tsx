@@ -17,7 +17,7 @@ function StreakDots({ days }: { days: number[] }) {
 }
 
 export function MiddleColumn() {
-  const { focuses } = useCompassStore()
+  const { focuses, openFocusDetail } = useCompassStore()
   const active = focuses.filter((f) => f.status !== 'parked')
 
   return (
@@ -31,7 +31,7 @@ export function MiddleColumn() {
         const taskCount = f.tasks.length
         const captureCount = f.captures.length
         return (
-          <div className="focus-card" key={f.id}>
+          <div className="focus-card" key={f.id} onClick={() => { openFocusDetail(f.id) }}>
             <div className={`f-bar ${COLOR_CLASS[f.color]}`} />
             <div className="f-body">
               <div className="f-name">{f.name}</div>
@@ -41,7 +41,9 @@ export function MiddleColumn() {
                 {captureCount > 0 && (
                   <span className="chip chip-info">{captureCount} {captureCount === 1 ? 'capture' : 'captures'}</span>
                 )}
-                {f.status === 'trying' && (
+                {f.tags.length > 0 ? (
+                  f.tags.map((t) => <span className="chip chip-tag" key={t}>{t}</span>)
+                ) : f.status === 'trying' && (
                   <span className="chip chip-warn">Trying</span>
                 )}
                 <StreakDots days={f.streakDays} />

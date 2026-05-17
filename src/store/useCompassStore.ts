@@ -14,10 +14,12 @@ export type Principle = {
   status: 'active' | 'queue' | 'retired'
 }
 
+export type TaskStatus = 'backlog' | 'todo' | 'inprogress' | 'done' | 'parked'
+
 export type Task = {
   id: string
   text: string
-  done: boolean
+  status: TaskStatus
 }
 
 export type Capture = {
@@ -32,6 +34,7 @@ export type Focus = {
   id: string
   name: string
   process: string
+  tags: string[]
   color: 'green' | 'indigo' | 'amber'
   status: 'active' | 'trying' | 'parked'
   daysActive: number
@@ -60,6 +63,7 @@ type View = 'now' | 'what' | 'who'
 interface CompassState {
   view: View
   captureOpen: boolean
+  focusDetailId: string | null
   values: Value[]
   principles: Principle[]
   focuses: Focus[]
@@ -69,11 +73,17 @@ interface CompassState {
 
   setView: (view: View) => void
   setCaptureOpen: (open: boolean) => void
+  openFocusDetail: (id: string | null) => void
   toggleHabit: (id: string) => void
   dismissReminder: (id: string) => void
   addCapture: (text: string, routedTo: string | null, processed?: boolean) => void
   resetDailyHabits: () => void
   addFocus: (name: string, process: string) => void
+  updateFocus: (id: string, updates: { name?: string; process?: string; tags?: string[] }) => void
+  deleteFocus: (id: string) => void
+  addTask: (focusId: string, text: string) => void
+  updateTaskStatus: (focusId: string, taskId: string, status: TaskStatus) => void
+  deleteTask: (focusId: string, taskId: string) => void
   addHabit: (name: string) => void
   addPrinciple: (cue: string) => void
   addValue: (name: string) => void
@@ -95,12 +105,12 @@ const SEED_PRINCIPLES: Principle[] = [
 
 const SEED_FOCUSES: Focus[] = [
   {
-    id: 'f1', name: 'Building health', color: 'green', status: 'active', daysActive: 14,
+    id: 'f1', name: 'Building health', color: 'green', status: 'active', daysActive: 14, tags: [],
     process: 'Morning walk daily · no phone first hour · cook at home 5×',
     streakDays: [1, 0, 1, 2, 2, 3, 3],
     tasks: [
-      { id: 't1', text: 'Schedule physio appointment', done: false },
-      { id: 't2', text: 'Buy blender', done: false },
+      { id: 't1', text: 'Schedule physio appointment', status: 'todo' },
+      { id: 't2', text: 'Buy blender', status: 'backlog' },
     ],
     captures: [
       { id: 'c1', text: 'Try cold shower protocol', routedTo: 'f1', createdAt: new Date().toISOString(), processed: false },
@@ -108,29 +118,29 @@ const SEED_FOCUSES: Focus[] = [
     ],
   },
   {
-    id: 'f2', name: 'Writing the essay', color: 'indigo', status: 'active', daysActive: 6,
+    id: 'f2', name: 'Writing the essay', color: 'indigo', status: 'active', daysActive: 6, tags: [],
     process: 'One session daily · draft first, shape later',
     streakDays: [0, 0, 1, 2, 2, 3, 3],
     tasks: [
-      { id: 't3', text: 'Finish intro section', done: false },
-      { id: 't4', text: 'Find 2 more citations', done: false },
-      { id: 't5', text: 'Send draft to Priya', done: false },
+      { id: 't3', text: 'Finish intro section', status: 'inprogress' },
+      { id: 't4', text: 'Find 2 more citations', status: 'todo' },
+      { id: 't5', text: 'Send draft to Priya', status: 'backlog' },
     ],
     captures: [
       { id: 'c3', text: 'Add Bailey quote to section 3', routedTo: 'f2', createdAt: new Date().toISOString(), processed: false },
     ],
   },
   {
-    id: 'f3', name: 'Learning AI', color: 'amber', status: 'trying', daysActive: 3,
+    id: 'f3', name: 'Learning AI', color: 'amber', status: 'trying', daysActive: 3, tags: ['Trying'],
     process: 'One chapter or tutorial daily · ends in 11 days',
     streakDays: [0, 0, 0, 2, 2, 3, 3],
     tasks: [
-      { id: 't6', text: 'Complete transformer architecture chapter', done: false },
+      { id: 't6', text: 'Complete transformer architecture chapter', status: 'todo' },
     ],
     captures: [],
   },
   {
-    id: 'f4', name: 'Portuguese', color: 'indigo', status: 'parked', daysActive: 0,
+    id: 'f4', name: 'Portuguese', color: 'indigo', status: 'parked', daysActive: 0, tags: [],
     process: 'Parked — revisit when travel comes up',
     streakDays: [0, 0, 0, 0, 0, 0, 0],
     tasks: [],
@@ -161,6 +171,7 @@ export const useCompassStore = create<CompassState>()(
     (set) => ({
       view: 'now',
       captureOpen: false,
+      focusDetailId: null,
       values: SEED_VALUES,
       principles: SEED_PRINCIPLES,
       focuses: SEED_FOCUSES,
@@ -170,6 +181,7 @@ export const useCompassStore = create<CompassState>()(
 
       setView: (view) => set({ view }),
       setCaptureOpen: (open) => set({ captureOpen: open }),
+      openFocusDetail: (id) => set({ focusDetailId: id }),
 
       toggleHabit: (id) =>
         set((state) => ({
@@ -192,18 +204,27 @@ export const useCompassStore = create<CompassState>()(
         })),
 
       addCapture: (text, routedTo, processed = false) =>
-        set((state) => ({
-          captures: [
-            ...state.captures,
-            {
-              id: `cap-${String(Date.now())}`,
-              text,
-              routedTo,
-              createdAt: new Date().toISOString(),
-              processed,
-            },
-          ],
-        })),
+        set((state) => {
+          const isFocusRoute = routedTo !== null && routedTo !== 'inbox'
+          const newTask: Task = { id: `t-${String(Date.now())}`, text, status: 'backlog' }
+          return {
+            captures: [
+              ...state.captures,
+              {
+                id: `cap-${String(Date.now())}`,
+                text,
+                routedTo,
+                createdAt: new Date().toISOString(),
+                processed: isFocusRoute ? true : processed,
+              },
+            ],
+            focuses: isFocusRoute
+              ? state.focuses.map((f) =>
+                  f.id === routedTo ? { ...f, tasks: [...f.tasks, newTask] } : f
+                )
+              : state.focuses,
+          }
+        }),
 
       resetDailyHabits: () =>
         set((state) => ({
@@ -218,6 +239,7 @@ export const useCompassStore = create<CompassState>()(
               id: `f-${String(Date.now())}`,
               name,
               process,
+              tags: [],
               color: 'green',
               status: 'active',
               daysActive: 0,
@@ -226,6 +248,46 @@ export const useCompassStore = create<CompassState>()(
               captures: [],
             },
           ],
+        })),
+
+      updateFocus: (id, updates) =>
+        set((state) => ({
+          focuses: state.focuses.map((f) =>
+            f.id === id ? { ...f, ...updates } : f
+          ),
+        })),
+
+      deleteFocus: (id) =>
+        set((state) => ({
+          focuses: state.focuses.filter((f) => f.id !== id),
+          focusDetailId: null,
+        })),
+
+      addTask: (focusId, text) =>
+        set((state) => ({
+          focuses: state.focuses.map((f) =>
+            f.id === focusId
+              ? { ...f, tasks: [...f.tasks, { id: `t-${String(Date.now())}`, text, status: 'backlog' }] }
+              : f
+          ),
+        })),
+
+      updateTaskStatus: (focusId, taskId, status) =>
+        set((state) => ({
+          focuses: state.focuses.map((f) =>
+            f.id === focusId
+              ? { ...f, tasks: f.tasks.map((t) => (t.id === taskId ? { ...t, status } : t)) }
+              : f
+          ),
+        })),
+
+      deleteTask: (focusId, taskId) =>
+        set((state) => ({
+          focuses: state.focuses.map((f) =>
+            f.id === focusId
+              ? { ...f, tasks: f.tasks.filter((t) => t.id !== taskId) }
+              : f
+          ),
         })),
 
       addHabit: (name) =>
@@ -252,6 +314,6 @@ export const useCompassStore = create<CompassState>()(
           ],
         })),
     }),
-    { name: 'compass-store' }
+    { name: 'compass-store-v2' }
   )
 )

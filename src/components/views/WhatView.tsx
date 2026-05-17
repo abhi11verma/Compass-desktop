@@ -92,7 +92,7 @@ function AddHabitForm({ onClose }: { onClose: () => void }) {
 }
 
 export function WhatView() {
-  const { focuses, habits } = useCompassStore()
+  const { focuses, habits, openFocusDetail } = useCompassStore()
   const [addingFocus, setAddingFocus] = useState(false)
   const [addingHabit, setAddingHabit] = useState(false)
 
@@ -109,14 +109,16 @@ export function WhatView() {
         </div>
         <div className="list-card">
           {active.map((f) => (
-            <div className="l-row" key={f.id}>
+            <div className="l-row" key={f.id} onClick={() => { openFocusDetail(f.id) }}>
               <div className="l-dot" style={{ background: DOT_COLOR[f.color] }} />
               <div className="l-body">
                 <div className="l-name">{f.name}</div>
                 <div className="l-sub">{f.process}</div>
               </div>
               <div className="l-right">
-                {f.status === 'trying' ? (
+                {f.tags.length > 0 ? (
+                  f.tags.map((t) => <span className="chip chip-tag" key={t}>{t}</span>)
+                ) : f.status === 'trying' ? (
                   <span className="chip chip-warn">Trying</span>
                 ) : (
                   <span className="chip">{f.tasks.length} {f.tasks.length === 1 ? 'task' : 'tasks'}</span>
@@ -126,7 +128,7 @@ export function WhatView() {
             </div>
           ))}
           {parked.map((f) => (
-            <div className="l-row" key={f.id}>
+            <div className="l-row" key={f.id} onClick={() => { openFocusDetail(f.id) }}>
               <div className="l-dot" style={{ background: 'rgba(255,255,255,0.12)' }} />
               <div className="l-body">
                 <div className="l-name" style={{ color: 'var(--ink-3)' }}>{f.name}</div>
