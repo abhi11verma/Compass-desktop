@@ -3,9 +3,11 @@ import { useEffect, useRef, useState } from 'react'
 import { useCompassStore, type Focus, type TaskStatus } from '@/store/useCompassStore'
 
 const DOT_COLOR: Record<Focus['color'], string> = {
-  green: '#3A8F68',
+  green:  '#3A8F68',
   indigo: '#5C6DC4',
-  amber: '#B8772A',
+  amber:  '#B8772A',
+  rose:   '#B85870',
+  teal:   '#3A9190',
 }
 
 const STATUS_OPTIONS: { value: TaskStatus; label: string }[] = [
@@ -68,6 +70,7 @@ export function FocusDetailOverlay() {
   const [confirmDelete, setConfirmDelete] = useState(false)
   const [editingTaskId, setEditingTaskId] = useState<string | null>(null)
   const [editingTaskVal, setEditingTaskVal] = useState('')
+  const [colorPickerOpen, setColorPickerOpen] = useState(false)
 
   const processRef = useRef<HTMLTextAreaElement>(null)
   const addTaskRef = useRef<HTMLInputElement>(null)
@@ -79,6 +82,7 @@ export function FocusDetailOverlay() {
       setTagsText(focus.tags.length > 0 ? focus.tags.map((t) => `#${t}`).join(' ') : '')
       setNewTask('')
       setConfirmDelete(false)
+      setColorPickerOpen(false)
       setTimeout(() => {
         if (processRef.current) autoResize(processRef.current)
       }, 0)
@@ -125,7 +129,26 @@ export function FocusDetailOverlay() {
 
         {/* Name row */}
         <div className="fd-hd">
-          <div className="fd-dot" style={{ background: DOT_COLOR[focus.color] }} />
+          <div className="fd-dot-wrap">
+            <div
+              className="fd-dot fd-dot-btn"
+              style={{ background: DOT_COLOR[focus.color] }}
+              onClick={() => { setColorPickerOpen((o) => !o) }}
+              title="Change color"
+            />
+            {colorPickerOpen && (
+              <div className="fd-color-picker">
+                {(Object.entries(DOT_COLOR) as [Focus['color'], string][]).map(([c, hex]) => (
+                  <div
+                    key={c}
+                    className={`fd-color-swatch${focus.color === c ? ' active' : ''}`}
+                    style={{ background: hex }}
+                    onClick={() => { updateFocus(focus.id, { color: c }); setColorPickerOpen(false) }}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
           <input
             className="fd-field fd-field-name"
             value={nameVal}
@@ -158,15 +181,33 @@ export function FocusDetailOverlay() {
           onBlur={saveProcess}
         />
 
-        {/* Tags */}
-        <input
-          className="fd-field fd-field-tags"
-          placeholder="#add #tags"
-          value={tagsText}
-          onChange={(e) => { setTagsText(e.target.value) }}
-          onBlur={saveTags}
-          onKeyDown={(e) => { if (e.key === 'Enter') e.currentTarget.blur() }}
-        />
+        <div className="fd-meta">
+          {/* Status */}
+          <div className="fd-meta-row">
+            <span className="fd-meta-lbl">Status</span>
+            <select
+              className={`fd-status-select${focus.status === 'parked' ? ' parked' : ''}`}
+              value={focus.status}
+              onChange={(e) => { updateFocus(focus.id, { status: e.target.value as Focus['status'] }) }}
+            >
+              <option value="active">Active</option>
+              <option value="parked">Parked</option>
+            </select>
+          </div>
+
+          {/* Tags */}
+          <div className="fd-meta-row">
+            <span className="fd-meta-lbl">Tags</span>
+            <input
+              className="fd-tags-input"
+              placeholder="#add #tags"
+              value={tagsText}
+              onChange={(e) => { setTagsText(e.target.value) }}
+              onBlur={saveTags}
+              onKeyDown={(e) => { if (e.key === 'Enter') e.currentTarget.blur() }}
+            />
+          </div>
+        </div>
 
         <div className="fd-sep" />
 

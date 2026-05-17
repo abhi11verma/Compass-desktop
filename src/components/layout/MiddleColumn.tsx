@@ -1,9 +1,11 @@
 import { useCompassStore, type Focus, type TaskStatus } from '@/store/useCompassStore'
 
 const COLOR_CLASS: Record<Focus['color'], string> = {
-  green: 'fb-g',
+  green:  'fb-g',
   indigo: 'fb-i',
-  amber: 'fb-a',
+  amber:  'fb-a',
+  rose:   'fb-r',
+  teal:   'fb-t',
 }
 
 const TASK_STATUS_LABEL: Record<TaskStatus, string> = {
@@ -24,7 +26,7 @@ const TASK_STATUS_CLASS: Record<TaskStatus, string> = {
 
 export function MiddleColumn() {
   const { focuses, openFocusDetail } = useCompassStore()
-  const active = focuses.filter((f) => f.status !== 'parked')
+  const active = focuses.filter((f) => f.status === 'active')
 
   return (
     <div className="col-mid">
@@ -62,9 +64,7 @@ export function MiddleColumn() {
                 )}
                 {f.tags.length > 0 ? (
                   f.tags.map((t) => <span className="chip chip-tag" key={t}>{t}</span>)
-                ) : f.status === 'trying' && (
-                  <span className="chip chip-warn">Trying</span>
-                )}
+                ) : null}
               </div>
             </div>
           </div>

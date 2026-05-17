@@ -35,8 +35,8 @@ export type Focus = {
   name: string
   process: string
   tags: string[]
-  color: 'green' | 'indigo' | 'amber'
-  status: 'active' | 'trying' | 'parked'
+  color: 'green' | 'indigo' | 'amber' | 'rose' | 'teal'
+  status: 'active' | 'parked'
   daysActive: number
   streakDays: number[]
   tasks: Task[]
@@ -79,7 +79,7 @@ interface CompassState {
   addCapture: (text: string, routedTo: string | null, processed?: boolean) => void
   resetDailyHabits: () => void
   addFocus: (name: string, process: string) => void
-  updateFocus: (id: string, updates: { name?: string; process?: string; tags?: string[] }) => void
+  updateFocus: (id: string, updates: { name?: string; process?: string; tags?: string[]; status?: Focus['status']; color?: Focus['color'] }) => void
   deleteFocus: (id: string) => void
   addTask: (focusId: string, text: string) => void
   updateTaskStatus: (focusId: string, taskId: string, status: TaskStatus) => void
@@ -132,7 +132,7 @@ const SEED_FOCUSES: Focus[] = [
     ],
   },
   {
-    id: 'f3', name: 'Learning AI', color: 'amber', status: 'trying', daysActive: 3, tags: ['Trying'],
+    id: 'f3', name: 'Learning AI', color: 'amber', status: 'active', daysActive: 3, tags: ['Trying'],
     process: 'One chapter or tutorial daily · ends in 11 days',
     streakDays: [0, 0, 0, 2, 2, 3, 3],
     tasks: [

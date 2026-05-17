@@ -3,9 +3,11 @@ import { useRef, useState } from 'react'
 import { useCompassStore, type Focus } from '@/store/useCompassStore'
 
 const DOT_COLOR: Record<Focus['color'], string> = {
-  green: '#3A8F68',
+  green:  '#3A8F68',
   indigo: '#5C6DC4',
-  amber: '#B8772A',
+  amber:  '#B8772A',
+  rose:   '#B85870',
+  teal:   '#3A9190',
 }
 
 function HabitDot({ level }: { level: number }) {
@@ -114,15 +116,16 @@ export function WhatView() {
               <div className="l-body">
                 <div className="l-name">{f.name}</div>
                 <div className="l-sub">{f.process}</div>
+                {f.tags.length > 0 && (
+                  <div className="l-tags">
+                    {f.tags.map((t) => <span className="chip chip-tag" key={t}>{t}</span>)}
+                  </div>
+                )}
               </div>
               <div className="l-right">
-                {f.tags.length > 0 ? (
-                  f.tags.map((t) => <span className="chip chip-tag" key={t}>{t}</span>)
-                ) : f.status === 'trying' ? (
-                  <span className="chip chip-warn">Trying</span>
-                ) : (
-                  <span className="chip">{f.tasks.length} {f.tasks.length === 1 ? 'task' : 'tasks'}</span>
-                )}
+                <span className={`chip${f.status === 'parked' ? '' : ' chip-status-active'}`}>
+                  {f.status === 'active' ? 'Active' : 'Parked'}
+                </span>
                 <span className="l-age">{f.daysActive}d</span>
               </div>
             </div>
@@ -133,6 +136,11 @@ export function WhatView() {
               <div className="l-body">
                 <div className="l-name" style={{ color: 'var(--ink-3)' }}>{f.name}</div>
                 <div className="l-sub">{f.process}</div>
+                {f.tags.length > 0 && (
+                  <div className="l-tags">
+                    {f.tags.map((t) => <span className="chip chip-tag" key={t}>{t}</span>)}
+                  </div>
+                )}
               </div>
               <div className="l-right">
                 <span className="chip">Parked</span>
