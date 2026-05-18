@@ -159,6 +159,21 @@ Open-surface design — no visible input chrome; the whole card feels like one e
   - Delete button visible on row hover only.
 - **Add task**: plain text input at bottom of task list; Enter to save, Escape to clear.
 
+### Capture Inbox (`src/components/overlays/InboxOverlay.tsx`)
+Two-pane overlay for reviewing and routing unprocessed captures.
+
+- **Open**: clicking the "to route" pill in the Topbar (visible when `captures.filter(!processed).length > 0`).
+- **Close**: Escape key · clicking backdrop.
+- **Left pane**: scrollable list of all unprocessed (`processed === false`) captures. Each row shows age + text. Clicking selects it.
+- **Right pane**: shown when a capture is selected.
+  - Displays the capture text.
+  - Search input filters active focuses and active habits by name.
+  - Results grouped: Focuses (colored dot, routes capture + creates Backlog task on that focus) / Habits (purple dot, tags capture without creating a task).
+  - "Dismiss without routing" marks the capture as processed with `routedTo: 'dismissed'` — no task created.
+  - After routing/dismissing, auto-advances to the next unprocessed capture.
+- **CSS namespace**: `.ibx-`
+- **Store actions**: `routeCapture(captureId, routedTo)` — marks `processed: true`, sets `routedTo`; if `routedTo` is a focus id it also appends a Backlog task to that focus.
+
 ### Capture Overlay (`src/components/overlays/CaptureOverlay.tsx`)
 - Trigger: `C` key (via `useKeyboard` hook) or any other configured shortcut.
 - **Route to focus**: pill selector — routes the capture to a specific focus and auto-creates a Backlog task on it.
@@ -235,4 +250,3 @@ All styles in `src/index.css`. No Tailwind utilities used in component JSX (Tail
 - WHO view (Values / Principles) is read-only — no add/edit UI yet.
 - Habit history (`history: string[]`) is stored but not visualized beyond streakCount.
 - Reminders in the Right Tray are seed-only — no add UI.
-- Captures inbox (unrouted captures) has no dedicated view.

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 
-import { useCompassStore, type HabitStatus } from '@/store/useCompassStore'
+import { useCompassStore, type HabitStatus, type HabitFrequency, isHabitDone } from '@/store/useCompassStore'
+import { useNow } from '@/hooks/useNow'
 
 function TrashIcon() {
   return (
@@ -31,16 +32,16 @@ function autoResize(el: HTMLTextAreaElement) {
   el.style.height = `${el.scrollHeight.toString()}px`
 }
 
-function StreakDots({ streakCount }: { streakCount: number }) {
-  const dots = Array(14).fill(0).map((_, i) => {
-    const daysAgo = 13 - i
-    if (daysAgo < streakCount) return daysAgo < 3 ? 3 : daysAgo < 6 ? 2 : 1
-    return 0
-  })
+function StreakDots({ history }: { history: string[] }) {
+  const historySet = new Set(history)
   return (
     <div className="hbd-streak-dots">
-      {dots.map((level, i) => {
-        const cls = level === 0 ? 'hd' : level === 1 ? 'hd on' : level === 2 ? 'hd hi' : 'hd ful'
+      {Array.from({ length: 14 }, (_, i) => {
+        const daysAgo = 13 - i
+        const d = new Date()
+        d.setDate(d.getDate() - daysAgo)
+        const done = historySet.has(d.toISOString().slice(0, 10))
+        const cls = !done ? 'hd' : daysAgo === 0 ? 'hd ful' : daysAgo <= 3 ? 'hd hi' : 'hd on'
         return <div key={i} className={cls} />
       })}
     </div>
@@ -50,15 +51,23 @@ function StreakDots({ streakCount }: { streakCount: number }) {
 export function HabitDetailOverlay() {
   const {
     habits,
+    captures,
     habitDetailId,
     openHabitDetail,
     toggleHabit,
     updateHabit,
+    updateCapture,
     deleteHabit,
   } = useCompassStore()
 
   const habit = habits.find((h) => h.id === habitDetailId) ?? null
   const isOpen = habit !== null
+  const habitCaptures = habit ? captures.filter((c) => c.routedTo === habit.id) : []
+  const now = useNow()
+  const done = habit ? isHabitDone(habit, now) : false
+
+  const [editingCaptureId, setEditingCaptureId] = useState<string | null>(null)
+  const [editingText, setEditingText] = useState('')
 
   const [nameVal, setNameVal] = useState('')
   const [detailsVal, setDetailsVal] = useState('')
@@ -178,9 +187,63 @@ export function HabitDetailOverlay() {
               onKeyDown={(e) => { if (e.key === 'Enter') e.currentTarget.blur() }}
             />
           </div>
+
+          {/* Frequency */}
+          <div className="fd-meta-row">
+            <span className="fd-meta-lbl">Every</span>
+            <select
+              className="hbd-freq-select"
+              value={habit.frequency}
+              onChange={(e) => { updateHabit(habit.id, { frequency: e.target.value as HabitFrequency }) }}
+            >
+              <option value="hourly">Hour</option>
+              <option value="daily">Day</option>
+              <option value="weekly">Week</option>
+            </select>
+          </div>
         </div>
 
         <div className="fd-sep" />
+
+        {/* Linked captures */}
+        {habitCaptures.length > 0 && (
+          <>
+            <div className="fd-sect-lbl">Notes</div>
+            <div className="hbd-captures">
+              {habitCaptures.map((c) => (
+                <div key={c.id} className="hbd-capture-row">
+                  {editingCaptureId === c.id ? (
+                    <textarea
+                      className="hbd-capture-edit"
+                      value={editingText}
+                      rows={1}
+                      autoFocus
+                      onChange={(e) => { setEditingText(e.target.value); autoResize(e.currentTarget) }}
+                      onFocus={(e) => { const len = e.target.value.length; e.target.setSelectionRange(len, len) }}
+                      onBlur={() => {
+                        const trimmed = editingText.trim()
+                        if (trimmed) updateCapture(c.id, trimmed)
+                        setEditingCaptureId(null)
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); e.currentTarget.blur() }
+                        if (e.key === 'Escape') { setEditingCaptureId(null) }
+                      }}
+                    />
+                  ) : (
+                    <span
+                      className="hbd-capture-text"
+                      onClick={() => { setEditingCaptureId(c.id); setEditingText(c.text) }}
+                    >
+                      {c.text}
+                    </span>
+                  )}
+                </div>
+              ))}
+            </div>
+            <div className="fd-sep" />
+          </>
+        )}
 
         {/* Streak section */}
         <div className="fd-sect-lbl">Streak</div>
@@ -189,21 +252,21 @@ export function HabitDetailOverlay() {
             <span className="hbd-streak-count">{habit.streakCount}</span>
             <span className="hbd-streak-unit">day streak</span>
           </div>
-          <StreakDots streakCount={habit.streakCount} />
+          <StreakDots history={habit.history} />
         </div>
 
         {/* Mark done button */}
         <button
-          className={`hbd-done-btn${habit.completedToday ? ' done' : ''}`}
+          className={`hbd-done-btn${done ? ' done' : ''}`}
           onClick={() => { toggleHabit(habit.id) }}
         >
-          {habit.completedToday ? (
+          {done ? (
             <>
               <CheckIcon />
-              Done today — tap to undo
+              Done — tap to undo
             </>
           ) : (
-            'Mark as done today'
+            'Mark as done'
           )}
         </button>
 

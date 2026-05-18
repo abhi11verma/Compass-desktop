@@ -4,7 +4,7 @@ import { formatTopbarDate } from '@/lib/dates'
 import { useCompassStore } from '@/store/useCompassStore'
 
 export function Topbar() {
-  const { view, setView, captures, setCaptureOpen, searchQuery, setSearchQuery } = useCompassStore()
+  const { view, setView, captures, setCaptureOpen, setInboxOpen, searchQuery, setSearchQuery } = useCompassStore()
   const unrouted = captures.filter((c) => !c.processed).length
   const showSearch = view === 'what' || view === 'who'
   const searchRef = useRef<HTMLInputElement>(null)
@@ -48,10 +48,10 @@ export function Topbar() {
           </div>
         )}
         {unrouted > 0 && (
-          <div className="inbox-pill">
+          <button className="inbox-pill" onClick={() => { setInboxOpen(true) }}>
             <div className="inbox-dot">{unrouted}</div>
             <span>to route</span>
-          </div>
+          </button>
         )}
         <button className="cap-btn" onClick={() => { setCaptureOpen(true) }}>
           <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">

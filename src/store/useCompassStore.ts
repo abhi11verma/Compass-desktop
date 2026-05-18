@@ -44,6 +44,7 @@ export type Focus = {
 }
 
 export type HabitStatus = 'active' | 'parked' | 'complete'
+export type HabitFrequency = 'hourly' | 'daily' | 'weekly'
 
 export type Habit = {
   id: string
@@ -51,9 +52,29 @@ export type Habit = {
   details: string
   tags: string[]
   status: HabitStatus
+  frequency: HabitFrequency
   streakCount: number
   completedToday: boolean
+  lastCompletedAt: string | null
   history: string[]
+}
+
+function mondayOf(d: Date): number {
+  const day = d.getDay()
+  const diff = day === 0 ? -6 : 1 - day
+  return new Date(d.getFullYear(), d.getMonth(), d.getDate() + diff).getTime()
+}
+
+export function isHabitDone(h: Habit, now: number = Date.now()): boolean {
+  if (h.frequency === 'hourly') {
+    if (!h.lastCompletedAt) return false
+    return (now - new Date(h.lastCompletedAt).getTime()) < 60 * 60 * 1000
+  }
+  if (h.frequency === 'weekly') {
+    if (!h.lastCompletedAt) return false
+    return mondayOf(new Date(h.lastCompletedAt)) === mondayOf(new Date(now))
+  }
+  return h.completedToday
 }
 
 export type Reminder = {
@@ -68,6 +89,7 @@ type View = 'now' | 'what' | 'who'
 interface CompassState {
   view: View
   captureOpen: boolean
+  inboxOpen: boolean
   settingsOpen: boolean
   focusDetailId: string | null
   habitDetailId: string | null
@@ -81,6 +103,7 @@ interface CompassState {
 
   setView: (view: View) => void
   setCaptureOpen: (open: boolean) => void
+  setInboxOpen: (open: boolean) => void
   setSettingsOpen: (open: boolean) => void
   openFocusDetail: (id: string | null) => void
   openHabitDetail: (id: string | null) => void
@@ -88,6 +111,9 @@ interface CompassState {
   toggleHabit: (id: string) => void
   dismissReminder: (id: string) => void
   addCapture: (text: string, routedTo: string | null, processed?: boolean) => void
+  routeCapture: (captureId: string, routedTo: string) => void
+  updateCapture: (captureId: string, text: string) => void
+  createAndRoute: (captureId: string, type: 'focus' | 'habit', name: string) => void
   resetDailyHabits: () => void
   addFocus: (name: string, process: string) => void
   updateFocus: (id: string, updates: { name?: string; process?: string; tags?: string[]; status?: Focus['status']; color?: Focus['color'] }) => void
@@ -97,10 +123,39 @@ interface CompassState {
   deleteTask: (focusId: string, taskId: string) => void
   updateTask: (focusId: string, taskId: string, text: string) => void
   addHabit: (name: string) => void
-  updateHabit: (id: string, updates: { name?: string; details?: string; tags?: string[]; status?: HabitStatus }) => void
+  updateHabit: (id: string, updates: { name?: string; details?: string; tags?: string[]; status?: HabitStatus; frequency?: HabitFrequency }) => void
   deleteHabit: (id: string) => void
   addPrinciple: (cue: string) => void
   addValue: (name: string) => void
+}
+
+function dateStr(daysAgo: number): string {
+  const d = new Date()
+  d.setDate(d.getDate() - daysAgo)
+  return d.toISOString().slice(0, 10)
+}
+
+function seedHistory(days: number, includeToday: boolean): string[] {
+  const start = includeToday ? 0 : 1
+  return Array.from({ length: days }, (_, i) => dateStr(start + i))
+}
+
+function calcStreak(history: string[]): number {
+  if (history.length === 0) return 0
+  const today = dateStr(0)
+  const yesterday = dateStr(1)
+  const sorted = [...new Set(history)].sort().reverse()
+  if (sorted[0] !== today && sorted[0] !== yesterday) return 0
+  let streak = 0
+  let expected = sorted[0]
+  for (const date of sorted) {
+    if (date !== expected) break
+    streak++
+    const prev = new Date(expected)
+    prev.setDate(prev.getDate() - 1)
+    expected = prev.toISOString().slice(0, 10)
+  }
+  return streak
 }
 
 const SEED_VALUES: Value[] = [
@@ -163,9 +218,9 @@ const SEED_FOCUSES: Focus[] = [
 ]
 
 const SEED_HABITS: Habit[] = [
-  { id: 'h1', name: 'Morning walk', details: 'Walk for at least 20 minutes outdoors before breakfast.', tags: ['health'], status: 'active', streakCount: 12, completedToday: true, history: [] },
-  { id: 'h2', name: 'Meditation · 10 min', details: '', tags: [], status: 'active', streakCount: 5, completedToday: false, history: [] },
-  { id: 'h3', name: 'Read before sleep', details: 'Any book, at least 10 pages.', tags: [], status: 'active', streakCount: 3, completedToday: false, history: [] },
+  { id: 'h1', name: 'Morning walk', details: 'Walk for at least 20 minutes outdoors before breakfast.', tags: ['health'], status: 'active', frequency: 'daily', streakCount: 12, completedToday: true, lastCompletedAt: new Date().toISOString(), history: seedHistory(12, true) },
+  { id: 'h2', name: 'Meditation · 10 min', details: '', tags: [], status: 'active', frequency: 'daily', streakCount: 5, completedToday: false, lastCompletedAt: null, history: seedHistory(5, false) },
+  { id: 'h3', name: 'Read before sleep', details: 'Any book, at least 10 pages.', tags: [], status: 'active', frequency: 'daily', streakCount: 3, completedToday: false, lastCompletedAt: null, history: seedHistory(3, false) },
 ]
 
 const SEED_REMINDERS: Reminder[] = [
@@ -185,6 +240,7 @@ export const useCompassStore = create<CompassState>()(
     (set) => ({
       view: 'now',
       captureOpen: false,
+      inboxOpen: false,
       settingsOpen: false,
       focusDetailId: null,
       habitDetailId: null,
@@ -198,6 +254,7 @@ export const useCompassStore = create<CompassState>()(
 
       setView: (view) => set({ view }),
       setCaptureOpen: (open) => set({ captureOpen: open }),
+      setInboxOpen: (open) => set({ inboxOpen: open }),
       setSettingsOpen: (open) => set({ settingsOpen: open }),
       openFocusDetail: (id) => set({ focusDetailId: id }),
       openHabitDetail: (id) => set({ habitDetailId: id }),
@@ -205,15 +262,22 @@ export const useCompassStore = create<CompassState>()(
 
       toggleHabit: (id) =>
         set((state) => ({
-          habits: state.habits.map((h) =>
-            h.id === id
-              ? {
-                  ...h,
-                  completedToday: !h.completedToday,
-                  streakCount: !h.completedToday ? h.streakCount + 1 : Math.max(0, h.streakCount - 1),
-                }
-              : h
-          ),
+          habits: state.habits.map((h) => {
+            if (h.id !== id) return h
+            const now = Date.now()
+            const completing = !isHabitDone(h, now)
+            const today = dateStr(0)
+            const newHistory = completing
+              ? [...h.history.filter((d) => d !== today), today]
+              : h.history.filter((d) => d !== today)
+            return {
+              ...h,
+              completedToday: completing,
+              lastCompletedAt: completing ? new Date().toISOString() : null,
+              history: newHistory,
+              streakCount: calcStreak(newHistory),
+            }
+          }),
         })),
 
       dismissReminder: (id) =>
@@ -246,9 +310,69 @@ export const useCompassStore = create<CompassState>()(
           }
         }),
 
+      routeCapture: (captureId, routedTo) =>
+        set((state) => {
+          const capture = state.captures.find((c) => c.id === captureId)
+          if (!capture) return state
+          const isFocus = state.focuses.some((f) => f.id === routedTo)
+          const newTask: Task = { id: `t-${String(Date.now())}`, text: capture.text, status: 'backlog' }
+          return {
+            captures: state.captures.map((c) =>
+              c.id === captureId ? { ...c, routedTo, processed: true } : c
+            ),
+            focuses: isFocus
+              ? state.focuses.map((f) =>
+                  f.id === routedTo ? { ...f, tasks: [...f.tasks, newTask] } : f
+                )
+              : state.focuses,
+          }
+        }),
+
+      updateCapture: (captureId, text) =>
+        set((state) => ({
+          captures: state.captures.map((c) =>
+            c.id === captureId ? { ...c, text } : c
+          ),
+        })),
+
+      createAndRoute: (captureId, type, name) =>
+        set((state) => {
+          const capture = state.captures.find((c) => c.id === captureId)
+          if (!capture) return state
+          const ts = String(Date.now())
+          if (type === 'focus') {
+            const newId = `f-${ts}`
+            const newTask: Task = { id: `t-${ts}`, text: capture.text, status: 'backlog' }
+            const newFocus: Focus = {
+              id: newId, name, process: '', tags: [], color: 'green',
+              status: 'active', daysActive: 0, streakDays: [], tasks: [newTask], captures: [],
+            }
+            return {
+              focuses: [...state.focuses, newFocus],
+              captures: state.captures.map((c) =>
+                c.id === captureId ? { ...c, routedTo: newId, processed: true } : c
+              ),
+            }
+          } else {
+            const newId = `h-${ts}`
+            const newHabit: Habit = {
+              id: newId, name, details: '', tags: [], status: 'active', frequency: 'daily',
+              streakCount: 0, completedToday: false, lastCompletedAt: null, history: [],
+            }
+            return {
+              habits: [...state.habits, newHabit],
+              captures: state.captures.map((c) =>
+                c.id === captureId ? { ...c, routedTo: newId, processed: true } : c
+              ),
+            }
+          }
+        }),
+
       resetDailyHabits: () =>
         set((state) => ({
-          habits: state.habits.map((h) => ({ ...h, completedToday: false })),
+          habits: state.habits.map((h) =>
+            h.frequency === 'daily' ? { ...h, completedToday: false, lastCompletedAt: null } : h
+          ),
         })),
 
       addFocus: (name, process) =>
@@ -323,7 +447,7 @@ export const useCompassStore = create<CompassState>()(
         set((state) => ({
           habits: [
             ...state.habits,
-            { id: `h-${String(Date.now())}`, name, details: '', tags: [], status: 'active', streakCount: 0, completedToday: false, history: [] },
+            { id: `h-${String(Date.now())}`, name, details: '', tags: [], status: 'active', frequency: 'daily', streakCount: 0, completedToday: false, lastCompletedAt: null, history: [] },
           ],
         })),
 

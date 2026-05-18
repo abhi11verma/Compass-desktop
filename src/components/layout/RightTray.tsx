@@ -1,6 +1,7 @@
 import { useState } from 'react'
 
-import { useCompassStore } from '@/store/useCompassStore'
+import { isHabitDone, useCompassStore } from '@/store/useCompassStore'
+import { useNow } from '@/hooks/useNow'
 
 function ChevronIcon({ open }: { open: boolean }) {
   return (
@@ -36,24 +37,28 @@ function TrayCard({ label, defaultOpen = true, children }: TrayCardProps) {
 
 export function RightTray() {
   const { habits, reminders, toggleHabit, dismissReminder, openHabitDetail } = useCompassStore()
-  const activeReminders = reminders.filter((r) => !r.dismissed)
+  const now = useNow()
   const activeHabits = habits.filter((h) => h.status === 'active')
+  const activeReminders = reminders.filter((r) => !r.dismissed)
 
   return (
     <div className="col-tray">
       <TrayCard label="Habits">
-        {activeHabits.map((h) => (
-          <div className="h-row" key={h.id}>
-            <div
-              className={`hck${h.completedToday ? ' done' : ''}`}
-              onClick={() => { toggleHabit(h.id) }}
-            />
-            <div className="h-info" onClick={() => { openHabitDetail(h.id) }}>
-              <div className={`h-name${h.completedToday ? ' done' : ''}`}>{h.name}</div>
-              <div className="h-streak">{h.streakCount}d streak</div>
+        {activeHabits.map((h) => {
+          const done = isHabitDone(h, now)
+          return (
+            <div className="h-row" key={h.id}>
+              <div
+                className={`hck${done ? ' done' : ''}`}
+                onClick={() => { toggleHabit(h.id) }}
+              />
+              <div className="h-info" onClick={() => { openHabitDetail(h.id) }}>
+                <div className={`h-name${done ? ' done' : ''}`}>{h.name}</div>
+                <div className="h-streak">{h.streakCount}d streak</div>
+              </div>
             </div>
-          </div>
-        ))}
+          )
+        })}
       </TrayCard>
 
       {activeReminders.length > 0 && (

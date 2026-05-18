@@ -196,11 +196,7 @@ export function WhatView() {
         <div className="list-card">
           <div className="list-items">
             {filteredHabits.map((h) => {
-              const displayDots = Array(14).fill(0).map((_, i) => {
-                const daysAgo = 13 - i
-                if (daysAgo < h.streakCount) return daysAgo < 3 ? 3 : daysAgo < 6 ? 2 : 1
-                return 0
-              })
+              const historySet = new Set(h.history)
               const isComplete = h.status === 'complete'
               const isParked = h.status === 'parked'
               return (
@@ -220,14 +216,21 @@ export function WhatView() {
                     </div>
                     {!isComplete && (
                       <div className="hl-dots">
-                        {displayDots.map((level, i) => {
-                          const cls = level === 0 ? 'hd' : level === 1 ? 'hd on' : level === 2 ? 'hd hi' : 'hd ful'
+                        {Array.from({ length: 14 }, (_, i) => {
+                          const daysAgo = 13 - i
+                          const d = new Date()
+                          d.setDate(d.getDate() - daysAgo)
+                          const done = historySet.has(d.toISOString().slice(0, 10))
+                          const cls = !done ? 'hd' : daysAgo === 0 ? 'hd ful' : daysAgo <= 3 ? 'hd hi' : 'hd on'
                           return <div key={i} className={cls} />
                         })}
                       </div>
                     )}
                   </div>
                   <div className="l-right">
+                    {(h.frequency === 'hourly' || h.frequency === 'weekly') && (
+                      <span className="chip">{h.frequency}</span>
+                    )}
                     <span className={
                       isComplete ? 'chip chip-status-complete' :
                       isParked ? 'chip chip-status-parked' :
