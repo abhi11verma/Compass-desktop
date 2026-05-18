@@ -1,3 +1,6 @@
+import { useEffect } from 'react'
+
+import { SettingsDialog } from '@/components/layout/SettingsDialog'
 import { Topbar } from '@/components/layout/Topbar'
 import { CaptureOverlay } from '@/components/overlays/CaptureOverlay'
 import { FocusDetailOverlay } from '@/components/overlays/FocusDetailOverlay'
@@ -7,11 +10,18 @@ import { WhoView } from '@/components/views/WhoView'
 import { useDailyReset } from '@/hooks/useDailyReset'
 import { useKeyboard } from '@/hooks/useKeyboard'
 import { useCompassStore } from '@/store/useCompassStore'
+import { useThemeStore } from '@/store/useThemeStore'
 
 export function App() {
   const view = useCompassStore((s) => s.view)
+  const { settingsOpen, setSettingsOpen } = useCompassStore()
+  const theme = useThemeStore((s) => s.theme)
   useKeyboard()
   useDailyReset()
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('light', theme === 'light')
+  }, [theme])
 
   return (
     <div className="app">
@@ -21,6 +31,7 @@ export function App() {
       {view === 'who' && <WhoView />}
       <CaptureOverlay />
       <FocusDetailOverlay />
+      <SettingsDialog open={settingsOpen} onClose={() => { setSettingsOpen(false) }} />
     </div>
   )
 }

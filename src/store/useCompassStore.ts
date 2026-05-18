@@ -63,6 +63,7 @@ type View = 'now' | 'what' | 'who'
 interface CompassState {
   view: View
   captureOpen: boolean
+  settingsOpen: boolean
   focusDetailId: string | null
   values: Value[]
   principles: Principle[]
@@ -73,6 +74,7 @@ interface CompassState {
 
   setView: (view: View) => void
   setCaptureOpen: (open: boolean) => void
+  setSettingsOpen: (open: boolean) => void
   openFocusDetail: (id: string | null) => void
   toggleHabit: (id: string) => void
   dismissReminder: (id: string) => void
@@ -172,6 +174,7 @@ export const useCompassStore = create<CompassState>()(
     (set) => ({
       view: 'now',
       captureOpen: false,
+      settingsOpen: false,
       focusDetailId: null,
       values: SEED_VALUES,
       principles: SEED_PRINCIPLES,
@@ -182,6 +185,7 @@ export const useCompassStore = create<CompassState>()(
 
       setView: (view) => set({ view }),
       setCaptureOpen: (open) => set({ captureOpen: open }),
+      setSettingsOpen: (open) => set({ settingsOpen: open }),
       openFocusDetail: (id) => set({ focusDetailId: id }),
 
       toggleHabit: (id) =>

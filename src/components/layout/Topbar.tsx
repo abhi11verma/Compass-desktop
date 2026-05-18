@@ -8,8 +8,10 @@ export function Topbar() {
   return (
     <div className="topbar">
       <div className="topbar-left">
-        <span className="app-name">compass</span>
-        <span className="topbar-date">{formatTopbarDate()}</span>
+        <div className="app-brand">
+          <span className="app-name">compass</span>
+          <span className="topbar-date">{formatTopbarDate()}</span>
+        </div>
       </div>
 
       <div className="seg">
