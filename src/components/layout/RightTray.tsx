@@ -35,16 +35,20 @@ function TrayCard({ label, defaultOpen = true, children }: TrayCardProps) {
 }
 
 export function RightTray() {
-  const { habits, reminders, toggleHabit, dismissReminder } = useCompassStore()
+  const { habits, reminders, toggleHabit, dismissReminder, openHabitDetail } = useCompassStore()
   const activeReminders = reminders.filter((r) => !r.dismissed)
+  const activeHabits = habits.filter((h) => h.status === 'active')
 
   return (
     <div className="col-tray">
       <TrayCard label="Habits">
-        {habits.map((h) => (
-          <div className="h-row" key={h.id} onClick={() => { toggleHabit(h.id) }}>
-            <div className={`hck${h.completedToday ? ' done' : ''}`} />
-            <div className="h-info">
+        {activeHabits.map((h) => (
+          <div className="h-row" key={h.id}>
+            <div
+              className={`hck${h.completedToday ? ' done' : ''}`}
+              onClick={() => { toggleHabit(h.id) }}
+            />
+            <div className="h-info" onClick={() => { openHabitDetail(h.id) }}>
               <div className={`h-name${h.completedToday ? ' done' : ''}`}>{h.name}</div>
               <div className="h-streak">{h.streakCount}d streak</div>
             </div>

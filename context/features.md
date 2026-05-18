@@ -51,9 +51,14 @@ type Focus = {
   captures: Capture[]    // captures routed to this focus
 }
 
+type HabitStatus = 'active' | 'parked' | 'complete'
+
 type Habit = {
   id: string
   name: string
+  details: string          // long-form description, shown only in detail view
+  tags: string[]           // stored without #; user types "#tag1 #tag2"
+  status: HabitStatus      // active | parked | complete
   streakCount: number
   completedToday: boolean
   history: string[]
@@ -93,6 +98,8 @@ type Reminder  = { id: string; text: string; time: string; dismissed: boolean }
 | `updateTaskStatus` | `(focusId, taskId, status) => void` | |
 | `deleteTask` | `(focusId, taskId) => void` | |
 | `addHabit` | `(name) => void` | |
+| `updateHabit` | `(id, { name?, details?, tags?, status? }) => void` | partial update |
+| `deleteHabit` | `(id) => void` | also clears `habitDetailId` |
 | `addPrinciple` | `(cue) => void` | status defaults to queue |
 | `addValue` | `(name) => void` | |
 
@@ -114,8 +121,25 @@ type Reminder  = { id: string; text: string; time: string; dismissed: boolean }
   - Active row right side: **Active** chip (green) + any `#tag` chips + age in days.
   - Parked row right side: **Parked** chip + any `#tag` chips.
 - Clicking any focus row opens the Focus Detail overlay.
+- **Habit rows**: All habits listed (active, parked, complete). Clicking a row opens the Habit Detail overlay.
+  - Active habits: streak dots + Active chip + tag chips.
+  - Parked habits: no streak dots + Parked chip (muted name).
+  - Complete habits: no streak dots + Complete chip (muted name, no streak count).
 - **Add focus**: inline form at the bottom of the focus list (name + process fields; Enter or Add button).
 - **Add habit**: inline form at the bottom of the habit list (name field).
+
+### Habit Detail Overlay (`src/components/overlays/HabitDetailOverlay.tsx`)
+Open-surface design — matching Focus Detail visual language.
+
+- **Open**: clicking any habit row in the What view; clicking habit name in the Right Tray.
+- **Close**: Escape key · clicking backdrop.
+- **Header row**: ◎ icon · editable habit name (blur to save) · trash icon.
+- **Confirm delete**: inline red banner with Delete / Cancel.
+- **Details**: auto-resizing textarea (like process in Focus Detail); blur to save.
+- **Status**: select (Active / Parked / Complete).
+- **Tags**: single text field; user types `#tag1 #tag2`; blur parses and saves as `string[]`.
+- **Streak section**: numeric streak count + 14-dot history bar.
+- **Mark as done button**: full-width button; toggles `completedToday` and adjusts `streakCount`. Shows "Done today — tap to undo" when complete.
 
 ### Focus Detail Overlay (`src/components/overlays/FocusDetailOverlay.tsx`)
 Open-surface design — no visible input chrome; the whole card feels like one editable document.
@@ -190,6 +214,7 @@ All styles in `src/index.css`. No Tailwind utilities used in component JSX (Tail
 | `.f-` | Focus card body (Now view) |
 | `.fb-` | Focus card color bar |
 | `.hl-` | Habit list row (What view) |
+| `.hbd-` | Habit Detail overlay |
 | `.l-` | List row (What view) |
 | `.chip` | Base chip/badge |
 
@@ -199,6 +224,8 @@ All styles in `src/index.css`. No Tailwind utilities used in component JSX (Tail
 - `.chip-warn` — amber (legacy, available)
 - `.chip-tag` — purple (`#tags`)
 - `.chip-status-active` — green (Active status)
+- `.chip-status-parked` — amber (Parked status)
+- `.chip-status-complete` — indigo (Complete status)
 
 ---
 

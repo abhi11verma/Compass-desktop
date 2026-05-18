@@ -4,6 +4,7 @@ import { SettingsDialog } from '@/components/layout/SettingsDialog'
 import { Topbar } from '@/components/layout/Topbar'
 import { CaptureOverlay } from '@/components/overlays/CaptureOverlay'
 import { FocusDetailOverlay } from '@/components/overlays/FocusDetailOverlay'
+import { HabitDetailOverlay } from '@/components/overlays/HabitDetailOverlay'
 import { NowView } from '@/components/views/NowView'
 import { WhatView } from '@/components/views/WhatView'
 import { WhoView } from '@/components/views/WhoView'
@@ -31,6 +32,7 @@ export function App() {
       {view === 'who' && <WhoView />}
       <CaptureOverlay />
       <FocusDetailOverlay />
+      <HabitDetailOverlay />
       <SettingsDialog open={settingsOpen} onClose={() => { setSettingsOpen(false) }} />
     </div>
   )

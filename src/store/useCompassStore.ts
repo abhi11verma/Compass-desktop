@@ -43,9 +43,14 @@ export type Focus = {
   captures: Capture[]
 }
 
+export type HabitStatus = 'active' | 'parked' | 'complete'
+
 export type Habit = {
   id: string
   name: string
+  details: string
+  tags: string[]
+  status: HabitStatus
   streakCount: number
   completedToday: boolean
   history: string[]
@@ -65,6 +70,7 @@ interface CompassState {
   captureOpen: boolean
   settingsOpen: boolean
   focusDetailId: string | null
+  habitDetailId: string | null
   values: Value[]
   principles: Principle[]
   focuses: Focus[]
@@ -76,6 +82,7 @@ interface CompassState {
   setCaptureOpen: (open: boolean) => void
   setSettingsOpen: (open: boolean) => void
   openFocusDetail: (id: string | null) => void
+  openHabitDetail: (id: string | null) => void
   toggleHabit: (id: string) => void
   dismissReminder: (id: string) => void
   addCapture: (text: string, routedTo: string | null, processed?: boolean) => void
@@ -88,6 +95,8 @@ interface CompassState {
   deleteTask: (focusId: string, taskId: string) => void
   updateTask: (focusId: string, taskId: string, text: string) => void
   addHabit: (name: string) => void
+  updateHabit: (id: string, updates: { name?: string; details?: string; tags?: string[]; status?: HabitStatus }) => void
+  deleteHabit: (id: string) => void
   addPrinciple: (cue: string) => void
   addValue: (name: string) => void
 }
@@ -152,9 +161,9 @@ const SEED_FOCUSES: Focus[] = [
 ]
 
 const SEED_HABITS: Habit[] = [
-  { id: 'h1', name: 'Morning walk', streakCount: 12, completedToday: true, history: [] },
-  { id: 'h2', name: 'Meditation · 10 min', streakCount: 5, completedToday: false, history: [] },
-  { id: 'h3', name: 'Read before sleep', streakCount: 3, completedToday: false, history: [] },
+  { id: 'h1', name: 'Morning walk', details: 'Walk for at least 20 minutes outdoors before breakfast.', tags: ['health'], status: 'active', streakCount: 12, completedToday: true, history: [] },
+  { id: 'h2', name: 'Meditation · 10 min', details: '', tags: [], status: 'active', streakCount: 5, completedToday: false, history: [] },
+  { id: 'h3', name: 'Read before sleep', details: 'Any book, at least 10 pages.', tags: [], status: 'active', streakCount: 3, completedToday: false, history: [] },
 ]
 
 const SEED_REMINDERS: Reminder[] = [
@@ -176,6 +185,7 @@ export const useCompassStore = create<CompassState>()(
       captureOpen: false,
       settingsOpen: false,
       focusDetailId: null,
+      habitDetailId: null,
       values: SEED_VALUES,
       principles: SEED_PRINCIPLES,
       focuses: SEED_FOCUSES,
@@ -187,6 +197,7 @@ export const useCompassStore = create<CompassState>()(
       setCaptureOpen: (open) => set({ captureOpen: open }),
       setSettingsOpen: (open) => set({ settingsOpen: open }),
       openFocusDetail: (id) => set({ focusDetailId: id }),
+      openHabitDetail: (id) => set({ habitDetailId: id }),
 
       toggleHabit: (id) =>
         set((state) => ({
@@ -308,8 +319,19 @@ export const useCompassStore = create<CompassState>()(
         set((state) => ({
           habits: [
             ...state.habits,
-            { id: `h-${String(Date.now())}`, name, streakCount: 0, completedToday: false, history: [] },
+            { id: `h-${String(Date.now())}`, name, details: '', tags: [], status: 'active', streakCount: 0, completedToday: false, history: [] },
           ],
+        })),
+
+      updateHabit: (id, updates) =>
+        set((state) => ({
+          habits: state.habits.map((h) => (h.id === id ? { ...h, ...updates } : h)),
+        })),
+
+      deleteHabit: (id) =>
+        set((state) => ({
+          habits: state.habits.filter((h) => h.id !== id),
+          habitDetailId: null,
         })),
 
       addPrinciple: (cue) =>
@@ -328,6 +350,6 @@ export const useCompassStore = create<CompassState>()(
           ],
         })),
     }),
-    { name: 'compass-store-v2' }
+    { name: 'compass-store-v3' }
   )
 )
