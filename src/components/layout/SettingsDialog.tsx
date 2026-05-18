@@ -1,5 +1,6 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
+import { useCompassStore } from '@/store/useCompassStore'
 import { useThemeStore } from '@/store/useThemeStore'
 
 interface SettingsDialogProps {
@@ -9,19 +10,42 @@ interface SettingsDialogProps {
 
 export function SettingsDialog({ open, onClose }: SettingsDialogProps) {
   const { theme, setTheme } = useThemeStore()
+  const { resetCompass, clearData } = useCompassStore()
   const overlayRef = useRef<HTMLDivElement>(null)
+  const [confirmReset, setConfirmReset] = useState(false)
+  const [confirmClear, setConfirmClear] = useState(false)
 
   useEffect(() => {
     if (!open) return
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') { onClose() }
+      if (e.key === 'Escape') {
+        if (confirmReset) { setConfirmReset(false); return }
+        if (confirmClear) { setConfirmClear(false); return }
+        onClose()
+      }
     }
     window.addEventListener('keydown', onKey)
     return () => { window.removeEventListener('keydown', onKey) }
-  }, [open, onClose])
+  }, [open, onClose, confirmReset])
+
+  useEffect(() => {
+    if (!open) { setConfirmReset(false); setConfirmClear(false) }
+  }, [open])
 
   const handleBackdropClick = (e: React.MouseEvent) => {
     if (e.target === overlayRef.current) { onClose() }
+  }
+
+  function handleReset() {
+    resetCompass()
+    setConfirmReset(false)
+    onClose()
+  }
+
+  function handleClear() {
+    clearData()
+    setConfirmClear(false)
+    onClose()
   }
 
   return (
@@ -92,6 +116,44 @@ export function SettingsDialog({ open, onClose }: SettingsDialogProps) {
         <div className="settings-row">
           <div className="settings-row-label">Who view</div>
           <span className="cap-kbd" style={{ fontSize: '10px' }}>3</span>
+        </div>
+
+        <div className="settings-sep" />
+
+        <div className="settings-section-lbl">Data</div>
+        <div className="settings-row settings-row-danger">
+          <div>
+            <div className="settings-row-label">Reset Compass</div>
+            <div className="settings-row-sub">Restore all data to the demo state</div>
+          </div>
+          {confirmReset ? (
+            <div className="settings-reset-confirm">
+              <span className="settings-reset-msg">This will erase all your data.</span>
+              <button className="settings-reset-yes" onClick={handleReset}>Confirm</button>
+              <button className="settings-reset-no" onClick={() => { setConfirmReset(false) }}>Cancel</button>
+            </div>
+          ) : (
+            <button className="settings-reset-btn" onClick={() => { setConfirmReset(true) }}>
+              Reset
+            </button>
+          )}
+        </div>
+        <div className="settings-row settings-row-danger">
+          <div>
+            <div className="settings-row-label">Clear Data</div>
+            <div className="settings-row-sub">Delete everything and start with a blank slate</div>
+          </div>
+          {confirmClear ? (
+            <div className="settings-reset-confirm">
+              <span className="settings-reset-msg">This will erase all your data.</span>
+              <button className="settings-reset-yes" onClick={handleClear}>Confirm</button>
+              <button className="settings-reset-no" onClick={() => { setConfirmClear(false) }}>Cancel</button>
+            </div>
+          ) : (
+            <button className="settings-reset-btn" onClick={() => { setConfirmClear(true) }}>
+              Clear
+            </button>
+          )}
         </div>
       </div>
     </div>

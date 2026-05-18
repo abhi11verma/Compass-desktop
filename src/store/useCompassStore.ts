@@ -79,13 +79,6 @@ export function isHabitDone(h: Habit, now: number = Date.now()): boolean {
   return h.completedToday
 }
 
-export type Reminder = {
-  id: string
-  text: string
-  time: string
-  dismissed: boolean
-}
-
 type View = 'now' | 'what' | 'who'
 
 interface CompassState {
@@ -101,7 +94,6 @@ interface CompassState {
   principles: Principle[]
   focuses: Focus[]
   habits: Habit[]
-  reminders: Reminder[]
   captures: Capture[]
 
   setView: (view: View) => void
@@ -113,7 +105,6 @@ interface CompassState {
   openValueDetail: (id: string | null) => void
   setSearchQuery: (q: string) => void
   toggleHabit: (id: string) => void
-  dismissReminder: (id: string) => void
   addCapture: (text: string, routedTo: string | null, processed?: boolean) => void
   routeCapture: (captureId: string, routedTo: string) => void
   updateCapture: (captureId: string, text: string) => void
@@ -133,6 +124,8 @@ interface CompassState {
   addValue: (name: string) => void
   updateValue: (id: string, updates: { name?: string; description?: string; note?: string; hidden?: boolean }) => void
   deleteValue: (id: string) => void
+  resetCompass: () => void
+  clearData: () => void
 }
 
 function dateStr(daysAgo: number): string {
@@ -229,11 +222,6 @@ const SEED_HABITS: Habit[] = [
   { id: 'h3', name: 'Read before sleep', details: 'Any book, at least 10 pages.', tags: [], status: 'active', frequency: 'daily', streakCount: 3, completedToday: false, lastCompletedAt: null, history: seedHistory(3, false) },
 ]
 
-const SEED_REMINDERS: Reminder[] = [
-  { id: 'r1', text: 'Call Dr. Mehta re: bloodwork', time: '10a', dismissed: false },
-  { id: 'r2', text: 'Cook dal — ingredients ready', time: '6p', dismissed: false },
-]
-
 const SEED_CAPTURES: Capture[] = [
   { id: 'cap1', text: 'Try cold shower protocol', routedTo: 'f1', createdAt: new Date().toISOString(), processed: false },
   { id: 'cap2', text: 'Look into creatine', routedTo: 'f1', createdAt: new Date().toISOString(), processed: false },
@@ -256,7 +244,6 @@ export const useCompassStore = create<CompassState>()(
       principles: SEED_PRINCIPLES,
       focuses: SEED_FOCUSES,
       habits: SEED_HABITS,
-      reminders: SEED_REMINDERS,
       captures: SEED_CAPTURES,
 
       setView: (view) => set({ view }),
@@ -288,12 +275,6 @@ export const useCompassStore = create<CompassState>()(
           }),
         })),
 
-      dismissReminder: (id) =>
-        set((state) => ({
-          reminders: state.reminders.map((r) =>
-            r.id === id ? { ...r, dismissed: true } : r
-          ),
-        })),
 
       addCapture: (text, routedTo, processed = false) =>
         set((state) => {
@@ -496,6 +477,36 @@ export const useCompassStore = create<CompassState>()(
           values: state.values.filter((v) => v.id !== id),
           valueDetailId: null,
         })),
+
+      resetCompass: () =>
+        set({
+          view: 'now',
+          focusDetailId: null,
+          habitDetailId: null,
+          valueDetailId: null,
+          captureOpen: false,
+          inboxOpen: false,
+          values: SEED_VALUES,
+          principles: SEED_PRINCIPLES,
+          focuses: SEED_FOCUSES,
+          habits: SEED_HABITS,
+          captures: SEED_CAPTURES,
+        }),
+
+      clearData: () =>
+        set({
+          view: 'now',
+          focusDetailId: null,
+          habitDetailId: null,
+          valueDetailId: null,
+          captureOpen: false,
+          inboxOpen: false,
+          values: [],
+          principles: [],
+          focuses: [],
+          habits: [],
+          captures: [],
+        }),
     }),
     { name: 'compass-store-v4', partialize: (state) => { const { searchQuery: _sq, ...rest } = state; return rest } }
   )

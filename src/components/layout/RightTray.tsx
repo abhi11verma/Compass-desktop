@@ -36,10 +36,9 @@ function TrayCard({ label, defaultOpen = true, children }: TrayCardProps) {
 }
 
 export function RightTray() {
-  const { habits, reminders, toggleHabit, dismissReminder, openHabitDetail } = useCompassStore()
+  const { habits, toggleHabit, openHabitDetail } = useCompassStore()
   const now = useNow()
   const activeHabits = habits.filter((h) => h.status === 'active')
-  const activeReminders = reminders.filter((r) => !r.dismissed)
 
   return (
     <div className="col-tray">
@@ -60,24 +59,6 @@ export function RightTray() {
           )
         })}
       </TrayCard>
-
-      {activeReminders.length > 0 && (
-        <TrayCard label="Reminders">
-          {activeReminders.map((r) => (
-            <div className="r-row" key={r.id}>
-              <span className="r-time">{r.time}</span>
-              <span className="r-text">{r.text}</span>
-              <button
-                className="r-x"
-                aria-label="Dismiss"
-                onClick={() => { dismissReminder(r.id) }}
-              >
-                ×
-              </button>
-            </div>
-          ))}
-        </TrayCard>
-      )}
     </div>
   )
 }
