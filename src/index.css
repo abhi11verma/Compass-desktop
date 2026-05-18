@@ -9,12 +9,12 @@
   --bg-card:    #161619;
   --bg-hover:   #1C1C21;
   --bg-active:  #202026;
-  --border:     rgba(255,255,255,0.07);
-  --border-mid: rgba(255,255,255,0.12);
-  --ink-1: rgba(255,255,255,0.86);
-  --ink-2: rgba(255,255,255,0.44);
-  --ink-3: rgba(255,255,255,0.22);
-  --ink-4: rgba(255,255,255,0.10);
+  --border:     rgba(255,255,255,0.09);
+  --border-mid: rgba(255,255,255,0.16);
+  --ink-1: rgba(255,255,255,0.88);
+  --ink-2: rgba(255,255,255,0.58);
+  --ink-3: rgba(255,255,255,0.36);
+  --ink-4: rgba(255,255,255,0.20);
   --accent:     rgba(76,110,245,0.9);
   --accent-dim: rgba(76,110,245,0.12);
   --warn:       rgba(200,136,26,0.85);
@@ -249,6 +249,7 @@ html, body, #root {
 .chip-warn { color: var(--warn); border-color: rgba(156,106,40,0.28); background: var(--warn-dim); }
 .chip-tag  { color: rgba(180,160,255,0.9); border-color: rgba(130,100,240,0.3); background: rgba(120,90,220,0.1); }
 .chip-status-active { color: rgba(80,200,140,0.85); border-color: rgba(58,143,104,0.3); background: rgba(58,143,104,0.08); }
+.chip-status-parked { color: rgba(180,140,80,0.8); border-color: rgba(160,110,40,0.28); background: rgba(140,90,30,0.08); }
 
 /* focus meta block (status + tags rows) in detail overlay */
 .fd-meta { display: flex; flex-direction: column; gap: 6px; margin-top: 10px; }
@@ -362,18 +363,18 @@ html, body, #root {
   border-radius: 9px; overflow: hidden;
 }
 .l-row {
-  display: flex; align-items: center; gap: 13px;
+  display: flex; align-items: flex-start; gap: 13px;
   padding: 12px 15px; border-bottom: 1px solid var(--border);
   cursor: pointer; transition: background 0.1s;
 }
 .l-row:last-child { border-bottom: none; }
 .l-row:hover { background: var(--bg-hover); }
-.l-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; opacity: 0.65; }
+.l-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; opacity: 0.65; margin-top: 4px; }
 .l-body { flex: 1; min-width: 0; }
 .l-name { font-size: 13px; color: var(--ink-1); font-weight: 300; margin-bottom: 2px; }
 .l-sub  { font-size: 11px; color: var(--ink-3); font-weight: 300; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .l-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 5px; }
-.l-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.l-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex-shrink: 0; }
 .l-age { font-family: var(--mono); font-size: 10px; color: var(--ink-3); }
 
 .hl-row {

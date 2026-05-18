@@ -123,7 +123,7 @@ export function WhatView() {
                 )}
               </div>
               <div className="l-right">
-                <span className={`chip${f.status === 'parked' ? '' : ' chip-status-active'}`}>
+                <span className={`chip${f.status === 'active' ? ' chip-status-active' : ' chip-status-parked'}`}>
                   {f.status === 'active' ? 'Active' : 'Parked'}
                 </span>
                 <span className="l-age">{f.daysActive}d</span>
@@ -132,9 +132,9 @@ export function WhatView() {
           ))}
           {parked.map((f) => (
             <div className="l-row" key={f.id} onClick={() => { openFocusDetail(f.id) }}>
-              <div className="l-dot" style={{ background: 'rgba(255,255,255,0.12)' }} />
+              <div className="l-dot" style={{ background: 'rgba(255,255,255,0.22)' }} />
               <div className="l-body">
-                <div className="l-name" style={{ color: 'var(--ink-3)' }}>{f.name}</div>
+                <div className="l-name" style={{ color: 'var(--ink-2)' }}>{f.name}</div>
                 <div className="l-sub">{f.process}</div>
                 {f.tags.length > 0 && (
                   <div className="l-tags">
@@ -143,7 +143,7 @@ export function WhatView() {
                 )}
               </div>
               <div className="l-right">
-                <span className="chip">Parked</span>
+                <span className="chip chip-status-parked">Parked</span>
               </div>
             </div>
           ))}
