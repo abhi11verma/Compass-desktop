@@ -5,6 +5,8 @@ export type Value = {
   id: string
   name: string
   description: string
+  note: string
+  hidden: boolean
 }
 
 export type Principle = {
@@ -93,6 +95,7 @@ interface CompassState {
   settingsOpen: boolean
   focusDetailId: string | null
   habitDetailId: string | null
+  valueDetailId: string | null
   searchQuery: string
   values: Value[]
   principles: Principle[]
@@ -107,6 +110,7 @@ interface CompassState {
   setSettingsOpen: (open: boolean) => void
   openFocusDetail: (id: string | null) => void
   openHabitDetail: (id: string | null) => void
+  openValueDetail: (id: string | null) => void
   setSearchQuery: (q: string) => void
   toggleHabit: (id: string) => void
   dismissReminder: (id: string) => void
@@ -127,6 +131,8 @@ interface CompassState {
   deleteHabit: (id: string) => void
   addPrinciple: (cue: string) => void
   addValue: (name: string) => void
+  updateValue: (id: string, updates: { name?: string; description?: string; note?: string; hidden?: boolean }) => void
+  deleteValue: (id: string) => void
 }
 
 function dateStr(daysAgo: number): string {
@@ -159,9 +165,9 @@ function calcStreak(history: string[]): number {
 }
 
 const SEED_VALUES: Value[] = [
-  { id: 'v1', name: 'Self-direction', description: 'Going your own way · thinking your own thoughts' },
-  { id: 'v2', name: 'Pleasure', description: 'Sensory enjoyment · savoring experience' },
-  { id: 'v3', name: 'Benevolence', description: 'Kindness · serving those close to you' },
+  { id: 'v1', name: 'Self-direction', description: 'Going your own way · thinking your own thoughts', note: '', hidden: false },
+  { id: 'v2', name: 'Pleasure', description: 'Sensory enjoyment · savoring experience', note: '', hidden: false },
+  { id: 'v3', name: 'Benevolence', description: 'Kindness · serving those close to you', note: '', hidden: false },
 ]
 
 const SEED_PRINCIPLES: Principle[] = [
@@ -244,6 +250,7 @@ export const useCompassStore = create<CompassState>()(
       settingsOpen: false,
       focusDetailId: null,
       habitDetailId: null,
+      valueDetailId: null,
       searchQuery: '',
       values: SEED_VALUES,
       principles: SEED_PRINCIPLES,
@@ -258,6 +265,7 @@ export const useCompassStore = create<CompassState>()(
       setSettingsOpen: (open) => set({ settingsOpen: open }),
       openFocusDetail: (id) => set({ focusDetailId: id }),
       openHabitDetail: (id) => set({ habitDetailId: id }),
+      openValueDetail: (id) => set({ valueDetailId: id }),
       setSearchQuery: (q) => set({ searchQuery: q }),
 
       toggleHabit: (id) =>
@@ -474,10 +482,21 @@ export const useCompassStore = create<CompassState>()(
         set((state) => ({
           values: [
             ...state.values,
-            { id: `v-${String(Date.now())}`, name, description: '' },
+            { id: `v-${String(Date.now())}`, name, description: '', note: '', hidden: false },
           ],
         })),
+
+      updateValue: (id, updates) =>
+        set((state) => ({
+          values: state.values.map((v) => (v.id === id ? { ...v, ...updates } : v)),
+        })),
+
+      deleteValue: (id) =>
+        set((state) => ({
+          values: state.values.filter((v) => v.id !== id),
+          valueDetailId: null,
+        })),
     }),
-    { name: 'compass-store-v3', partialize: (state) => { const { searchQuery: _sq, ...rest } = state; return rest } }
+    { name: 'compass-store-v4', partialize: (state) => { const { searchQuery: _sq, ...rest } = state; return rest } }
   )
 )

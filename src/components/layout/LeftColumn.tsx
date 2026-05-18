@@ -9,7 +9,7 @@ export function LeftColumn() {
       <div className="col-who-scroll">
         <div className="who-card">
           <div className="who-card-lbl">Values</div>
-          {values.map((v) => (
+          {values.filter((v) => !v.hidden).map((v) => (
             <div className="val-row" key={v.id}>{v.name}</div>
           ))}
         </div>

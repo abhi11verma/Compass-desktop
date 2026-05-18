@@ -72,7 +72,7 @@ type Capture = {
   processed: boolean
 }
 
-type Value     = { id: string; name: string; description: string }
+type Value     = { id: string; name: string; description: string; note: string; hidden: boolean }
 type Principle = { id: string; cue: string; daysActive: number; status: 'active' | 'queue' | 'retired' }
 type Reminder  = { id: string; text: string; time: string; dismissed: boolean }
 ```
@@ -102,6 +102,8 @@ type Reminder  = { id: string; text: string; time: string; dismissed: boolean }
 | `deleteHabit` | `(id) => void` | also clears `habitDetailId` |
 | `addPrinciple` | `(cue) => void` | status defaults to queue |
 | `addValue` | `(name) => void` | |
+| `updateValue` | `(id, { name?, description?, note?, hidden? }) => void` | partial update |
+| `deleteValue` | `(id) => void` | also clears `valueDetailId` |
 
 ---
 
@@ -181,7 +183,10 @@ Two-pane overlay for reviewing and routing unprocessed captures.
 - Saving with a focus route marks the capture as `processed: true`.
 
 ### WHO View (`src/components/views/WhoView.tsx`)
-- Displays Values and Principles lists. Read-only in current state.
+- Displays Values and Principles lists.
+- **Values**: clicking any row opens the Value Detail overlay. Hidden values shown at bottom with muted style + "hidden" badge.
+- **Add value**: inline input triggered by `+` button in the Values header or the `+ add value` hint at the bottom.
+- **Value Detail Overlay** (`src/components/overlays/ValueDetailOverlay.tsx`): editable name · description textarea · note textarea · eye toggle for show/hide · delete with confirm. CSS namespace: `.vd-`
 
 ### Keyboard Shortcuts (`src/hooks/useKeyboard.ts`)
 | Key | Action |
@@ -247,6 +252,6 @@ All styles in `src/index.css`. No Tailwind utilities used in component JSX (Tail
 ## Known Gaps / Not Yet Built
 
 - `streakDays` field on Focus exists in the store but nothing reads or writes it after initial seed.
-- WHO view (Values / Principles) is read-only — no add/edit UI yet.
+- WHO view (Values / Principles) is read-only — no add/edit UI yet. ~~done~~
 - Habit history (`history: string[]`) is stored but not visualized beyond streakCount.
 - Reminders in the Right Tray are seed-only — no add UI.
