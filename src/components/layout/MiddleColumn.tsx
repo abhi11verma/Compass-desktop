@@ -32,7 +32,6 @@ export function MiddleColumn() {
     <div className="col-mid">
       <div className="sec-hd">
         <span className="sec-hd-lbl">Focuses</span>
-        <span className="sec-hd-ct">{active.length}</span>
       </div>
 
       {active.map((f) => {
