@@ -71,6 +71,7 @@ interface CompassState {
   settingsOpen: boolean
   focusDetailId: string | null
   habitDetailId: string | null
+  searchQuery: string
   values: Value[]
   principles: Principle[]
   focuses: Focus[]
@@ -83,6 +84,7 @@ interface CompassState {
   setSettingsOpen: (open: boolean) => void
   openFocusDetail: (id: string | null) => void
   openHabitDetail: (id: string | null) => void
+  setSearchQuery: (q: string) => void
   toggleHabit: (id: string) => void
   dismissReminder: (id: string) => void
   addCapture: (text: string, routedTo: string | null, processed?: boolean) => void
@@ -186,6 +188,7 @@ export const useCompassStore = create<CompassState>()(
       settingsOpen: false,
       focusDetailId: null,
       habitDetailId: null,
+      searchQuery: '',
       values: SEED_VALUES,
       principles: SEED_PRINCIPLES,
       focuses: SEED_FOCUSES,
@@ -198,6 +201,7 @@ export const useCompassStore = create<CompassState>()(
       setSettingsOpen: (open) => set({ settingsOpen: open }),
       openFocusDetail: (id) => set({ focusDetailId: id }),
       openHabitDetail: (id) => set({ habitDetailId: id }),
+      setSearchQuery: (q) => set({ searchQuery: q }),
 
       toggleHabit: (id) =>
         set((state) => ({
@@ -350,6 +354,6 @@ export const useCompassStore = create<CompassState>()(
           ],
         })),
     }),
-    { name: 'compass-store-v3' }
+    { name: 'compass-store-v3', partialize: (state) => { const { searchQuery: _sq, ...rest } = state; return rest } }
   )
 )

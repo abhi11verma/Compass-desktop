@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 
-import { useCompassStore, type Focus } from '@/store/useCompassStore'
+import { useCompassStore, type Focus, type Habit } from '@/store/useCompassStore'
 
 const DOT_COLOR: Record<Focus['color'], string> = {
   green:  '#3A8F68',
@@ -89,17 +89,39 @@ function AddHabitForm({ onClose }: { onClose: () => void }) {
 }
 
 export function WhatView() {
-  const { focuses, habits, openFocusDetail, openHabitDetail } = useCompassStore()
+  const { focuses, habits, openFocusDetail, openHabitDetail, searchQuery } = useCompassStore()
   const [addingFocus, setAddingFocus] = useState(false)
   const [addingHabit, setAddingHabit] = useState(false)
 
-  const active = focuses.filter((f) => f.status !== 'parked')
-  const parked = focuses.filter((f) => f.status === 'parked')
+  const q = searchQuery.toLowerCase().trim()
+
+  function matchesFocus(f: Focus): boolean {
+    if (!q) return true
+    return (
+      f.name.toLowerCase().includes(q) ||
+      f.process.toLowerCase().includes(q) ||
+      f.tags.some((t) => t.toLowerCase().includes(q)) ||
+      f.tasks.some((t) => t.text.toLowerCase().includes(q))
+    )
+  }
+
+  function matchesHabit(h: Habit): boolean {
+    if (!q) return true
+    return (
+      h.name.toLowerCase().includes(q) ||
+      h.details.toLowerCase().includes(q) ||
+      h.tags.some((t) => t.toLowerCase().includes(q))
+    )
+  }
+
+  const active = focuses.filter((f) => f.status !== 'parked' && matchesFocus(f))
+  const parked = focuses.filter((f) => f.status === 'parked' && matchesFocus(f))
   const activeSummary = `${active.length.toString()} active${parked.length > 0 ? ` · ${parked.length.toString()} parked` : ''}`
 
-  const activeHabits = habits.filter((h) => h.status === 'active')
-  const parkedHabits = habits.filter((h) => h.status === 'parked')
-  const completeHabits = habits.filter((h) => h.status === 'complete')
+  const filteredHabits = habits.filter(matchesHabit)
+  const activeHabits = filteredHabits.filter((h) => h.status === 'active')
+  const parkedHabits = filteredHabits.filter((h) => h.status === 'parked')
+  const completeHabits = filteredHabits.filter((h) => h.status === 'complete')
   const habitSummary = [
     activeHabits.length > 0 && `${activeHabits.length.toString()} active`,
     parkedHabits.length > 0 && `${parkedHabits.length.toString()} parked`,
@@ -152,6 +174,9 @@ export function WhatView() {
                 </div>
               </div>
             ))}
+            {q && active.length === 0 && parked.length === 0 && (
+              <div className="list-empty">No focuses match "{q}"</div>
+            )}
           </div>
           {addingFocus ? (
             <AddFocusForm onClose={() => { setAddingFocus(false) }} />
@@ -170,7 +195,7 @@ export function WhatView() {
         </div>
         <div className="list-card">
           <div className="list-items">
-            {habits.map((h) => {
+            {filteredHabits.map((h) => {
               const displayDots = Array(14).fill(0).map((_, i) => {
                 const daysAgo = 13 - i
                 if (daysAgo < h.streakCount) return daysAgo < 3 ? 3 : daysAgo < 6 ? 2 : 1
@@ -215,6 +240,9 @@ export function WhatView() {
                 </div>
               )
             })}
+            {q && filteredHabits.length === 0 && (
+              <div className="list-empty">No habits match "{q}"</div>
+            )}
           </div>
           {addingHabit ? (
             <AddHabitForm onClose={() => { setAddingHabit(false) }} />

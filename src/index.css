@@ -150,6 +150,30 @@ html, body, #root {
 .seg-btn.active { background: rgba(255,255,255,0.08); color: var(--ink-1); }
 
 .topbar-right { display: flex; align-items: center; gap: 12px; justify-content: flex-end; }
+
+/* topbar search */
+.topbar-search-wrap {
+  display: flex; align-items: center; gap: 6px;
+  border: 1px solid var(--border);
+  border-radius: 6px; padding: 0 8px;
+  height: 27px; transition: border-color 0.15s;
+}
+.topbar-search-wrap:focus-within { border-color: var(--border-mid); }
+.topbar-search-icon { color: var(--ink-4); flex-shrink: 0; }
+.topbar-search {
+  font-family: var(--mono); font-size: 11px; color: var(--ink-2);
+  background: transparent; border: none; outline: none;
+  width: 130px; transition: width 0.2s; letter-spacing: 0.02em;
+}
+.topbar-search:focus { width: 180px; }
+.topbar-search::placeholder { color: var(--ink-4); }
+.topbar-search-clear {
+  background: transparent; border: none; cursor: pointer;
+  color: var(--ink-4); font-size: 14px; line-height: 1;
+  padding: 0; display: flex; align-items: center;
+  transition: color 0.1s;
+}
+.topbar-search-clear:hover { color: var(--ink-2); }
 .inbox-pill { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--ink-3); font-family: var(--mono); }
 .inbox-dot {
   width: 16px; height: 16px; border-radius: 50%;
@@ -443,6 +467,10 @@ html, body, #root {
   padding-bottom: 44px;
 }
 .list-items::-webkit-scrollbar { display: none; }
+.list-empty {
+  padding: 20px 15px; font-family: var(--mono); font-size: 10.5px;
+  color: var(--ink-4); letter-spacing: 0.03em; text-align: center;
+}
 .l-row {
   display: flex; align-items: flex-start; gap: 13px;
   padding: 12px 15px; border-bottom: 1px solid var(--border);
