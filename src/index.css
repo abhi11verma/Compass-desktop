@@ -397,6 +397,17 @@ html, body, #root {
 }
 .h-row:last-child { border-bottom: none; }
 .h-row:hover { background: var(--bg-hover); }
+.h-row--clickable { cursor: pointer; }
+.h-row--dismissing {
+  animation: h-dismiss 0.35s ease forwards;
+  pointer-events: none;
+  overflow: hidden;
+}
+@keyframes h-dismiss {
+  0%   { opacity: 1; max-height: 80px; }
+  40%  { opacity: 0; max-height: 80px; }
+  100% { opacity: 0; max-height: 0; padding-top: 0; padding-bottom: 0; border-bottom-width: 0; }
+}
 .hck {
   width: 16px; height: 16px; border-radius: 50%;
   border: 1px solid var(--border-mid); flex-shrink: 0;
