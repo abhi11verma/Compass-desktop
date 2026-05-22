@@ -10,7 +10,7 @@ export function Topbar() {
   const searchRef = useRef<HTMLInputElement>(null)
 
   return (
-    <div className="topbar">
+    <div className="topbar" data-tauri-drag-region>
       <div className="topbar-left">
         <div className="app-brand">
           <span className="app-name">compass</span>

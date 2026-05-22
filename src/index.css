@@ -1234,3 +1234,13 @@ html.light .hbd-freq-select option { background: #fff; color: rgba(0,0,0,0.85); 
 
 /* ── light theme ── */
 html.light .ibx-overlay { background: rgba(0,0,0,0.35); }
+
+/* ── tauri desktop: frameless window with overlay traffic lights ── */
+/* Adds left padding to clear the macOS traffic-light buttons (~72px) */
+[data-tauri-drag-region] .topbar-left { padding-left: 72px; }
+/* Ensure the drag region spans the full topbar row */
+[data-tauri-drag-region] { -webkit-app-region: drag; app-region: drag; }
+/* Interactive children must opt out of drag */
+[data-tauri-drag-region] button,
+[data-tauri-drag-region] input,
+[data-tauri-drag-region] a { -webkit-app-region: no-drag; app-region: no-drag; }

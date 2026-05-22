@@ -35,3 +35,6 @@ lerna-debug.log*
 
 # TypeScript cache
 *.tsbuildinfo
+
+# Tauri — Rust build artifacts (large, fully reproducible)
+src-tauri/target/
