@@ -73,7 +73,7 @@ type Capture = {
 }
 
 type Value     = { id: string; name: string; description: string; note: string; hidden: boolean }
-type Principle = { id: string; cue: string; daysActive: number; status: 'active' | 'queue' | 'retired' }
+type Principle = { id: string; cue: string; daysActive: number; tags: string[]; status: 'active' | 'queue' | 'retired' }
 type Reminder  = { id: string; text: string; time: string; dismissed: boolean }
 ```
 
@@ -101,6 +101,8 @@ type Reminder  = { id: string; text: string; time: string; dismissed: boolean }
 | `updateHabit` | `(id, { name?, details?, tags?, status? }) => void` | partial update |
 | `deleteHabit` | `(id) => void` | also clears `habitDetailId` |
 | `addPrinciple` | `(cue) => void` | status defaults to queue |
+| `updatePrinciple` | `(id, { cue?, tags?, status? }) => void` | partial update |
+| `deletePrinciple` | `(id) => void` | also clears `principleDetailId` |
 | `addValue` | `(name) => void` | |
 | `updateValue` | `(id, { name?, description?, note?, hidden? }) => void` | partial update |
 | `deleteValue` | `(id) => void` | also clears `valueDetailId` |
@@ -187,6 +189,9 @@ Two-pane overlay for reviewing and routing unprocessed captures.
 - **Values**: clicking any row opens the Value Detail overlay. Hidden values shown at bottom with muted style + "hidden" badge.
 - **Add value**: inline input triggered by `+` button in the Values header or the `+ add value` hint at the bottom.
 - **Value Detail Overlay** (`src/components/overlays/ValueDetailOverlay.tsx`): editable name · description textarea · note textarea · eye toggle for show/hide · delete with confirm. CSS namespace: `.vd-`
+- **Principles**: clicking any row opens the Principle Detail overlay. Active and queued principles shown with tag chips.
+- **Add principle**: inline input at bottom via `+ add principle` hint; created with `queue` status.
+- **Principle Detail Overlay** (`src/components/overlays/PrincipleDetailOverlay.tsx`): editable cue textarea · status select (Active / Queue) · tags field (`#tag1 #tag2`) · days-active display · delete with confirm. CSS namespace: `.pd-`
 
 ### Keyboard Shortcuts (`src/hooks/useKeyboard.ts`)
 | Key | Action |
@@ -236,7 +241,7 @@ All styles in `src/index.css`. No Tailwind utilities used in component JSX (Tail
 | `.hl-` | Habit list row (What view) |
 | `.hbd-` | Habit Detail overlay |
 | `.l-` | List row (What view) |
-| `.chip` | Base chip/badge |
+| `.pd-` | Principle Detail overlay |
 
 **Chip variants:**
 - `.chip` — default (muted)

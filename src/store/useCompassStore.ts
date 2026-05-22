@@ -13,6 +13,7 @@ export type Principle = {
   id: string
   cue: string
   daysActive: number
+  tags: string[]
   status: 'active' | 'queue' | 'retired'
 }
 
@@ -89,6 +90,7 @@ interface CompassState {
   focusDetailId: string | null
   habitDetailId: string | null
   valueDetailId: string | null
+  principleDetailId: string | null
   searchQuery: string
   values: Value[]
   principles: Principle[]
@@ -103,6 +105,7 @@ interface CompassState {
   openFocusDetail: (id: string | null) => void
   openHabitDetail: (id: string | null) => void
   openValueDetail: (id: string | null) => void
+  openPrincipleDetail: (id: string | null) => void
   setSearchQuery: (q: string) => void
   toggleHabit: (id: string) => void
   addCapture: (text: string, routedTo: string | null, processed?: boolean) => void
@@ -121,6 +124,8 @@ interface CompassState {
   updateHabit: (id: string, updates: { name?: string; details?: string; tags?: string[]; status?: HabitStatus; frequency?: HabitFrequency }) => void
   deleteHabit: (id: string) => void
   addPrinciple: (cue: string) => void
+  updatePrinciple: (id: string, updates: { cue?: string; tags?: string[]; status?: Principle['status'] }) => void
+  deletePrinciple: (id: string) => void
   addValue: (name: string) => void
   updateValue: (id: string, updates: { name?: string; description?: string; note?: string; hidden?: boolean }) => void
   deleteValue: (id: string) => void
@@ -164,11 +169,11 @@ const SEED_VALUES: Value[] = [
 ]
 
 const SEED_PRINCIPLES: Principle[] = [
-  { id: 'p1', cue: 'Talk slower than feels natural.', daysActive: 18, status: 'active' },
-  { id: 'p2', cue: "Respond, don't react.", daysActive: 9, status: 'active' },
-  { id: 'p3', cue: 'Ask one more question before offering an opinion.', daysActive: 4, status: 'active' },
-  { id: 'p4', cue: 'Listen more than you speak in group settings.', daysActive: 0, status: 'queue' },
-  { id: 'p5', cue: 'Start tasks before you feel ready.', daysActive: 0, status: 'queue' },
+  { id: 'p1', cue: 'Talk slower than feels natural.', daysActive: 18, tags: [], status: 'active' },
+  { id: 'p2', cue: "Respond, don't react.", daysActive: 9, tags: [], status: 'active' },
+  { id: 'p3', cue: 'Ask one more question before offering an opinion.', daysActive: 4, tags: [], status: 'active' },
+  { id: 'p4', cue: 'Listen more than you speak in group settings.', daysActive: 0, tags: [], status: 'queue' },
+  { id: 'p5', cue: 'Start tasks before you feel ready.', daysActive: 0, tags: [], status: 'queue' },
 ]
 
 const SEED_FOCUSES: Focus[] = [
@@ -239,6 +244,7 @@ export const useCompassStore = create<CompassState>()(
       focusDetailId: null,
       habitDetailId: null,
       valueDetailId: null,
+      principleDetailId: null,
       searchQuery: '',
       values: SEED_VALUES,
       principles: SEED_PRINCIPLES,
@@ -253,6 +259,7 @@ export const useCompassStore = create<CompassState>()(
       openFocusDetail: (id) => set({ focusDetailId: id }),
       openHabitDetail: (id) => set({ habitDetailId: id }),
       openValueDetail: (id) => set({ valueDetailId: id }),
+      openPrincipleDetail: (id) => set({ principleDetailId: id }),
       setSearchQuery: (q) => set({ searchQuery: q }),
 
       toggleHabit: (id) =>
@@ -455,8 +462,19 @@ export const useCompassStore = create<CompassState>()(
         set((state) => ({
           principles: [
             ...state.principles,
-            { id: `p-${String(Date.now())}`, cue, daysActive: 0, status: 'queue' },
+            { id: `p-${String(Date.now())}`, cue, daysActive: 0, tags: [], status: 'queue' },
           ],
+        })),
+
+      updatePrinciple: (id, updates) =>
+        set((state) => ({
+          principles: state.principles.map((p) => (p.id === id ? { ...p, ...updates } : p)),
+        })),
+
+      deletePrinciple: (id) =>
+        set((state) => ({
+          principles: state.principles.filter((p) => p.id !== id),
+          principleDetailId: null,
         })),
 
       addValue: (name) =>
@@ -484,6 +502,7 @@ export const useCompassStore = create<CompassState>()(
           focusDetailId: null,
           habitDetailId: null,
           valueDetailId: null,
+          principleDetailId: null,
           captureOpen: false,
           inboxOpen: false,
           values: SEED_VALUES,
@@ -499,6 +518,7 @@ export const useCompassStore = create<CompassState>()(
           focusDetailId: null,
           habitDetailId: null,
           valueDetailId: null,
+          principleDetailId: null,
           captureOpen: false,
           inboxOpen: false,
           values: [],
@@ -508,6 +528,6 @@ export const useCompassStore = create<CompassState>()(
           captures: [],
         }),
     }),
-    { name: 'compass-store-v4', partialize: (state) => { const { searchQuery: _sq, ...rest } = state; return rest } }
+    { name: 'compass-store-v5', partialize: (state) => { const { searchQuery: _sq, ...rest } = state; return rest } }
   )
 )

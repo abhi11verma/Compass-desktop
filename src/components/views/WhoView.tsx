@@ -3,10 +3,12 @@ import { useState } from 'react'
 import { useCompassStore } from '@/store/useCompassStore'
 
 export function WhoView() {
-  const { values, principles, searchQuery, openValueDetail, addValue } = useCompassStore()
+  const { values, principles, searchQuery, openValueDetail, openPrincipleDetail, addValue, addPrinciple } = useCompassStore()
 
   const [addingValue, setAddingValue] = useState(false)
   const [newValueName, setNewValueName] = useState('')
+  const [addingPrinciple, setAddingPrinciple] = useState(false)
+  const [newPrincipleCue, setNewPrincipleCue] = useState('')
 
   const q = searchQuery.toLowerCase().trim()
 
@@ -15,7 +17,7 @@ export function WhoView() {
     : values
 
   const filteredPrinciples = q
-    ? principles.filter((p) => p.cue.toLowerCase().includes(q))
+    ? principles.filter((p) => p.cue.toLowerCase().includes(q) || p.tags.some((t) => t.toLowerCase().includes(q)))
     : principles
 
   const active = filteredPrinciples.filter((p) => p.status === 'active')
@@ -28,6 +30,14 @@ export function WhoView() {
     addValue(name)
     setNewValueName('')
     setAddingValue(false)
+  }
+
+  function submitPrinciple() {
+    const cue = newPrincipleCue.trim()
+    if (!cue) { setAddingPrinciple(false); return }
+    addPrinciple(cue)
+    setNewPrincipleCue('')
+    setAddingPrinciple(false)
   }
 
   return (
@@ -77,25 +87,55 @@ export function WhoView() {
         </div>
         <div className="list-card">
           {active.map((p) => (
-            <div className="pf-row" key={p.id}>
+            <div className="pf-row pf-row-click" key={p.id} onClick={() => { openPrincipleDetail(p.id) }}>
               <div className="pf-body">
                 <div className="pf-cue">{p.cue}</div>
-                <div className="pf-age">{p.daysActive}d active</div>
+                <div className="pf-age">
+                  {p.daysActive}d active
+                  {p.tags.length > 0 && p.tags.map((t) => (
+                    <span key={t} className="chip chip-tag pf-tag">#{t}</span>
+                  ))}
+                </div>
               </div>
               <span className="pf-badge pf-active">active</span>
             </div>
           ))}
           {queued.map((p) => (
-            <div className="pf-row" key={p.id}>
+            <div className="pf-row pf-row-click" key={p.id} onClick={() => { openPrincipleDetail(p.id) }}>
               <div className="pf-body">
                 <div className="pf-cue">{p.cue}</div>
-                <div className="pf-age">In queue</div>
+                <div className="pf-age">
+                  In queue
+                  {p.tags.length > 0 && p.tags.map((t) => (
+                    <span key={t} className="chip chip-tag pf-tag">#{t}</span>
+                  ))}
+                </div>
               </div>
               <span className="pf-badge pf-queue">queue</span>
             </div>
           ))}
           {q && filteredPrinciples.length === 0 && (
             <div className="list-empty">No principles match "{q}"</div>
+          )}
+          {addingPrinciple ? (
+            <div className="vf-add-row">
+              <input
+                className="vf-add-input"
+                placeholder="Principle cue…"
+                value={newPrincipleCue}
+                autoFocus
+                onChange={(e) => { setNewPrincipleCue(e.target.value) }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') submitPrinciple()
+                  if (e.key === 'Escape') { setNewPrincipleCue(''); setAddingPrinciple(false) }
+                }}
+                onBlur={submitPrinciple}
+              />
+            </div>
+          ) : (
+            <div className="vf-add-hint" onClick={() => { setAddingPrinciple(true) }}>
+              + add principle
+            </div>
           )}
         </div>
       </div>

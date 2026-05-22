@@ -1,7 +1,7 @@
 import { useCompassStore } from '@/store/useCompassStore'
 
 export function LeftColumn() {
-  const { values, principles, setSettingsOpen } = useCompassStore()
+  const { values, principles, openPrincipleDetail, setSettingsOpen } = useCompassStore()
   const activePrinciples = principles.filter((p) => p.status === 'active')
 
   return (
@@ -17,9 +17,18 @@ export function LeftColumn() {
         <div className="who-card">
           <div className="who-card-lbl">Principles</div>
           {activePrinciples.map((p) => (
-            <div className="prin-row" key={p.id}>
+            <div
+              className="prin-row prin-row-click"
+              key={p.id}
+              onClick={() => { openPrincipleDetail(p.id) }}
+            >
               <div className="prin-cue">{p.cue}</div>
-              <div className="prin-age">{p.daysActive}d</div>
+              <div className="prin-meta">
+                <span className="prin-age">{p.daysActive}d</span>
+                {p.tags.map((t) => (
+                  <span key={t} className="chip chip-tag prin-tag">#{t}</span>
+                ))}
+              </div>
             </div>
           ))}
         </div>
