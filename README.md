@@ -2,6 +2,10 @@
 
 A personal life-navigation app. Three views — **Now**, **What**, **Who** — keep your daily actions, active focuses, and core identity in one place.
 
+**[compassapp.verma.dev](https://abhi11verma.github.io/Compass-desktop/) · [Open app →](https://abhi11verma.github.io/Compass-desktop/app/)**
+
+Works entirely in the browser. No account, no server — your data lives in `localStorage`.
+
 ---
 
 ## What it does
