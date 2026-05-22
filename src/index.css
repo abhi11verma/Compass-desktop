@@ -117,13 +117,15 @@ html, body, #root {
 }
 .topbar input { user-select: text; }
 .topbar-left { display: flex; align-items: center; }
-.app-brand { display: flex; flex-direction: column; gap: 1px; }
+.app-brand { display: flex; flex-direction: row; align-items: center; gap: 10px; }
+.app-brand-icon { color: var(--ink-3); flex-shrink: 0; }
+.app-brand-text { display: flex; flex-direction: column; gap: 1px; }
 .app-name {
-  font-family: var(--mono); font-size: 14.4px;
+  font-family: var(--mono); font-size: 13px;
   color: var(--ink-3); letter-spacing: 0.1em;
 }
 .topbar-date {
-  font-family: var(--mono); font-size: 11.9px;
+  font-family: var(--mono); font-size: 11px;
   color: var(--ink-4); letter-spacing: 0.06em;
 }
 
@@ -1289,4 +1291,4 @@ html.light .pd-status-queue option { background: #fff; color: rgba(0,0,0,0.85); 
 
 /* ── tauri desktop: frameless window with overlay traffic lights ── */
 /* Left padding clears the macOS traffic-light buttons (~72px) */
-[data-tauri-drag-region] .topbar-left { padding-left: 72px; }
+.is-tauri .topbar-left { padding-left: 72px; }

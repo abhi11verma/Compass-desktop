@@ -1,5 +1,6 @@
 import { useCallback, useRef } from 'react'
 
+import { CompassIcon } from '@/components/CompassIcon'
 import { formatTopbarDate } from '@/lib/dates'
 import { useCompassStore } from '@/store/useCompassStore'
 
@@ -34,11 +35,14 @@ export function Topbar() {
   const onDoubleClick = useCallback(handleTopbarDoubleClick, [])
 
   return (
-    <div className="topbar" data-tauri-drag-region onMouseDown={onMouseDown} onDoubleClick={onDoubleClick}>
+    <div className={`topbar${isTauri() ? ' is-tauri' : ''}`} data-tauri-drag-region onMouseDown={onMouseDown} onDoubleClick={onDoubleClick}>
       <div className="topbar-left">
         <div className="app-brand">
-          <span className="app-name">compass</span>
-          <span className="topbar-date">{formatTopbarDate()}</span>
+          <CompassIcon size={30} className="app-brand-icon" />
+          <div className="app-brand-text">
+            <span className="app-name">compass</span>
+            <span className="topbar-date">{formatTopbarDate()}</span>
+          </div>
         </div>
       </div>
 

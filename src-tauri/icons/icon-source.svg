@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <!-- background -->
+  <rect width="512" height="512" rx="112" fill="#0E0E11"/>
+  <!-- NORTH label -->
+  <text x="256" y="62" text-anchor="middle" dominant-baseline="middle"
+        fill="white" font-size="40" font-family="system-ui,sans-serif"
+        font-weight="700" letter-spacing="14">NORTH</text>
+  <!-- tick: NORTH to ring -->
+  <line x1="256" y1="86" x2="256" y2="122" stroke="white" stroke-width="6" stroke-linecap="round" opacity="0.5"/>
+  <!-- ring -->
+  <circle cx="256" cy="296" r="168" stroke="white" stroke-width="10"/>
+  <!-- S E W ticks -->
+  <line x1="256" y1="464" x2="256" y2="486" stroke="white" stroke-width="6" stroke-linecap="round" opacity="0.3"/>
+  <line x1="88" y1="296" x2="66" y2="296" stroke="white" stroke-width="6" stroke-linecap="round" opacity="0.3"/>
+  <line x1="424" y1="296" x2="446" y2="296" stroke="white" stroke-width="6" stroke-linecap="round" opacity="0.3"/>
+  <!-- S E W labels -->
+  <text x="256" y="424" text-anchor="middle" dominant-baseline="middle"
+        fill="white" font-size="38" font-family="system-ui,sans-serif" font-weight="700" opacity="0.3">S</text>
+  <text x="384" y="297" text-anchor="middle" dominant-baseline="middle"
+        fill="white" font-size="38" font-family="system-ui,sans-serif" font-weight="700" opacity="0.3">E</text>
+  <text x="128" y="297" text-anchor="middle" dominant-baseline="middle"
+        fill="white" font-size="38" font-family="system-ui,sans-serif" font-weight="700" opacity="0.3">W</text>
+  <!-- needle north -->
+  <polygon points="256,124 218,296 256,272 294,296" fill="white"/>
+  <!-- needle south -->
+  <polygon points="256,468 218,296 256,320 294,296" fill="white" opacity="0.22"/>
+  <!-- center pivot -->
+  <circle cx="256" cy="296" r="16" fill="white"/>
+</svg>
