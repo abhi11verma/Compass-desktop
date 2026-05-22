@@ -336,7 +336,7 @@ html, body, #root {
 
 /* focus meta block (status + tags rows) in detail overlay */
 .fd-meta { display: flex; flex-direction: column; gap: 6px; margin-top: 10px; }
-.fd-meta-row { display: flex; align-items: center; gap: 12px; }
+.fd-meta-row { display: flex; align-items: center; gap: 20px; }
 .fd-meta-lbl {
   font-family: var(--mono); font-size: 11.2px; letter-spacing: 0.12em;
   text-transform: uppercase; color: var(--ink-4); width: 38px; flex-shrink: 0;
