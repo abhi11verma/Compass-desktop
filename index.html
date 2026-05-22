@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Compass — Navigate what matters</title>
+  <meta name="description" content="Compass keeps your values, focuses, and daily habits in one calm space. No project management overhead.">
+  <meta property="og:title" content="Compass — Navigate what matters">
+  <meta property="og:description" content="Your values, focuses, and daily habits in one calm space.">
+  <meta property="og:image" content="assets/screenshot.png">
+  <link rel="icon" href="../public/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;1,300&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #0E0E11;
+      --bg-card:     #161619;
+      --bg-hover:    #1C1C21;
+      --border:      rgba(255,255,255,0.07);
+      --border-mid:  rgba(255,255,255,0.12);
+      --ink-1:       rgba(255,255,255,0.86);
+      --ink-2:       rgba(255,255,255,0.44);
+      --ink-3:       rgba(255,255,255,0.22);
+      --ink-4:       rgba(255,255,255,0.10);
+      --accent:      rgba(76,110,245,0.9);
+      --accent-hex:  #4C6EF5;
+      --g:  #3A8F68;
+      --i:  #5C6DC4;
+      --a:  #B8772A;
+      --sans:  'DM Sans', system-ui, sans-serif;
+      --serif: 'Instrument Serif', Georgia, serif;
+      --mono:  'DM Mono', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink-1);
+      font-family: var(--sans);
+      font-size: 15px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 48px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(14,14,17,0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .nav-wordmark {
+      font-family: var(--mono);
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--ink-1);
+      letter-spacing: 0.02em;
+      text-decoration: none;
+    }
+
+    .nav-cta {
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 500;
+      color: #fff;
+      background: var(--accent-hex);
+      border: none;
+      border-radius: 6px;
+      padding: 7px 16px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.15s ease, transform 0.15s ease;
+    }
+    .nav-cta:hover {
+      opacity: 0.88;
+      transform: scale(1.03);
+    }
+
+    /* ── LAYOUT ── */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      padding-top: 160px;
+      padding-bottom: 80px;
+      text-align: center;
+    }
+
+    .hero-label {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+      margin-bottom: 28px;
+    }
+
+    .hero-headline {
+      font-family: var(--serif);
+      font-size: clamp(40px, 6vw, 68px);
+      font-weight: 400;
+      font-style: italic;
+      line-height: 1.1;
+      color: var(--ink-1);
+      margin-bottom: 20px;
+      letter-spacing: -0.01em;
+    }
+
+    .hero-sub {
+      font-size: 16px;
+      font-weight: 300;
+      color: var(--ink-2);
+      max-width: 480px;
+      margin: 0 auto 36px;
+      line-height: 1.65;
+    }
+
+    .hero-cta {
+      display: inline-block;
+      font-family: var(--sans);
+      font-size: 15px;
+      font-weight: 500;
+      color: #fff;
+      background: var(--accent-hex);
+      border-radius: 8px;
+      padding: 12px 28px;
+      text-decoration: none;
+      transition: opacity 0.15s ease, transform 0.18s ease;
+      margin-bottom: 72px;
+    }
+    .hero-cta:hover {
+      opacity: 0.9;
+      transform: scale(1.04);
+    }
+
+    /* ── SCREENSHOT ── */
+    .screenshot-wrap {
+      position: relative;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    /* Warm gradient glow — echoes the app's screenshot background */
+    .screenshot-glow {
+      position: absolute;
+      inset: -40px;
+      border-radius: 32px;
+      background: radial-gradient(
+        ellipse 80% 60% at 50% 50%,
+        rgba(76,110,245,0.12) 0%,
+        rgba(180,100,40,0.10) 45%,
+        transparent 70%
+      );
+      pointer-events: none;
+      filter: blur(20px);
+    }
+
+    .screenshot-frame {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.10);
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.04),
+        0 32px 64px rgba(0,0,0,0.6),
+        0 8px 16px rgba(0,0,0,0.4);
+    }
+
+    /* macOS-style title bar dots */
+    .screenshot-titlebar {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 12px 16px;
+      background: #111114;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+    }
+    .dot-r { background: #FF5F57; }
+    .dot-y { background: #FEBC2E; }
+    .dot-g { background: #28C840; }
+
+    .screenshot-frame img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    /* ── DIVIDER ── */
+    .section-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 0;
+    }
+
+    /* ── FEATURES ── */
+    .features {
+      padding: 96px 0;
+    }
+
+    .features-label {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+      text-align: center;
+      margin-bottom: 56px;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--border);
+    }
+
+    .feature-card {
+      background: var(--bg-card);
+      padding: 36px 32px;
+    }
+
+    .feature-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-bottom: 20px;
+    }
+    .dot-now  { background: var(--g); }
+    .dot-what { background: var(--i); }
+    .dot-who  { background: var(--a); }
+
+    .feature-view {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+      margin-bottom: 8px;
+    }
+
+    .feature-title {
+      font-family: var(--serif);
+      font-size: 20px;
+      font-style: italic;
+      color: var(--ink-1);
+      margin-bottom: 10px;
+      line-height: 1.2;
+    }
+
+    .feature-desc {
+      font-size: 13.5px;
+      font-weight: 300;
+      color: var(--ink-2);
+      line-height: 1.6;
+    }
+
+    /* ── HOW IT WORKS ── */
+    .how {
+      padding: 80px 0 96px;
+    }
+
+    .how-label {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .how-steps {
+      display: flex;
+      align-items: flex-start;
+      gap: 0;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    .how-step {
+      flex: 1;
+      text-align: center;
+      padding: 0 24px;
+    }
+
+    .step-number {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--ink-3);
+      letter-spacing: 0.08em;
+      margin-bottom: 12px;
+    }
+
+    .step-name {
+      font-family: var(--serif);
+      font-size: 22px;
+      font-style: italic;
+      color: var(--ink-1);
+      margin-bottom: 8px;
+    }
+
+    .step-desc {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--ink-2);
+      line-height: 1.55;
+    }
+
+    .how-arrow {
+      padding-top: 36px;
+      color: var(--ink-3);
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .footer-note {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--ink-3);
+    }
+
+    .footer-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .footer-link {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--ink-3);
+      text-decoration: none;
+      transition: color 0.12s;
+    }
+    .footer-link:hover { color: var(--ink-2); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 720px) {
+      nav { padding: 16px 24px; }
+
+      .container { padding: 0 20px; }
+
+      .hero { padding-top: 120px; padding-bottom: 60px; }
+
+      .features-grid { grid-template-columns: 1fr; }
+
+      .feature-card { padding: 28px 24px; }
+
+      .how-steps { flex-direction: column; align-items: center; gap: 8px; }
+
+      .how-arrow { padding-top: 0; transform: rotate(90deg); }
+
+      footer {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 24px;
+        gap: 12px;
+      }
+
+      .screenshot-titlebar { padding: 10px 12px; gap: 6px; }
+      .dot { width: 9px; height: 9px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-wordmark">compass</a>
+    <a href="/Compass-desktop/app/" target="_blank" rel="noopener" class="nav-cta">Start here →</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container">
+      <span class="hero-label">Personal navigation</span>
+      <h1 class="hero-headline">Navigate what matters.</h1>
+      <p class="hero-sub">
+        Compass keeps your values, focuses, and daily habits in one calm space —
+        no project management overhead.
+      </p>
+      <a href="/Compass-desktop/app/" target="_blank" rel="noopener" class="hero-cta">Start here →</a>
+
+      <!-- SCREENSHOT -->
+      <div class="screenshot-wrap">
+        <div class="screenshot-glow"></div>
+        <div class="screenshot-frame">
+          <div class="screenshot-titlebar">
+            <span class="dot dot-r"></span>
+            <span class="dot dot-y"></span>
+            <span class="dot dot-g"></span>
+          </div>
+          <img src="assets/screenshot.png" alt="Compass app — Now view showing focuses, habits, and values" width="1392" height="856">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- FEATURES -->
+  <section class="features">
+    <div class="container">
+      <p class="features-label">Three views</p>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-dot dot-now"></div>
+          <p class="feature-view">Now</p>
+          <h2 class="feature-title">Today's view</h2>
+          <p class="feature-desc">
+            Active focuses with their top tasks. Habits to check off. Quick capture so
+            nothing slips while you're in motion.
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-dot dot-what"></div>
+          <p class="feature-view">What</p>
+          <h2 class="feature-title">Your focuses</h2>
+          <p class="feature-desc">
+            Everything you're working on — active, parked, or in queue. Track streaks,
+            tags, and ideas routed from the inbox.
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-dot dot-who"></div>
+          <p class="feature-view">Who</p>
+          <h2 class="feature-title">Your identity</h2>
+          <p class="feature-desc">
+            The values you hold and the behavioral principles you're actively practicing.
+            The foundation everything else is built on.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- HOW IT WORKS -->
+  <section class="how">
+    <div class="container">
+      <p class="how-label">How it works</p>
+      <div class="how-steps">
+        <div class="how-step">
+          <p class="step-number">01</p>
+          <h3 class="step-name">Capture</h3>
+          <p class="step-desc">Press <code style="font-family:var(--mono);font-size:12px;color:var(--ink-3)">C</code> anywhere to jot a thought — task, idea, or impulse — without losing context.</p>
+        </div>
+        <div class="how-arrow">→</div>
+        <div class="how-step">
+          <p class="step-number">02</p>
+          <h3 class="step-name">Route</h3>
+          <p class="step-desc">Triage your inbox: send each capture to a focus, or dismiss it. Keeps the signal clean.</p>
+        </div>
+        <div class="how-arrow">→</div>
+        <div class="how-step">
+          <p class="step-number">03</p>
+          <h3 class="step-name">Act</h3>
+          <p class="step-desc">Open Now and see exactly what deserves your attention today — nothing more.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p class="footer-note">
+      Works in your browser. Your data lives in localStorage — private by default.
+    </p>
+    <div class="footer-links">
+      <a href="https://github.com/abhi11verma/Compass-desktop" target="_blank" rel="noopener" class="footer-link">GitHub</a>
+      <a href="/Compass-desktop/app/" target="_blank" rel="noopener" class="footer-link">Open app →</a>
+    </div>
+  </footer>
+
+</body>
+</html>
