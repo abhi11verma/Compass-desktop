@@ -400,6 +400,8 @@ html, body, #root {
 .h-row--clickable { cursor: pointer; }
 .h-row--dismissing {
   animation: h-dismiss 0.35s ease forwards;
+  animation-delay: 0.5s;
+  animation-fill-mode: both;
   pointer-events: none;
   overflow: hidden;
 }

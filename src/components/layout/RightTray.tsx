@@ -64,21 +64,20 @@ export function RightTray() {
 
     toggleHabit(id)
 
-    const t1 = setTimeout(() => {
-      setDismissing((prev) => new Set([...prev, id]))
+    // Add to dismissing immediately so the filter keeps it in the DOM.
+    // CSS animation-delay handles the linger; animation-fill-mode:both
+    // holds opacity:1 during the delay so it stays visible with the checkmark.
+    setDismissing((prev) => new Set([...prev, id]))
 
-      const t2 = setTimeout(() => {
-        setDismissing((prev) => {
-          const next = new Set(prev)
-          next.delete(id)
-          return next
-        })
-      }, DISMISS_MS)
+    const t = setTimeout(() => {
+      setDismissing((prev) => {
+        const next = new Set(prev)
+        next.delete(id)
+        return next
+      })
+    }, DONE_LINGER_MS + DISMISS_MS)
 
-      timerIds.current.push(t2)
-    }, DONE_LINGER_MS)
-
-    timerIds.current.push(t1)
+    timerIds.current.push(t)
   }
 
   return (
