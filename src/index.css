@@ -217,16 +217,16 @@ html, body, #root {
 }
 .col-who-scroll::-webkit-scrollbar { display: none; }
 .col-who-foot {
-  padding: 10px 11px;
+  padding: 6px 11px;
   border-top: 1px solid var(--border);
   flex-shrink: 0;
 }
 .settings-btn {
   display: flex; align-items: center; gap: 7px;
-  font-size: 15px; color: var(--ink-3);
+  font-size: 13.8px; color: var(--ink-3);
   background: transparent; border: none;
   cursor: pointer; font-family: var(--sans);
-  padding: 6px 8px; border-radius: 6px;
+  padding: 4px 8px; border-radius: 6px;
   transition: color 0.1s, background 0.1s;
   width: 100%; text-align: left;
 }
