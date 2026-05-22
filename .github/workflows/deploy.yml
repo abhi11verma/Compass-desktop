@@ -1,0 +1,47 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build app
+        env:
+          VITE_BASE_PATH: /Compass-desktop/app/
+        run: npm run build
+
+      - name: Assemble gh-pages output
+        run: |
+          mkdir -p gh-pages-dist/app
+          # Landing page at root
+          cp -r landing/. gh-pages-dist/
+          # App build at /app/
+          cp -r dist/. gh-pages-dist/app/
+          # Prevent Jekyll processing
+          touch gh-pages-dist/.nojekyll
+
+      - name: Deploy to gh-pages branch
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: gh-pages-dist
+          branch: gh-pages
+          clean: true
