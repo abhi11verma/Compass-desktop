@@ -41,6 +41,7 @@ export function WhoView() {
             <div className="vf-row vf-row-click" key={v.id} onClick={() => { openValueDetail(v.id) }}>
               <div className="vf-name">{v.name}</div>
               <div className="vf-desc">{v.description}</div>
+              {v.hidden && <span className="vf-status">hidden</span>}
             </div>
           ))}
           {q && allFiltered.length === 0 && (
