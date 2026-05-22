@@ -1236,12 +1236,5 @@ html.light .hbd-freq-select option { background: #fff; color: rgba(0,0,0,0.85); 
 html.light .ibx-overlay { background: rgba(0,0,0,0.35); }
 
 /* ── tauri desktop: frameless window with overlay traffic lights ── */
-/* Adds left padding to clear the macOS traffic-light buttons (~72px) */
+/* Left padding clears the macOS traffic-light buttons (~72px) */
 [data-tauri-drag-region] .topbar-left { padding-left: 72px; }
-/* Extend drag region across the full topbar; opt interactive children back out */
-[data-tauri-drag-region] { -webkit-app-region: drag; }
-[data-tauri-drag-region] button,
-[data-tauri-drag-region] input,
-[data-tauri-drag-region] select,
-[data-tauri-drag-region] a,
-[data-tauri-drag-region] label { -webkit-app-region: no-drag; }
