@@ -1,16 +1,40 @@
-import { useRef } from 'react'
+import { useCallback, useRef } from 'react'
 
 import { formatTopbarDate } from '@/lib/dates'
 import { useCompassStore } from '@/store/useCompassStore'
+
+const INTERACTIVE = 'button, input, select, a, label'
+const isTauri = () => '__TAURI_INTERNALS__' in window
+
+function handleTopbarMouseDown(e: React.MouseEvent<HTMLDivElement>) {
+  if (e.button !== 0) return
+  if ((e.target as HTMLElement).closest(INTERACTIVE)) return
+  // -webkit-app-region:drag is ignored by WKWebView on macOS; call the Tauri API directly.
+  // Dynamic import keeps the web build clean (no Tauri runtime in the browser).
+  if (!isTauri()) return
+  void import('@tauri-apps/api/webviewWindow').then(({ getCurrentWebviewWindow }) => {
+    void getCurrentWebviewWindow().startDragging()
+  })
+}
+
+function handleTopbarDoubleClick(e: React.MouseEvent<HTMLDivElement>) {
+  if ((e.target as HTMLElement).closest(INTERACTIVE)) return
+  if (!isTauri()) return
+  void import('@tauri-apps/api/webviewWindow').then(({ getCurrentWebviewWindow }) => {
+    void getCurrentWebviewWindow().toggleMaximize()
+  })
+}
 
 export function Topbar() {
   const { view, setView, captures, setCaptureOpen, setInboxOpen, searchQuery, setSearchQuery } = useCompassStore()
   const unrouted = captures.filter((c) => !c.processed).length
   const showSearch = view === 'what' || view === 'who'
   const searchRef = useRef<HTMLInputElement>(null)
+  const onMouseDown = useCallback(handleTopbarMouseDown, [])
+  const onDoubleClick = useCallback(handleTopbarDoubleClick, [])
 
   return (
-    <div className="topbar">
+    <div className="topbar" data-tauri-drag-region onMouseDown={onMouseDown} onDoubleClick={onDoubleClick}>
       <div className="topbar-left">
         <div className="app-brand">
           <span className="app-name">compass</span>

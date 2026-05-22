@@ -113,7 +113,9 @@ html, body, #root {
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
   padding: 0 20px;
+  user-select: none;
 }
+.topbar input { user-select: text; }
 .topbar-left { display: flex; align-items: center; }
 .app-brand { display: flex; flex-direction: column; gap: 1px; }
 .app-name {
@@ -215,16 +217,16 @@ html, body, #root {
 }
 .col-who-scroll::-webkit-scrollbar { display: none; }
 .col-who-foot {
-  padding: 10px 11px;
+  padding: 6px 11px;
   border-top: 1px solid var(--border);
   flex-shrink: 0;
 }
 .settings-btn {
   display: flex; align-items: center; gap: 7px;
-  font-size: 15px; color: var(--ink-3);
+  font-size: 13.8px; color: var(--ink-3);
   background: transparent; border: none;
   cursor: pointer; font-family: var(--sans);
-  padding: 6px 8px; border-radius: 6px;
+  padding: 4px 8px; border-radius: 6px;
   transition: color 0.1s, background 0.1s;
   width: 100%; text-align: left;
 }
@@ -336,7 +338,7 @@ html, body, #root {
 
 /* focus meta block (status + tags rows) in detail overlay */
 .fd-meta { display: flex; flex-direction: column; gap: 6px; margin-top: 10px; }
-.fd-meta-row { display: flex; align-items: center; gap: 12px; }
+.fd-meta-row { display: flex; align-items: center; gap: 20px; }
 .fd-meta-lbl {
   font-family: var(--mono); font-size: 11.2px; letter-spacing: 0.12em;
   text-transform: uppercase; color: var(--ink-4); width: 38px; flex-shrink: 0;
@@ -1234,3 +1236,7 @@ html.light .hbd-freq-select option { background: #fff; color: rgba(0,0,0,0.85); 
 
 /* ── light theme ── */
 html.light .ibx-overlay { background: rgba(0,0,0,0.35); }
+
+/* ── tauri desktop: frameless window with overlay traffic lights ── */
+/* Left padding clears the macOS traffic-light buttons (~72px) */
+[data-tauri-drag-region] .topbar-left { padding-left: 72px; }
