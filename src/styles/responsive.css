@@ -199,8 +199,8 @@ html.light .search-fab { box-shadow: 0 2px 10px rgba(0,0,0,0.12); }
 
   /* NowView: stack focuses then habits vertically */
   .col-main  { flex-direction: column; overflow-y: auto; }
-  .col-mid   { flex-basis: auto; width: 100%; overflow-y: visible; padding: 12px 12px 80px; }
-  .col-tray  { flex-basis: auto; width: 100%; overflow-y: visible; padding: 8px 12px 100px; }
+  .col-mid   { flex-basis: auto; width: 100%; overflow-y: visible; padding: 12px 12px 16px; }
+  .col-tray  { flex-basis: auto; width: 100%; overflow-y: visible; padding: 4px 12px 100px; }
 
   /* WhatView and WhoView scroll containers — clear the FAB */
   .what-view { padding-bottom: 80px; }
