@@ -62,6 +62,9 @@
     }
 
     .nav-wordmark {
+      display: flex;
+      align-items: center;
+      gap: 10px;
       font-family: var(--mono);
       font-size: 14px;
       font-weight: 400;
@@ -70,22 +73,22 @@
       text-decoration: none;
     }
 
+    .nav-icon {
+      color: var(--ink-2);
+      flex-shrink: 0;
+    }
+
     .nav-cta {
       font-family: var(--sans);
       font-size: 13px;
       font-weight: 500;
-      color: #fff;
-      background: var(--accent-hex);
-      border: none;
-      border-radius: 6px;
-      padding: 7px 16px;
-      cursor: pointer;
+      color: var(--ink-1);
       text-decoration: none;
-      transition: opacity 0.15s ease, transform 0.15s ease;
+      letter-spacing: 0.01em;
+      transition: color 0.15s ease;
     }
     .nav-cta:hover {
-      opacity: 0.88;
-      transform: scale(1.03);
+      color: var(--ink-2);
     }
 
     /* ── LAYOUT ── */
@@ -100,6 +103,12 @@
       padding-top: 160px;
       padding-bottom: 80px;
       text-align: center;
+    }
+
+    .hero-icon {
+      color: var(--ink-2);
+      margin-bottom: 32px;
+      display: block;
     }
 
     .hero-label {
@@ -135,19 +144,16 @@
     .hero-cta {
       display: inline-block;
       font-family: var(--sans);
-      font-size: 15px;
-      font-weight: 500;
-      color: #fff;
-      background: var(--accent-hex);
-      border-radius: 8px;
-      padding: 12px 28px;
+      font-size: 17px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.92);
       text-decoration: none;
-      transition: opacity 0.15s ease, transform 0.18s ease;
+      letter-spacing: 0.01em;
       margin-bottom: 72px;
+      transition: color 0.15s ease;
     }
     .hero-cta:hover {
-      opacity: 0.9;
-      transform: scale(1.04);
+      color: #fff;
     }
 
     /* ── SCREENSHOT ── */
@@ -279,6 +285,117 @@
       line-height: 1.6;
     }
 
+    /* ── FRAMEWORK ── */
+    .framework {
+      padding: 96px 0;
+    }
+
+    .framework-pullquote {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: clamp(28px, 4vw, 42px);
+      color: var(--ink-1);
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+      margin-bottom: 48px;
+    }
+
+    .framework-inner {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .framework-body {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--ink-2);
+      line-height: 1.75;
+      margin-bottom: 20px;
+    }
+
+    .framework-standout {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: clamp(22px, 3vw, 28px);
+      color: var(--ink-1);
+      line-height: 1.25;
+      margin: 36px 0;
+      letter-spacing: -0.01em;
+    }
+
+    .framework-rule {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 48px 0;
+    }
+
+    .framework-heading {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 22px;
+      font-weight: 400;
+      color: var(--ink-1);
+      margin-bottom: 24px;
+    }
+
+    .framework-body strong {
+      color: var(--ink-1);
+      font-weight: 400;
+    }
+
+    .framework-pillars {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      background: var(--border);
+      margin: 36px 0;
+    }
+
+    .framework-pillar {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: var(--bg-card);
+      padding: 18px 24px;
+    }
+
+    .framework-pillar-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .fpd-g { background: var(--g); }
+    .fpd-i { background: var(--i); }
+    .fpd-a { background: var(--a); }
+
+    .framework-pillar-name {
+      font-size: 13.5px;
+      font-weight: 500;
+      color: var(--ink-1);
+      width: 160px;
+      flex-shrink: 0;
+    }
+
+    .framework-pillar-desc {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--ink-2);
+      line-height: 1.5;
+    }
+
+    .framework-footer {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 14px;
+      color: var(--ink-3);
+      text-align: center;
+      margin-top: 48px;
+    }
+
     /* ── HOW IT WORKS ── */
     .how {
       padding: 80px 0 96px;
@@ -362,6 +479,14 @@
       gap: 32px;
     }
 
+    .download-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
     .download-btn {
       display: inline-flex;
       align-items: center;
@@ -370,13 +495,46 @@
       font-size: 15px;
       font-weight: 500;
       color: #fff;
-      background: var(--accent-hex);
-      border-radius: 8px;
+      background: linear-gradient(135deg, #5b7cf7 0%, #3d5ce8 100%);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 10px;
       padding: 13px 28px;
       text-decoration: none;
-      transition: opacity 0.15s ease, transform 0.18s ease;
+      box-shadow:
+        0 2px 8px rgba(76,110,245,0.35),
+        0 1px 2px rgba(0,0,0,0.4),
+        0 0 0 1px rgba(76,110,245,0.5) inset;
+      transition: filter 0.15s ease, transform 0.18s ease, box-shadow 0.18s ease;
     }
-    .download-btn:hover { opacity: 0.9; transform: scale(1.03); }
+    .download-btn:hover {
+      filter: brightness(1.1);
+      transform: translateY(-2px);
+      box-shadow:
+        0 6px 20px rgba(76,110,245,0.45),
+        0 2px 4px rgba(0,0,0,0.4),
+        0 0 0 1px rgba(76,110,245,0.5) inset;
+    }
+
+    .browser-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--sans);
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--ink-1);
+      background: transparent;
+      border: 1px solid var(--border-mid);
+      border-radius: 10px;
+      padding: 13px 28px;
+      text-decoration: none;
+      transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+    }
+    .browser-btn:hover {
+      background: var(--bg-hover);
+      border-color: rgba(255,255,255,0.22);
+      transform: translateY(-1px);
+    }
 
     .download-platforms {
       font-family: var(--mono);
@@ -495,6 +653,103 @@
     }
     .footer-link:hover { color: var(--ink-2); }
 
+    /* ── LIGHT THEME ── */
+    html.light {
+      --bg:         #F7F7F5;
+      --bg-card:    #FFFFFF;
+      --bg-hover:   #F0F0EE;
+      --bg-active:  #E5E5E2;
+      --border:     rgba(17,24,39,0.08);
+      --border-mid: rgba(17,24,39,0.16);
+      --ink-1: #111827;
+      --ink-2: #374151;
+      --ink-3: #6B7280;
+      --ink-4: #9CA3AF;
+      --accent:     #2563EB;
+      --accent-hex: #2563EB;
+      --g:  #059669;
+      --i:  #4F46E5;
+      --a:  #D97706;
+    }
+
+    html.light body {
+      background: var(--bg);
+      color: var(--ink-1);
+    }
+
+    html.light nav {
+      background: rgba(247,247,245,0.88);
+    }
+
+    html.light .screenshot-frame {
+      border-color: rgba(0,0,0,0.10);
+      box-shadow:
+        0 0 0 1px rgba(0,0,0,0.04),
+        0 32px 64px rgba(0,0,0,0.12),
+        0 8px 16px rgba(0,0,0,0.08);
+    }
+
+    html.light .screenshot-titlebar {
+      background: #E8E8E6;
+      border-bottom-color: rgba(0,0,0,0.08);
+    }
+
+    html.light .screenshot-glow {
+      background: radial-gradient(
+        ellipse 80% 60% at 50% 50%,
+        rgba(37,99,235,0.08) 0%,
+        rgba(180,100,40,0.06) 45%,
+        transparent 70%
+      );
+    }
+
+    html.light .download-btn {
+      background: linear-gradient(135deg, #3b6ef0 0%, #1d4ed8 100%);
+      box-shadow:
+        0 2px 8px rgba(37,99,235,0.30),
+        0 1px 2px rgba(0,0,0,0.15),
+        0 0 0 1px rgba(37,99,235,0.4) inset;
+    }
+    html.light .download-btn:hover {
+      box-shadow:
+        0 6px 20px rgba(37,99,235,0.40),
+        0 2px 4px rgba(0,0,0,0.15),
+        0 0 0 1px rgba(37,99,235,0.4) inset;
+    }
+
+    html.light .hero-cta {
+      color: #111827;
+    }
+    html.light .hero-cta:hover {
+      color: #000;
+    }
+
+    /* ── THEME TOGGLE ── */
+    .theme-toggle {
+      background: none;
+      border: 1px solid var(--border-mid);
+      border-radius: 6px;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--ink-2);
+      flex-shrink: 0;
+      transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    }
+    .theme-toggle:hover {
+      background: var(--bg-hover);
+      color: var(--ink-1);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
     /* ── RESPONSIVE ── */
     @media (max-width: 720px) {
       nav { padding: 16px 24px; }
@@ -511,6 +766,8 @@
 
       .how-arrow { padding-top: 0; transform: rotate(90deg); }
 
+      .download-actions { flex-direction: column; width: 100%; }
+      .download-btn, .browser-btn { justify-content: center; width: 100%; }
       .macos-notice { padding: 20px 20px; }
 
       footer {
@@ -529,20 +786,64 @@
 
   <!-- NAV -->
   <nav>
-    <a href="#" class="nav-wordmark">compass</a>
-    <a href="/Compass-desktop/app/" target="_blank" rel="noopener" class="nav-cta">Start here →</a>
+    <a href="#" class="nav-wordmark">
+      <svg class="nav-icon" width="20" height="20" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+        <circle cx="16" cy="16" r="13.5" stroke="currentColor" stroke-width="0.9"/>
+        <line x1="16" y1="2.5" x2="16" y2="4.5" stroke="currentColor" stroke-width="0.8" stroke-linecap="round" opacity="0.5"/>
+        <line x1="16" y1="27.5" x2="16" y2="29.5" stroke="currentColor" stroke-width="0.8" stroke-linecap="round" opacity="0.3"/>
+        <line x1="2.5" y1="16" x2="4.5" y2="16" stroke="currentColor" stroke-width="0.8" stroke-linecap="round" opacity="0.3"/>
+        <line x1="27.5" y1="16" x2="29.5" y2="16" stroke="currentColor" stroke-width="0.8" stroke-linecap="round" opacity="0.3"/>
+        <text x="16" y="25.5" text-anchor="middle" dominant-baseline="middle" fill="currentColor" font-size="2.8" font-family="system-ui,sans-serif" font-weight="600" opacity="0.3">S</text>
+        <text x="24.5" y="16.1" text-anchor="middle" dominant-baseline="middle" fill="currentColor" font-size="2.8" font-family="system-ui,sans-serif" font-weight="600" opacity="0.3">E</text>
+        <text x="7.5" y="16.1" text-anchor="middle" dominant-baseline="middle" fill="currentColor" font-size="2.8" font-family="system-ui,sans-serif" font-weight="600" opacity="0.3">W</text>
+        <polygon points="16,3 13.2,16 16,14 18.8,16" fill="currentColor"/>
+        <polygon points="16,29 13.2,16 16,18 18.8,16" fill="currentColor" opacity="0.22"/>
+        <circle cx="16" cy="16" r="1.2" fill="currentColor"/>
+      </svg>
+      compass
+    </a>
+    <div class="nav-right">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <!-- Moon (shown in dark mode) -->
+        <svg id="iconMoon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+        <!-- Sun (shown in light mode) -->
+        <svg id="iconSun" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+          <circle cx="12" cy="12" r="5"/>
+          <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+      </button>
+      <a href="/Compass-desktop/app/" target="_blank" rel="noopener" class="nav-cta">Open App →</a>
+    </div>
   </nav>
 
   <!-- HERO -->
   <section class="hero">
     <div class="container">
+      <svg class="hero-icon" width="56" height="67" viewBox="0 0 32 38" fill="none" aria-hidden="true" style="margin: 0 auto 32px;">
+        <text x="16" y="3.2" text-anchor="middle" dominant-baseline="middle" fill="currentColor" font-size="2.6" font-family="system-ui,sans-serif" font-weight="700" letter-spacing="0.18em">NORTH</text>
+        <line x1="16" y1="4.6" x2="16" y2="7.5" stroke="currentColor" stroke-width="0.6" stroke-linecap="round" opacity="0.5"/>
+        <circle cx="16" cy="21" r="13.5" stroke="currentColor" stroke-width="0.9"/>
+        <line x1="16" y1="34.5" x2="16" y2="36.5" stroke="currentColor" stroke-width="0.6" stroke-linecap="round" opacity="0.3"/>
+        <line x1="2.5" y1="21" x2="4.5" y2="21" stroke="currentColor" stroke-width="0.6" stroke-linecap="round" opacity="0.3"/>
+        <line x1="27.5" y1="21" x2="29.5" y2="21" stroke="currentColor" stroke-width="0.6" stroke-linecap="round" opacity="0.3"/>
+        <text x="16" y="30.5" text-anchor="middle" dominant-baseline="middle" fill="currentColor" font-size="2.8" font-family="system-ui,sans-serif" font-weight="600" opacity="0.3">S</text>
+        <text x="25" y="21.1" text-anchor="middle" dominant-baseline="middle" fill="currentColor" font-size="2.8" font-family="system-ui,sans-serif" font-weight="600" opacity="0.3">E</text>
+        <text x="7" y="21.1" text-anchor="middle" dominant-baseline="middle" fill="currentColor" font-size="2.8" font-family="system-ui,sans-serif" font-weight="600" opacity="0.3">W</text>
+        <polygon points="16,8 13.2,21 16,19 18.8,21" fill="currentColor"/>
+        <polygon points="16,34 13.2,21 16,23 18.8,21" fill="currentColor" opacity="0.22"/>
+        <circle cx="16" cy="21" r="1.2" fill="currentColor"/>
+      </svg>
       <span class="hero-label">Personal navigation</span>
-      <h1 class="hero-headline">Navigate what matters.</h1>
+      <h1 class="hero-headline">The app you open<br>when you feel lost.</h1>
       <p class="hero-sub">
-        Compass keeps your values, focuses, and daily habits in one calm space —
-        no project management overhead.
+        A personal dashboard that shows what matters and hides everything else.
       </p>
-      <a href="/Compass-desktop/app/" target="_blank" rel="noopener" class="hero-cta">Start here →</a>
+      <a href="/Compass-desktop/app/" target="_blank" rel="noopener" class="hero-cta">Try now →</a>
 
       <!-- SCREENSHOT -->
       <div class="screenshot-wrap">
@@ -561,6 +862,74 @@
 
   <hr class="section-divider">
 
+  <!-- FRAMEWORK -->
+  <section class="framework">
+    <div class="container">
+      <div class="framework-inner">
+
+        <p class="framework-pullquote">
+          More features isn't the answer.<br>More features is the problem.
+        </p>
+
+        <p class="framework-body">
+          We live in an age of infinite inputs. More tools, more tabs, more systems.
+          You sit down with a spark — an idea, a project, a habit you want to build —
+          and two days later it's gone, buried under new urgencies and noise.
+        </p>
+        <p class="framework-standout">Compass is something else entirely.</p>
+        <p class="framework-body">
+          A personal life dashboard — a post-it note, not a filing cabinet. It holds
+          the things you've chosen to care about right now, and hides everything else.
+          When the noise gets loud and you lose your footing, you open Compass.
+          It points you back.
+        </p>
+
+        <hr class="framework-rule">
+
+        <h2 class="framework-heading">Opinionated by design.</h2>
+        <p class="framework-body">Compass restricts you. Deliberately.</p>
+        <p class="framework-body">
+          You get a small number of active <strong>Focuses</strong> — the things
+          commanding your attention right now, each with a clear process for how
+          you'll work on them. You get <strong>Habits</strong> — small daily
+          behaviours compounding beneath the surface. And you get
+          <strong>Values and Principles</strong> — your anchor when everything
+          feels urgent.
+        </p>
+        <p class="framework-body">
+          The interface only shows what's in focus. Everything else is hidden.
+          No infinite views, no plugin ecosystem, no customisation rabbit holes.
+          The constraint is the point.
+        </p>
+
+        <div class="framework-pillars">
+          <div class="framework-pillar">
+            <span class="framework-pillar-dot fpd-g"></span>
+            <span class="framework-pillar-name">Focuses</span>
+            <span class="framework-pillar-desc">What you're working on right now.</span>
+          </div>
+          <div class="framework-pillar">
+            <span class="framework-pillar-dot fpd-i"></span>
+            <span class="framework-pillar-name">Habits</span>
+            <span class="framework-pillar-desc">The behaviours you're building daily.</span>
+          </div>
+          <div class="framework-pillar">
+            <span class="framework-pillar-dot fpd-a"></span>
+            <span class="framework-pillar-name">Values &amp; Principles</span>
+            <span class="framework-pillar-desc">Who you are when it counts.</span>
+          </div>
+        </div>
+
+        <p class="framework-footer">
+          This will work for some people. It won't work for everyone. That's intentional.
+        </p>
+
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
   <!-- FEATURES -->
   <section class="features">
     <div class="container">
@@ -569,7 +938,7 @@
         <div class="feature-card">
           <div class="feature-dot dot-now"></div>
           <p class="feature-view">Now</p>
-          <h2 class="feature-title">Today's view</h2>
+          <h2 class="feature-title">What needs you today.</h2>
           <p class="feature-desc">
             Active focuses with their top tasks. Habits to check off. Quick capture so
             nothing slips while you're in motion.
@@ -578,7 +947,7 @@
         <div class="feature-card">
           <div class="feature-dot dot-what"></div>
           <p class="feature-view">What</p>
-          <h2 class="feature-title">Your focuses</h2>
+          <h2 class="feature-title">What you're building.</h2>
           <p class="feature-desc">
             Everything you're working on — active, parked, or in queue. Track streaks,
             tags, and ideas routed from the inbox.
@@ -587,9 +956,9 @@
         <div class="feature-card">
           <div class="feature-dot dot-who"></div>
           <p class="feature-view">Who</p>
-          <h2 class="feature-title">Your identity</h2>
+          <h2 class="feature-title">Who you are.</h2>
           <p class="feature-desc">
-            The values you hold and the behavioral principles you're actively practicing.
+            The values you hold and the principles you're actively practicing.
             The foundation everything else is built on.
           </p>
         </div>
@@ -602,7 +971,7 @@
   <!-- HOW IT WORKS -->
   <section class="how">
     <div class="container">
-      <p class="how-label">How it works</p>
+      <p class="how-label">The loop</p>
       <div class="how-steps">
         <div class="how-step">
           <p class="step-number">01</p>
@@ -630,17 +999,26 @@
   <!-- DOWNLOAD -->
   <section class="download">
     <div class="container">
-      <p class="download-label">Download</p>
+      <p class="download-label">Get started</p>
       <div class="download-inner">
 
-        <a href="https://github.com/abhi11verma/Compass-desktop/releases/latest" target="_blank" rel="noopener" class="download-btn">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-            <path d="M8 1v9M4.5 6.5 8 10l3.5-3.5M2 13h12" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          Download for macOS &amp; Windows
-        </a>
+        <div class="download-actions">
+          <a href="https://github.com/abhi11verma/Compass-desktop/releases/latest" target="_blank" rel="noopener" class="download-btn">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M8 1v9M4.5 6.5 8 10l3.5-3.5M2 13h12" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Download for desktop
+          </a>
+          <a href="/Compass-desktop/app/" target="_blank" rel="noopener" class="browser-btn">
+            <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
+              <circle cx="7.5" cy="7.5" r="6.5" stroke="currentColor" stroke-width="1.2"/>
+              <path d="M7.5 1C7.5 1 5 4 5 7.5s2.5 6.5 2.5 6.5M7.5 1C7.5 1 10 4 10 7.5S7.5 14 7.5 14M1 7.5h13" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+            </svg>
+            Try in browser
+          </a>
+        </div>
 
-        <p class="download-platforms">macOS (Apple Silicon · Intel) &nbsp;·&nbsp; Windows (x64)</p>
+        <p class="download-platforms">Desktop: macOS (Apple Silicon · Intel) &nbsp;·&nbsp; Windows (x64)</p>
 
         <!-- macOS Gatekeeper notice -->
         <div class="macos-notice">
@@ -688,5 +1066,25 @@
     </div>
   </footer>
 
+  <script>
+    const html = document.documentElement
+    const toggle = document.getElementById('themeToggle')
+    const moon = document.getElementById('iconMoon')
+    const sun = document.getElementById('iconSun')
+
+    function setTheme(light) {
+      html.classList.toggle('light', light)
+      moon.style.display = light ? 'none' : ''
+      sun.style.display = light ? '' : 'none'
+      localStorage.setItem('lp-theme', light ? 'light' : 'dark')
+    }
+
+    // Restore saved preference
+    setTheme(localStorage.getItem('lp-theme') === 'light')
+
+    toggle.addEventListener('click', () => {
+      setTheme(!html.classList.contains('light'))
+    })
+  </script>
 </body>
 </html>
