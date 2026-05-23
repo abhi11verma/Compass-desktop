@@ -1,0 +1,91 @@
+name: Release Desktop App
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  check-version:
+    runs-on: ubuntu-latest
+    outputs:
+      should_release: ${{ steps.check.outputs.should_release }}
+      version: ${{ steps.check.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Compare version with latest release
+        id: check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION=$(jq -r '.version' src-tauri/tauri.conf.json)
+          LATEST=$(gh release view --json tagName -q .tagName 2>/dev/null || echo "none")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          if [ "v$VERSION" = "$LATEST" ]; then
+            echo "should_release=false" >> $GITHUB_OUTPUT
+            echo "Version v$VERSION already released — skipping build."
+          else
+            echo "should_release=true" >> $GITHUB_OUTPUT
+            echo "New version v$VERSION detected (latest: $LATEST) — building."
+          fi
+
+  build:
+    needs: check-version
+    if: needs.check-version.outputs.should_release == 'true'
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-latest
+            target: aarch64-apple-darwin
+            label: macos-arm
+          - os: macos-latest
+            target: x86_64-apple-darwin
+            label: macos-intel
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+            label: windows-x64
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build and publish release
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: v${{ needs.check-version.outputs.version }}
+          releaseName: Compass v${{ needs.check-version.outputs.version }}
+          releaseBody: |
+            ## Download
+
+            | Platform | File |
+            |---|---|
+            | macOS (Apple Silicon) | `Compass_*_aarch64.dmg` |
+            | macOS (Intel) | `Compass_*_x64.dmg` |
+            | Windows | `Compass_*_x64-setup.exe` |
+
+            ### macOS — first launch
+
+            macOS will block the app because it is unsigned. Right-click the app → **Open** → confirm once. macOS remembers your choice from that point on.
+
+            See the [landing page](https://abhi11verma.github.io/Compass-desktop/) for full instructions.
+          args: --target ${{ matrix.target }}
+          prerelease: false
