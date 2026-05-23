@@ -113,3 +113,7 @@ html.light .topbar-search-kbd { background: rgba(0,0,0,0.04); }
 
 html.light .seg-btn.active { background: rgba(0,0,0,0.04); }
 html.light .cap-kbd { background: rgba(0,0,0,0.05); }
+
+.topbar-settings-btn {
+  display: none;
+}

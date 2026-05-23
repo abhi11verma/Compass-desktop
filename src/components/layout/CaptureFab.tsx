@@ -1,7 +1,9 @@
 import { useCompassStore } from '@/store/useCompassStore'
 
 export function CaptureFab() {
-  const { setCaptureOpen } = useCompassStore()
+  const { setCaptureOpen, inboxOpen } = useCompassStore()
+
+  if (inboxOpen) return null
 
   return (
     <button

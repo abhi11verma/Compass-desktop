@@ -91,8 +91,17 @@ html.light .capture-fab { box-shadow: 0 4px 16px rgba(0,0,0,0.18); }
   .topbar { grid-template-columns: auto 1fr; padding: 0 14px; }
   .topbar-right { gap: 8px; }
 
-  /* Inbox pill label — hide text, keep dot to save space */
-  .inbox-pill span { display: none; }
+  /* Settings gear — mobile only (left column is hidden) */
+  .topbar-settings-btn {
+    display: flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px;
+    color: var(--ink-3);
+    background: transparent; border: none; cursor: pointer;
+    border-radius: 6px; padding: 0;
+    transition: color 0.1s, background 0.1s;
+    flex-shrink: 0;
+  }
+  .topbar-settings-btn:hover { color: var(--ink-2); background: var(--bg-hover); }
 
   /* NowView: stack focuses then habits vertically */
   .col-main  { flex-direction: column; overflow-y: auto; }
@@ -168,7 +177,7 @@ html.light .capture-fab { box-shadow: 0 4px 16px rgba(0,0,0,0.18); }
     padding: 24px 20px 32px;
   }
 
-  /* Inbox: stack the two panes vertically */
+  /* Inbox: full-height sheet — route section first, pending list at bottom */
   .ibx-card {
     width: 100%;
     max-width: 100%;
@@ -176,17 +185,36 @@ html.light .capture-fab { box-shadow: 0 4px 16px rgba(0,0,0,0.18); }
     max-height: calc(100dvh - 56px);
     border-radius: 12px 12px 0 0;
     flex-direction: column;
+    overflow: hidden;
   }
 
+  /* Give the sheet-close bar breathing room inside the card */
+  .ibx-card .sheet-close-bar { padding: 14px 16px 0; }
+
+  /* Route pane (selected item + tag/search UI) goes first */
+  .ibx-pane-route {
+    order: 1;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  /* Hide redundant "Route" heading — position makes it clear */
+  .ibx-pane-route > .ibx-pane-hd { display: none; }
+
+  /* Pending items list sits at the bottom */
   .ibx-pane-list {
+    order: 2;
     width: 100%;
+    flex-shrink: 0;
+    max-height: 34%;
     border-right: none;
-    border-bottom: 1px solid var(--border);
-    max-height: 42%;
+    border-top: 1px solid var(--border);
   }
 
   /* Hide keyboard shortcut hints — no keyboard on mobile */
   .fd-hint,
   .cap-hint,
-  .fd-foot { display: none; }
+  .fd-foot,
+  .settings-shortcuts-section { display: none; }
 }
