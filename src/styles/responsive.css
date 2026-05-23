@@ -1,4 +1,9 @@
-/* ── Bottom tab bar (hidden by default, shown on mobile) ─────────────────── */
+/* ── Sheet close/action bar (mobile-only) ────────────────────────────────── */
+
+.sheet-close-bar  { display: none; }
+.sheet-close-btn  { display: none; }
+.sheet-close-delete { display: none; }
+
 
 .bottom-tabs {
   display: none;
@@ -103,4 +108,85 @@ html.light .capture-fab { box-shadow: 0 4px 16px rgba(0,0,0,0.18); }
 
   /* Capture FAB — show on mobile */
   .capture-fab { display: flex; }
+
+  /* Sheet action bar — delete (left) + close (right) */
+  .sheet-close-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    flex-shrink: 0;
+  }
+
+  .sheet-close-btn,
+  .sheet-close-delete {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--bg-hover);
+    border: none;
+    cursor: pointer;
+    color: var(--ink-3);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .sheet-close-delete { color: rgba(220, 80, 80, 0.7); }
+
+  /* When only close is present (no delete), push it to the right */
+  .sheet-close-bar:has(.sheet-close-btn:only-child) { justify-content: flex-end; }
+
+  /* Hide the original delete button inside fd-hd on mobile — replaced by sheet bar */
+  .fd-hd .fd-del-btn { display: none; }
+
+  /* ── Dialog / Overlay — full-screen bottom sheet on mobile ────────────── */
+
+  /* Backdrops: fixed, column layout so card hugs the bottom */
+  .cap-overlay,
+  .fd-overlay,
+  .ibx-overlay,
+  .settings-overlay-bg {
+    position: fixed;
+    border-radius: 0;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: stretch;
+  }
+
+  /* All dialog cards: full-width, fill viewport minus bottom tab bar */
+  .cap-card,
+  .fd-card,
+  .settings-overlay {
+    width: 100%;
+    max-width: 100%;
+    height: calc(100dvh - 56px);
+    max-height: calc(100dvh - 56px);
+    border-radius: 12px 12px 0 0;
+    overflow-y: auto;
+    padding: 24px 20px 32px;
+  }
+
+  /* Inbox: stack the two panes vertically */
+  .ibx-card {
+    width: 100%;
+    max-width: 100%;
+    height: calc(100dvh - 56px);
+    max-height: calc(100dvh - 56px);
+    border-radius: 12px 12px 0 0;
+    flex-direction: column;
+  }
+
+  .ibx-pane-list {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    max-height: 42%;
+  }
+
+  /* Hide keyboard shortcut hints — no keyboard on mobile */
+  .fd-hint,
+  .cap-hint,
+  .fd-foot { display: none; }
 }

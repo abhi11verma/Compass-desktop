@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
+import { SheetClose } from '@/components/layout/SheetClose'
 import { useCompassStore, type HabitStatus, type HabitFrequency, isHabitDone } from '@/store/useCompassStore'
 import { useNow } from '@/hooks/useNow'
 
@@ -124,6 +125,7 @@ export function HabitDetailOverlay() {
   return (
     <div className={`fd-overlay${isOpen ? ' open' : ''}`} onClick={() => { openHabitDetail(null) }}>
       <div className="fd-card hbd-card" onClick={(e) => { e.stopPropagation() }}>
+        <SheetClose onClose={() => { openHabitDetail(null) }} onDelete={() => { setConfirmDelete(true) }} />
 
         {/* Header */}
         <div className="fd-hd">
