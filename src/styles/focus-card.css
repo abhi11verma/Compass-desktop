@@ -6,7 +6,6 @@
   display: flex; align-items: flex-start; gap: 12px;
   cursor: pointer;
   transition: border-color 0.1s, background 0.1s;
-  max-width: 80%;
 }
 .focus-card:hover { border-color: var(--border-mid); background: var(--bg-hover); }
 
