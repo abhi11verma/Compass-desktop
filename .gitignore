@@ -36,5 +36,8 @@ lerna-debug.log*
 # TypeScript cache
 *.tsbuildinfo
 
+# Mobile QA screenshots
+scripts/screenshots/
+
 # Tauri — Rust build artifacts (large, fully reproducible)
 src-tauri/target/

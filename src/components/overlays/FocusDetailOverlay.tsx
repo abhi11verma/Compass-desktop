@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
+import { SheetClose } from '@/components/layout/SheetClose'
 import { useCompassStore, type Focus, type TaskStatus } from '@/store/useCompassStore'
 
 const DOT_COLOR: Record<Focus['color'], string> = {
@@ -126,6 +127,7 @@ export function FocusDetailOverlay() {
   return (
     <div className={`fd-overlay${isOpen ? ' open' : ''}`} onClick={() => { openFocusDetail(null) }}>
       <div className="fd-card" onClick={(e) => { e.stopPropagation() }}>
+        <SheetClose onClose={() => { openFocusDetail(null) }} onDelete={() => { setConfirmDelete(true) }} />
 
         {/* Name row */}
         <div className="fd-hd">

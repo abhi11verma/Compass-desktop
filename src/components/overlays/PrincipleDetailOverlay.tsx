@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
+import { SheetClose } from '@/components/layout/SheetClose'
 import { useCompassStore, type Principle } from '@/store/useCompassStore'
 
 function TrashIcon() {
@@ -84,6 +85,7 @@ export function PrincipleDetailOverlay() {
   return (
     <div className={`fd-overlay${isOpen ? ' open' : ''}`} onClick={() => { openPrincipleDetail(null) }}>
       <div className="fd-card pd-card" onClick={(e) => { e.stopPropagation() }}>
+        <SheetClose onClose={() => { openPrincipleDetail(null) }} onDelete={() => { setConfirmDelete(true) }} />
 
         {/* Header */}
         <div className="fd-hd">

@@ -42,6 +42,10 @@ apply-theme base-color:
 new:
     bash scripts/new.sh
 
+# Take mobile screenshots for responsive QA (requires `just dev` running)
+mobile-check:
+    node scripts/mobile-screenshot.mjs
+
 # ── Desktop (Tauri) ──────────────────────────────────────────────────────────
 
 # Start Tauri desktop app in development mode (also starts Vite dev server)

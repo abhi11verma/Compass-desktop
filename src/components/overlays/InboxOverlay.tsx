@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
+import { SheetClose } from '@/components/layout/SheetClose'
 import { useCompassStore } from '@/store/useCompassStore'
 
 function formatAge(isoString: string): string {
@@ -82,6 +83,7 @@ export function InboxOverlay() {
   return (
     <div className={`ibx-overlay${inboxOpen ? ' open' : ''}`} onClick={() => { setInboxOpen(false) }}>
       <div className="ibx-card" onClick={(e) => { e.stopPropagation() }}>
+        <SheetClose onClose={() => { setInboxOpen(false) }} />
 
         {/* Left pane — capture list */}
         <div className="ibx-pane-list">

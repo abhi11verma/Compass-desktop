@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect } from 'react'
 
+import { SheetClose } from '@/components/layout/SheetClose'
 import { useCompassStore } from '@/store/useCompassStore'
 
 type CreateAsType = 'habit' | 'focus' | 'principle' | 'value'
@@ -64,6 +65,7 @@ export function CaptureOverlay() {
   return (
     <div className={`cap-overlay${captureOpen ? ' open' : ''}`} onClick={handleOverlayClick}>
       <div className="cap-card" onClick={(e) => e.stopPropagation()}>
+        <SheetClose onClose={() => { setCaptureOpen(false) }} />
         <div className="cap-lbl">Capture</div>
         <textarea
           ref={textareaRef}

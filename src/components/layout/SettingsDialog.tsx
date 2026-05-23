@@ -100,25 +100,26 @@ export function SettingsDialog({ open, onClose }: SettingsDialogProps) {
 
         <div className="settings-sep" />
 
-        <div className="settings-section-lbl">Keyboard shortcuts</div>
-        <div className="settings-row">
-          <div className="settings-row-label">Capture</div>
-          <span className="cap-kbd" style={{ fontSize: '10px' }}>C</span>
+        <div className="settings-shortcuts-section">
+          <div className="settings-section-lbl">Keyboard shortcuts</div>
+          <div className="settings-row">
+            <div className="settings-row-label">Capture</div>
+            <span className="cap-kbd" style={{ fontSize: '10px' }}>C</span>
+          </div>
+          <div className="settings-row">
+            <div className="settings-row-label">Now view</div>
+            <span className="cap-kbd" style={{ fontSize: '10px' }}>1</span>
+          </div>
+          <div className="settings-row">
+            <div className="settings-row-label">What view</div>
+            <span className="cap-kbd" style={{ fontSize: '10px' }}>2</span>
+          </div>
+          <div className="settings-row">
+            <div className="settings-row-label">Who view</div>
+            <span className="cap-kbd" style={{ fontSize: '10px' }}>3</span>
+          </div>
+          <div className="settings-sep" />
         </div>
-        <div className="settings-row">
-          <div className="settings-row-label">Now view</div>
-          <span className="cap-kbd" style={{ fontSize: '10px' }}>1</span>
-        </div>
-        <div className="settings-row">
-          <div className="settings-row-label">What view</div>
-          <span className="cap-kbd" style={{ fontSize: '10px' }}>2</span>
-        </div>
-        <div className="settings-row">
-          <div className="settings-row-label">Who view</div>
-          <span className="cap-kbd" style={{ fontSize: '10px' }}>3</span>
-        </div>
-
-        <div className="settings-sep" />
 
         <div className="settings-section-lbl">Data</div>
         <div className="settings-row settings-row-danger">

@@ -1,5 +1,7 @@
 import { useEffect } from 'react'
 
+import { BottomTabBar } from '@/components/layout/BottomTabBar'
+import { CaptureFab } from '@/components/layout/CaptureFab'
 import { SettingsDialog } from '@/components/layout/SettingsDialog'
 import { Topbar } from '@/components/layout/Topbar'
 import { CaptureOverlay } from '@/components/overlays/CaptureOverlay'
@@ -40,6 +42,8 @@ export function App() {
       <PrincipleDetailOverlay />
       <InboxOverlay />
       <SettingsDialog open={settingsOpen} onClose={() => { setSettingsOpen(false) }} />
+      <BottomTabBar />
+      <CaptureFab />
     </div>
   )
 }
