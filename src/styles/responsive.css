@@ -27,8 +27,9 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+.bottom-tab + .bottom-tab { border-left: 1px solid var(--border); }
 .bottom-tab:active { background: var(--bg-hover); }
-.bottom-tab.active { color: var(--ink-1); font-weight: 500; }
+.bottom-tab.active { color: var(--ink-1); font-weight: 500; background: var(--bg-active); }
 
 /* ── Capture FAB (hidden by default, shown on mobile) ────────────────────── */
 

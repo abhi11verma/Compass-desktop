@@ -2,36 +2,41 @@ import { useCompassStore } from '@/store/useCompassStore'
 
 export function LeftColumn() {
   const { values, principles, openPrincipleDetail, setSettingsOpen } = useCompassStore()
+  const visibleValues = values.filter((v) => !v.hidden)
   const activePrinciples = principles.filter((p) => p.status === 'active')
 
   return (
     <div className="col-who">
       <div className="col-who-scroll">
-        <div className="who-card">
-          <div className="who-card-lbl">Values</div>
-          {values.filter((v) => !v.hidden).map((v) => (
-            <div className="val-row" key={v.id}>{v.name}</div>
-          ))}
-        </div>
+        {visibleValues.length > 0 && (
+          <div className="who-card">
+            <div className="who-card-lbl">Values</div>
+            {visibleValues.map((v) => (
+              <div className="val-row" key={v.id}>{v.name}</div>
+            ))}
+          </div>
+        )}
 
-        <div className="who-card">
-          <div className="who-card-lbl">Principles</div>
-          {activePrinciples.map((p) => (
-            <div
-              className="prin-row prin-row-click"
-              key={p.id}
-              onClick={() => { openPrincipleDetail(p.id) }}
-            >
-              <div className="prin-cue">{p.cue}</div>
-              <div className="prin-meta">
-                <span className="prin-age">{p.daysActive}d</span>
-                {p.tags.map((t) => (
-                  <span key={t} className="chip chip-tag prin-tag">#{t}</span>
-                ))}
+        {activePrinciples.length > 0 && (
+          <div className="who-card">
+            <div className="who-card-lbl">Principles</div>
+            {activePrinciples.map((p) => (
+              <div
+                className="prin-row prin-row-click"
+                key={p.id}
+                onClick={() => { openPrincipleDetail(p.id) }}
+              >
+                <div className="prin-cue">{p.cue}</div>
+                <div className="prin-meta">
+                  <span className="prin-age">{p.daysActive}d</span>
+                  {p.tags.map((t) => (
+                    <span key={t} className="chip chip-tag prin-tag">#{t}</span>
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
 
       <div className="col-who-foot">
