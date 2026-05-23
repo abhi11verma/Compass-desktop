@@ -338,6 +338,132 @@
       flex-shrink: 0;
     }
 
+    /* ── DOWNLOAD ── */
+    .download {
+      padding: 80px 0 96px;
+    }
+
+    .download-label {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .download-inner {
+      max-width: 600px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .download-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--sans);
+      font-size: 15px;
+      font-weight: 500;
+      color: #fff;
+      background: var(--accent-hex);
+      border-radius: 8px;
+      padding: 13px 28px;
+      text-decoration: none;
+      transition: opacity 0.15s ease, transform 0.18s ease;
+    }
+    .download-btn:hover { opacity: 0.9; transform: scale(1.03); }
+
+    .download-platforms {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--ink-3);
+      letter-spacing: 0.06em;
+      text-align: center;
+    }
+
+    /* macOS notice card */
+    .macos-notice {
+      width: 100%;
+      border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 10px;
+      background: var(--bg-card);
+      padding: 24px 28px;
+    }
+
+    .macos-notice-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .macos-notice-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      background: rgba(255,255,255,0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 14px;
+    }
+
+    .macos-notice-title {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-2);
+    }
+
+    .macos-notice-why {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--ink-2);
+      line-height: 1.65;
+      margin-bottom: 18px;
+    }
+
+    .macos-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .macos-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .macos-step-num {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--ink-3);
+      letter-spacing: 0.06em;
+      padding-top: 2px;
+      flex-shrink: 0;
+      width: 16px;
+    }
+
+    .macos-step-text {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--ink-2);
+      line-height: 1.5;
+    }
+
+    .macos-step-text strong {
+      color: var(--ink-1);
+      font-weight: 400;
+    }
+
     /* ── FOOTER ── */
     footer {
       border-top: 1px solid var(--border);
@@ -384,6 +510,8 @@
       .how-steps { flex-direction: column; align-items: center; gap: 8px; }
 
       .how-arrow { padding-top: 0; transform: rotate(90deg); }
+
+      .macos-notice { padding: 20px 20px; }
 
       footer {
         flex-direction: column;
@@ -493,6 +621,58 @@
           <h3 class="step-name">Act</h3>
           <p class="step-desc">Open Now and see exactly what deserves your attention today — nothing more.</p>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- DOWNLOAD -->
+  <section class="download">
+    <div class="container">
+      <p class="download-label">Download</p>
+      <div class="download-inner">
+
+        <a href="https://github.com/abhi11verma/Compass-desktop/releases/latest" target="_blank" rel="noopener" class="download-btn">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M8 1v9M4.5 6.5 8 10l3.5-3.5M2 13h12" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Download for macOS &amp; Windows
+        </a>
+
+        <p class="download-platforms">macOS (Apple Silicon · Intel) &nbsp;·&nbsp; Windows (x64)</p>
+
+        <!-- macOS Gatekeeper notice -->
+        <div class="macos-notice">
+          <div class="macos-notice-header">
+            <div class="macos-notice-icon">⚠</div>
+            <span class="macos-notice-title">macOS — First launch</span>
+          </div>
+          <p class="macos-notice-why">
+            Compass is free and open-source. Apple requires a $99/yr developer certificate to
+            silently trust apps — we skip that so the app stays free. macOS will block the first
+            launch with a <em>"cannot be opened"</em> warning. Here's how to get past it in seconds:
+          </p>
+          <div class="macos-steps">
+            <div class="macos-step">
+              <span class="macos-step-num">01</span>
+              <span class="macos-step-text"><strong>Right-click</strong> the Compass app in your Applications folder (or wherever you placed it)</span>
+            </div>
+            <div class="macos-step">
+              <span class="macos-step-num">02</span>
+              <span class="macos-step-text">Choose <strong>Open</strong> from the context menu — not double-click</span>
+            </div>
+            <div class="macos-step">
+              <span class="macos-step-num">03</span>
+              <span class="macos-step-text">A dialog appears asking to confirm. Click <strong>Open</strong> once more</span>
+            </div>
+            <div class="macos-step">
+              <span class="macos-step-num">04</span>
+              <span class="macos-step-text">macOS remembers your choice — every launch after this is normal</span>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
