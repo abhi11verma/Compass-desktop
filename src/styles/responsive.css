@@ -54,6 +54,82 @@
 
 html.light .capture-fab { box-shadow: 0 4px 16px rgba(0,0,0,0.18); }
 
+/* ── Search FAB (hidden by default, shown on mobile for what/who views) ───── */
+
+.search-fab {
+  display: none;
+  position: fixed;
+  bottom: 132px;
+  right: 16px;
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: var(--bg-hover);
+  color: var(--ink-2);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  align-items: center; justify-content: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+  transition: opacity 0.15s, transform 0.15s, background 0.15s, color 0.15s;
+  -webkit-tap-highlight-color: transparent;
+  z-index: 50;
+}
+
+.search-fab--active {
+  background: var(--ink-1);
+  color: var(--bg);
+  border-color: transparent;
+}
+
+.search-fab:active { opacity: 0.85; transform: scale(0.94); }
+
+html.light .search-fab { box-shadow: 0 2px 10px rgba(0,0,0,0.12); }
+
+/* Search overlay bar */
+.search-fab-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 98;
+}
+
+.search-fab-bar {
+  display: none;
+  position: fixed;
+  top: 44px;
+  left: 0; right: 0;
+  z-index: 99;
+  height: 48px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  align-items: center;
+  gap: 10px;
+  padding: 0 16px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+}
+
+.search-fab-bar-icon { color: var(--ink-4); flex-shrink: 0; }
+
+.search-fab-input {
+  flex: 1;
+  font-family: var(--mono); font-size: 15px; color: var(--ink-1);
+  background: transparent; border: none; outline: none;
+  letter-spacing: 0.02em;
+}
+
+.search-fab-input::placeholder { color: var(--ink-4); }
+
+.search-fab-close {
+  background: transparent; border: none; cursor: pointer;
+  color: var(--ink-4); padding: 6px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  transition: color 0.1s, background 0.1s;
+  -webkit-tap-highlight-color: transparent;
+  flex-shrink: 0;
+}
+
+.search-fab-close:active { color: var(--ink-2); background: var(--bg-hover); }
+
 /* ── Breakpoints ─────────────────────────────────────────────────────────── */
 
 @media (max-width: 1100px) {
@@ -86,10 +162,24 @@ html.light .capture-fab { box-shadow: 0 4px 16px rgba(0,0,0,0.18); }
 /* ── Mobile (≤640px) ─────────────────────────────────────────────────────── */
 
 @media (max-width: 640px) {
+  /* View slide-in animations for tab switching */
+  @keyframes view-from-right {
+    from { transform: translateX(100%); }
+    to   { transform: translateX(0); }
+  }
+  @keyframes view-from-left {
+    from { transform: translateX(-100%); }
+    to   { transform: translateX(0); }
+  }
+
+  .view-slide-right { animation: view-from-right 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+  .view-slide-left  { animation: view-from-left  0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+
   /* Hide desktop nav and capture shortcut — replaced by bottom tabs + FAB */
-  .seg     { display: none; }
-  .cap-btn { display: none; }
-  .topbar-search-kbd { display: none; }
+  .seg              { display: none; }
+  .cap-btn          { display: none; }
+  .topbar-search-kbd  { display: none; }
+  .topbar-search-wrap { display: none; }
 
   /* Topbar: 2-col grid (brand | actions) since center seg is gone */
   .topbar { grid-template-columns: auto 1fr; padding: 0 14px; }
@@ -109,8 +199,8 @@ html.light .capture-fab { box-shadow: 0 4px 16px rgba(0,0,0,0.18); }
 
   /* NowView: stack focuses then habits vertically */
   .col-main  { flex-direction: column; overflow-y: auto; }
-  .col-mid   { flex-basis: auto; width: 100%; overflow-y: visible; padding: 12px 12px 80px; }
-  .col-tray  { flex-basis: auto; width: 100%; overflow-y: visible; padding: 8px 12px 100px; }
+  .col-mid   { flex-basis: auto; width: 100%; overflow-y: visible; padding: 12px 12px 16px; }
+  .col-tray  { flex-basis: auto; width: 100%; overflow-y: visible; padding: 4px 12px 100px; }
 
   /* WhatView and WhoView scroll containers — clear the FAB */
   .what-view { padding-bottom: 80px; }
@@ -121,6 +211,11 @@ html.light .capture-fab { box-shadow: 0 4px 16px rgba(0,0,0,0.18); }
 
   /* Capture FAB — show on mobile */
   .capture-fab { display: flex; }
+
+  /* Search FAB — show on mobile for what/who views */
+  .search-fab          { display: flex; }
+  .search-fab-backdrop { display: block; }
+  .search-fab-bar      { display: flex; }
 
   /* Sheet action bar — delete (left) + close (right) */
   .sheet-close-bar {
