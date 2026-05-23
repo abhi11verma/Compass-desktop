@@ -4,6 +4,9 @@
 .sheet-close-btn  { display: none; }
 .sheet-close-delete { display: none; }
 
+/* ── Mobile-only principles section in right tray ────────────────────────── */
+.mobile-principles { display: none; }
+
 
 .bottom-tabs {
   display: none;
@@ -217,4 +220,11 @@ html.light .capture-fab { box-shadow: 0 4px 16px rgba(0,0,0,0.18); }
   .cap-hint,
   .fd-foot,
   .settings-shortcuts-section { display: none; }
+
+  /* Focus card: hide tasks, fix width to match habit card */
+  .f-tasks { display: none; }
+  .focus-card { max-width: 100%; }
+
+  /* Principles section — visible below habits on mobile */
+  .mobile-principles { display: block; }
 }
