@@ -71,6 +71,15 @@
   transition: color 0.1s;
 }
 .topbar-search-clear:hover { color: var(--ink-2); }
+.topbar-search-kbd {
+  font-size: 10.5px; color: var(--ink-4);
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border);
+  border-radius: 3px; padding: 1px 4px;
+  font-family: var(--mono); letter-spacing: 0.02em;
+  pointer-events: none; flex-shrink: 0;
+}
+html.light .topbar-search-kbd { background: rgba(0,0,0,0.04); }
 .inbox-dot {
   width: 16px; height: 16px; border-radius: 50%;
   background: var(--warn-dim); color: var(--warn);

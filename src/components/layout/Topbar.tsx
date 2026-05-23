@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { CompassIcon } from '@/components/CompassIcon'
 import { formatTopbarDate } from '@/lib/dates'
@@ -26,13 +26,32 @@ function handleTopbarDoubleClick(e: React.MouseEvent<HTMLDivElement>) {
   })
 }
 
+const isMac = /mac/i.test(navigator.platform)
+
 export function Topbar() {
   const { view, setView, captures, setCaptureOpen, setInboxOpen, searchQuery, setSearchQuery } = useCompassStore()
   const unrouted = captures.filter((c) => !c.processed).length
   const showSearch = view === 'what' || view === 'who'
   const searchRef = useRef<HTMLInputElement>(null)
+  const [searchFocused, setSearchFocused] = useState(false)
   const onMouseDown = useCallback(handleTopbarMouseDown, [])
   const onDoubleClick = useCallback(handleTopbarDoubleClick, [])
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault()
+        if (!showSearch) setView('what')
+        // defer so the input is in the DOM when switching from 'now' view
+        setTimeout(() => {
+          searchRef.current?.focus()
+          searchRef.current?.select()
+        }, 0)
+      }
+    }
+    document.addEventListener('keydown', handler)
+    return () => document.removeEventListener('keydown', handler)
+  }, [showSearch, setView])
 
   return (
     <div className={`topbar${isTauri() ? ' is-tauri' : ''}`} data-tauri-drag-region onMouseDown={onMouseDown} onDoubleClick={onDoubleClick}>
@@ -66,13 +85,17 @@ export function Topbar() {
               placeholder="search…"
               value={searchQuery}
               onChange={(e) => { setSearchQuery(e.target.value) }}
+              onFocus={() => { setSearchFocused(true) }}
+              onBlur={() => { setSearchFocused(false) }}
               onKeyDown={(e) => { if (e.key === 'Escape') { setSearchQuery(''); searchRef.current?.blur() } }}
             />
-            {searchQuery && (
+            {searchQuery ? (
               <button className="topbar-search-clear" onClick={() => { setSearchQuery(''); searchRef.current?.focus() }} aria-label="Clear search">
                 ×
               </button>
-            )}
+            ) : !searchFocused ? (
+              <kbd className="topbar-search-kbd">{isMac ? '⌘K' : '^K'}</kbd>
+            ) : null}
           </div>
         )}
         {unrouted > 0 && (
