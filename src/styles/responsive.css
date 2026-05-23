@@ -1,0 +1,26 @@
+@media (max-width: 1100px) {
+  .col-mid  { flex-basis: 63%; padding-inline: clamp(6px, 1vw, 14px); }
+  .col-tray { flex-basis: 37%; }
+}
+
+@media (max-width: 860px) {
+  .col-who  { width: 200px; }
+  .col-mid  { flex-basis: 60%; padding-inline: 8px; }
+  .col-tray { flex-basis: 40%; padding-right: 8px; }
+  .focus-card { max-width: 95%; }
+}
+
+@media (max-width: 700px) {
+  .what-view { flex-direction: column; overflow-y: auto; justify-content: flex-start; }
+  .what-col { height: auto; overflow: visible; padding-bottom: 20px; }
+  .what-col-focus  { flex: none; width: 100%; }
+  .what-col-habits { flex: none; width: 100%; }
+  .list-card { flex: none; }
+  .list-items { overflow-y: visible; padding-bottom: 0; }
+}
+
+@media (max-width: 680px) {
+  .col-who  { display: none; }
+  .col-mid  { flex-basis: 65%; padding-inline: 6px; }
+  .col-tray { flex-basis: 35%; padding-right: 6px; }
+}

@@ -83,7 +83,13 @@ Use Tailwind CSS variable tokens for all color styling. Never hardcode colors.
 <div style={{ backgroundColor: "#fff" }}>
 ```
 
-### 9. No New Dependencies Without Explicit Permission
+### 9. CSS Lives in `src/styles/` — Never in `src/index.css`
+`src/index.css` contains only the three `@tailwind` directives. All custom CSS is split across `src/styles/*.css` and `src/styles/overlays/*.css`, imported in order from `src/main.tsx`.
+- To add styles: find the right file in `src/styles/` using `context/css-guide.md` (file map + namespace table).
+- To add a new feature's styles: create `src/styles/<feature>.css` and add its import to `src/main.tsx`.
+- Light-theme overrides (`html.light ...`) go in the same file as their dark-mode rules, at the bottom.
+
+### 10. No New Dependencies Without Explicit Permission
 If a feature needs a library not already in `package.json`, ask the user before installing.
 Exception: shadcn components added via `just add-ui` are always allowed.
 

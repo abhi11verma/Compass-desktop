@@ -53,6 +53,18 @@ import { cn } from "@/lib/utils";
 
 ---
 
+## CSS
+
+**Do not touch `src/index.css`.** It holds only the three `@tailwind` directives. All custom CSS goes in `src/styles/`.
+
+**Find the right file before writing CSS.** See `context/css-guide.md` for the full file map and class namespace table. Adding to the wrong file creates the same monolith problem the split was designed to avoid.
+
+**Prefer Tailwind utility classes** for one-off layout or spacing. Write custom CSS only for component-specific styles that would be unwieldy as Tailwind classes (complex selectors, pseudo-elements, CSS animations, `::placeholder` overrides, etc.).
+
+**No hardcoded colors.** Use the CSS variable tokens from `src/styles/tokens.css` (e.g. `var(--ink-2)`, `var(--bg-card)`). Full token reference in `context/css-guide.md`.
+
+---
+
 ## Imports
 
 **`@/` alias always.** Never use `../` to cross folder boundaries.

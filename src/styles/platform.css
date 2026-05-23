@@ -1,0 +1,2 @@
+/* left padding clears macOS traffic-light buttons (~72px) */
+.is-tauri .topbar-left { padding-left: 72px; }

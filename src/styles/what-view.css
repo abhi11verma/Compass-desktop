@@ -1,0 +1,126 @@
+/* ══ WHAT VIEW ══ */
+.what-view {
+  flex: 1; min-height: 0;
+  background: var(--bg);
+  display: flex; flex-direction: row; align-items: flex-start;
+  justify-content: space-between; overflow: hidden;
+}
+
+.what-col {
+  height: 100%; overflow: hidden; padding: 18px 20px 24px;
+  display: flex; flex-direction: column; gap: 9px;
+}
+.what-col::-webkit-scrollbar { display: none; }
+.what-col-focus  { flex: 0 0 60%; }
+.what-col-habits { flex: 0 0 40%; }
+
+.list-hd {
+  font-family: var(--mono); font-size: 11.2px;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--ink-3); margin-bottom: 9px;
+  display: flex; justify-content: space-between; align-items: center;
+  flex-shrink: 0;
+}
+.list-hd-ct { text-transform: none; letter-spacing: 0; font-size: 12.5px; }
+
+.list-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 9px; overflow: hidden;
+  flex: 1; min-height: 0;
+  display: flex; flex-direction: column;
+}
+.list-items {
+  flex: 1; min-height: 0; overflow-y: auto;
+  padding-bottom: 44px;
+}
+.list-items::-webkit-scrollbar { display: none; }
+.list-empty {
+  padding: 20px 15px; font-family: var(--mono); font-size: 13.1px;
+  color: var(--ink-4); letter-spacing: 0.03em; text-align: center;
+}
+.l-row {
+  display: flex; align-items: flex-start; gap: 13px;
+  padding: 12px 15px; border-bottom: 1px solid var(--border);
+  cursor: pointer; transition: background 0.1s;
+}
+.l-row:last-child { border-bottom: none; }
+.l-row:hover { background: var(--bg-hover); }
+.l-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; opacity: 0.65; margin-top: 4px; }
+.l-body { flex: 1; min-width: 0; }
+.l-name { font-size: 16.2px; color: var(--ink-1); font-weight: 300; margin-bottom: 2px; }
+.l-sub  { font-size: 13.8px; color: var(--ink-3); font-weight: 300; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.l-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 5px; }
+.l-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex-shrink: 0; }
+.l-age { font-family: var(--mono); font-size: 12.5px; color: var(--ink-3); }
+
+.hl-row {
+  display: flex; align-items: center; gap: 14px;
+  padding: 12px 15px; border-bottom: 1px solid var(--border);
+}
+.hl-row:last-child { border-bottom: none; }
+.hl-body { flex: 1; min-width: 0; }
+.hl-name-row { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; flex-wrap: wrap; }
+.hl-name { font-size: 16.2px; color: var(--ink-1); font-weight: 300; }
+.hl-dots { display: flex; gap: 3px; }
+.hd { width: 9px; height: 9px; border-radius: 2px; background: rgba(255,255,255,0.05); }
+.hd.on  { background: rgba(255,255,255,0.14); }
+.hd.hi  { background: rgba(255,255,255,0.30); }
+.hd.ful { background: rgba(255,255,255,0.52); }
+.hl-streak { font-family: var(--mono); font-size: 12.5px; color: var(--ink-3); flex-shrink: 0; }
+.hl-row-clickable { cursor: pointer; transition: background 0.1s; }
+.hl-row-clickable:hover { background: var(--bg-hover); }
+.hl-name-muted { color: var(--ink-3) !important; }
+.hl-chips { display: flex; gap: 4px; flex-wrap: wrap; }
+
+/* ── ADD ROW (inline forms in What view) ── */
+.add-btn {
+  width: 100%; display: flex; align-items: center; gap: 6px;
+  padding: 10px 15px;
+  background: transparent; border: none; border-top: 1px solid var(--border);
+  color: var(--ink-3); font-size: 15px; font-family: var(--sans);
+  cursor: pointer; text-align: left; transition: color 0.1s, background 0.1s;
+}
+.add-btn:hover { color: var(--ink-2); background: var(--bg-hover); }
+.add-btn-icon { font-size: 17.5px; line-height: 1; opacity: 0.6; }
+
+.add-form {
+  border-top: 1px solid var(--border);
+  padding: 11px 15px; display: flex; flex-direction: column; gap: 7px;
+  background: var(--bg-active);
+}
+.add-form-input {
+  width: 100%; background: transparent; border: none; outline: none;
+  font-size: 16.2px; color: var(--ink-1); font-family: var(--sans);
+  font-weight: 300;
+}
+.add-form-input::placeholder { color: var(--ink-3); }
+.add-form-input.sub { font-size: 14.4px; color: var(--ink-2); }
+.add-form-foot {
+  display: flex; align-items: center; gap: 8px; margin-top: 2px;
+}
+.add-form-save {
+  font-size: 13.8px; color: var(--ink-1);
+  background: var(--bg-hover);
+  border: 1px solid var(--border-mid);
+  border-radius: 5px; padding: 4px 12px;
+  cursor: pointer; font-family: var(--sans);
+  transition: border-color 0.1s;
+}
+.add-form-save:hover { border-color: rgba(255,255,255,0.24); }
+.add-form-cancel {
+  font-size: 13.8px; color: var(--ink-3);
+  background: transparent; border: none;
+  cursor: pointer; font-family: var(--sans);
+  transition: color 0.1s; padding: 4px 6px;
+}
+.add-form-cancel:hover { color: var(--ink-2); }
+
+html.light .what-view { background: #FFFFFF; }
+html.light .list-card { background: #FEFEFE; }
+
+/* streak dots — light theme */
+html.light .hd      { background: rgba(0,0,0,0.08); }
+html.light .hd.on   { background: rgba(0,0,0,0.20); }
+html.light .hd.hi   { background: rgba(0,0,0,0.38); }
+html.light .hd.ful  { background: rgba(0,0,0,0.62); }

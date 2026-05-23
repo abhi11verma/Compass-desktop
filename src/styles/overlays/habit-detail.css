@@ -1,0 +1,116 @@
+.hbd-card { width: 480px; }
+
+.hbd-icon {
+  font-size: 16.2px; color: var(--ink-4);
+  flex-shrink: 0; line-height: 1;
+  margin-top: 1px;
+}
+
+/* streak display */
+.hbd-streak-row {
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 14px;
+}
+.hbd-streak-info { display: flex; align-items: baseline; gap: 5px; }
+.hbd-streak-count {
+  font-family: var(--mono); font-size: 27.5px; font-weight: 500;
+  color: var(--ink-1); letter-spacing: -0.01em;
+}
+.hbd-streak-unit { font-family: var(--mono); font-size: 12.5px; color: var(--ink-3); }
+.hbd-streak-dots { display: flex; gap: 3px; align-items: center; }
+
+/* mark done button */
+.hbd-done-btn {
+  width: 100%; display: flex; align-items: center; justify-content: center; gap: 7px;
+  font-size: 15.6px; font-family: var(--sans); font-weight: 400;
+  color: var(--ink-2);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border-mid);
+  border-radius: 8px; padding: 11px 16px;
+  cursor: pointer; transition: all 0.15s; margin-top: 4px;
+  letter-spacing: 0.01em;
+}
+.hbd-done-btn:hover { border-color: rgba(255,255,255,0.22); color: var(--ink-1); }
+.hbd-done-btn.done {
+  background: rgba(58,143,104,0.09);
+  border-color: rgba(58,143,104,0.28);
+  color: #5BBF94;
+}
+.hbd-done-btn.done:hover { background: rgba(58,143,104,0.06); color: var(--ink-3); border-color: var(--border); }
+
+/* habit status select variants */
+.hbd-status-active {
+  background-color: rgba(58,143,104,0.08); border: 1px solid rgba(58,143,104,0.3);
+  color: rgba(80,200,140,0.85); font-family: var(--mono); font-size: 12.5px;
+  border-radius: 4px; padding: 2px 20px 2px 7px;
+  appearance: none; -webkit-appearance: none; outline: none; cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg width='8' height='5' viewBox='0 0 8 5' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l3 3 3-3' stroke='rgba(255,255,255,0.25)' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 5px center;
+}
+.hbd-status-parked {
+  background-color: transparent; border: 1px solid var(--border); color: var(--ink-3);
+  font-family: var(--mono); font-size: 12.5px;
+  border-radius: 4px; padding: 2px 20px 2px 7px;
+  appearance: none; -webkit-appearance: none; outline: none; cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg width='8' height='5' viewBox='0 0 8 5' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l3 3 3-3' stroke='rgba(255,255,255,0.25)' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 5px center;
+}
+.hbd-status-complete {
+  background-color: rgba(100,90,240,0.08); border: 1px solid rgba(100,90,240,0.28);
+  color: rgba(160,150,255,0.9); font-family: var(--mono); font-size: 12.5px;
+  border-radius: 4px; padding: 2px 20px 2px 7px;
+  appearance: none; -webkit-appearance: none; outline: none; cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg width='8' height='5' viewBox='0 0 8 5' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l3 3 3-3' stroke='rgba(255,255,255,0.25)' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 5px center;
+}
+.hbd-status-active option,
+.hbd-status-parked option,
+.hbd-status-complete option { background: #1C1C21; color: rgba(255,255,255,0.86); }
+
+/* habit frequency select */
+.hbd-freq-select {
+  background-color: transparent; border: 1px solid var(--border); color: var(--ink-3);
+  font-family: var(--mono); font-size: 12.5px;
+  border-radius: 4px; padding: 2px 20px 2px 7px;
+  appearance: none; -webkit-appearance: none; outline: none; cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg width='8' height='5' viewBox='0 0 8 5' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l3 3 3-3' stroke='rgba(255,255,255,0.25)' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 5px center;
+  transition: border-color 0.1s;
+}
+.hbd-freq-select:hover { border-color: var(--border-mid); color: var(--ink-2); }
+.hbd-freq-select option { background: #1C1C21; color: rgba(255,255,255,0.86); }
+
+/* habit detail — linked captures */
+.hbd-captures { display: flex; flex-direction: column; gap: 1px; margin-bottom: 4px; }
+.hbd-capture-row {
+  padding: 5px 2px 5px 10px;
+  border-left: 2px solid rgba(180,160,255,0.25);
+}
+.hbd-capture-text {
+  font-size: 15.6px; color: var(--ink-2); font-weight: 300;
+  line-height: 1.45; cursor: text; display: block;
+}
+.hbd-capture-text:hover { color: var(--ink-1); }
+.hbd-capture-edit {
+  width: 100%; background: transparent; border: none; outline: none; resize: none;
+  font-size: 15.6px; color: var(--ink-1); font-weight: 300; line-height: 1.45;
+  font-family: var(--sans); overflow: hidden;
+}
+
+html.light .hbd-status-active { background-color: rgba(5,150,105,0.08); border-color: rgba(5,150,105,0.28); color: #059669; }
+html.light .hbd-status-parked { background-color: transparent; border-color: rgba(17,24,39,0.14); color: #6B7280; }
+html.light .hbd-status-complete { background-color: rgba(76,110,245,0.07); border-color: rgba(76,110,245,0.25); color: #4F46E5; }
+html.light .hbd-status-active option,
+html.light .hbd-status-parked option,
+html.light .hbd-status-complete option { background: #fff; color: rgba(0,0,0,0.85); }
+html.light .hbd-done-btn { background: var(--bg-hover); border-color: var(--border-mid); color: var(--ink-2); }
+html.light .hbd-done-btn:hover { border-color: var(--border-mid); }
+html.light .hbd-done-btn.done { background: rgba(5,150,105,0.07); border-color: rgba(5,150,105,0.22); color: #059669; }
+html.light .hbd-freq-select { background-color: transparent; border-color: var(--border-mid); color: var(--ink-2); }
+html.light .hbd-freq-select option { background: #fff; color: rgba(0,0,0,0.85); }
+html.light .hbd-status-active,
+html.light .hbd-status-parked,
+html.light .hbd-status-complete,
+html.light .hbd-freq-select {
+  background-image: url("data:image/svg+xml,%3Csvg width='8' height='5' viewBox='0 0 8 5' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l3 3 3-3' stroke='rgba(17,24,39,0.5)' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
