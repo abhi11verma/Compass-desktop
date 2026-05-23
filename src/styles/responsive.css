@@ -1,3 +1,52 @@
+/* ── Bottom tab bar (hidden by default, shown on mobile) ─────────────────── */
+
+.bottom-tabs {
+  display: none;
+  flex-shrink: 0;
+  height: 56px;
+  border-top: 1px solid var(--border);
+  background: var(--bg);
+}
+
+.bottom-tab {
+  flex: 1;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--sans); font-size: 15px; font-weight: 400;
+  color: var(--ink-3);
+  background: transparent; border: none;
+  cursor: pointer; letter-spacing: 0.01em;
+  transition: color 0.15s, background 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.bottom-tab:active { background: var(--bg-hover); }
+.bottom-tab.active { color: var(--ink-1); font-weight: 500; }
+
+/* ── Capture FAB (hidden by default, shown on mobile) ────────────────────── */
+
+.capture-fab {
+  display: none;
+  position: fixed;
+  bottom: 72px;
+  right: 16px;
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  background: var(--ink-1);
+  color: var(--bg);
+  border: none; cursor: pointer;
+  align-items: center; justify-content: center;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+  transition: opacity 0.15s, transform 0.15s;
+  -webkit-tap-highlight-color: transparent;
+  z-index: 50;
+}
+
+.capture-fab:active { opacity: 0.85; transform: scale(0.94); }
+
+html.light .capture-fab { box-shadow: 0 4px 16px rgba(0,0,0,0.18); }
+
+/* ── Breakpoints ─────────────────────────────────────────────────────────── */
+
 @media (max-width: 1100px) {
   .col-mid  { flex-basis: 63%; padding-inline: clamp(6px, 1vw, 14px); }
   .col-tray { flex-basis: 37%; }
@@ -23,4 +72,35 @@
   .col-who  { display: none; }
   .col-mid  { flex-basis: 65%; padding-inline: 6px; }
   .col-tray { flex-basis: 35%; padding-right: 6px; }
+}
+
+/* ── Mobile (≤640px) ─────────────────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  /* Hide desktop nav and capture shortcut — replaced by bottom tabs + FAB */
+  .seg     { display: none; }
+  .cap-btn { display: none; }
+  .topbar-search-kbd { display: none; }
+
+  /* Topbar: 2-col grid (brand | actions) since center seg is gone */
+  .topbar { grid-template-columns: auto 1fr; padding: 0 14px; }
+  .topbar-right { gap: 8px; }
+
+  /* Inbox pill label — hide text, keep dot to save space */
+  .inbox-pill span { display: none; }
+
+  /* NowView: stack focuses then habits vertically */
+  .col-main  { flex-direction: column; overflow-y: auto; }
+  .col-mid   { flex-basis: auto; width: 100%; overflow-y: visible; padding: 12px 12px 80px; }
+  .col-tray  { flex-basis: auto; width: 100%; overflow-y: visible; padding: 8px 12px 100px; }
+
+  /* WhatView and WhoView scroll containers — clear the FAB */
+  .what-view { padding-bottom: 80px; }
+  .who-view  { padding-bottom: 80px; }
+
+  /* Bottom tab bar — show on mobile */
+  .bottom-tabs { display: flex; }
+
+  /* Capture FAB — show on mobile */
+  .capture-fab { display: flex; }
 }
