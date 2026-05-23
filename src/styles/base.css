@@ -17,3 +17,19 @@ html, body, #root {
   overflow: hidden;
   position: relative;
 }
+
+/* ViewSlider — transparent passthrough on desktop, clipping container for mobile slide */
+.view-slider {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.view-slide {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}

@@ -162,6 +162,19 @@ html.light .search-fab { box-shadow: 0 2px 10px rgba(0,0,0,0.12); }
 /* ── Mobile (≤640px) ─────────────────────────────────────────────────────── */
 
 @media (max-width: 640px) {
+  /* View slide-in animations for tab switching */
+  @keyframes view-from-right {
+    from { transform: translateX(100%); }
+    to   { transform: translateX(0); }
+  }
+  @keyframes view-from-left {
+    from { transform: translateX(-100%); }
+    to   { transform: translateX(0); }
+  }
+
+  .view-slide-right { animation: view-from-right 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+  .view-slide-left  { animation: view-from-left  0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+
   /* Hide desktop nav and capture shortcut — replaced by bottom tabs + FAB */
   .seg              { display: none; }
   .cap-btn          { display: none; }

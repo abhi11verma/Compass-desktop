@@ -5,22 +5,19 @@ import { CaptureFab } from '@/components/layout/CaptureFab'
 import { SearchFab } from '@/components/layout/SearchFab'
 import { SettingsDialog } from '@/components/layout/SettingsDialog'
 import { Topbar } from '@/components/layout/Topbar'
+import { ViewSlider } from '@/components/layout/ViewSlider'
 import { CaptureOverlay } from '@/components/overlays/CaptureOverlay'
 import { FocusDetailOverlay } from '@/components/overlays/FocusDetailOverlay'
 import { HabitDetailOverlay } from '@/components/overlays/HabitDetailOverlay'
 import { InboxOverlay } from '@/components/overlays/InboxOverlay'
 import { PrincipleDetailOverlay } from '@/components/overlays/PrincipleDetailOverlay'
 import { ValueDetailOverlay } from '@/components/overlays/ValueDetailOverlay'
-import { NowView } from '@/components/views/NowView'
-import { WhatView } from '@/components/views/WhatView'
-import { WhoView } from '@/components/views/WhoView'
 import { useDailyReset } from '@/hooks/useDailyReset'
 import { useKeyboard } from '@/hooks/useKeyboard'
 import { useCompassStore } from '@/store/useCompassStore'
 import { useThemeStore } from '@/store/useThemeStore'
 
 export function App() {
-  const view = useCompassStore((s) => s.view)
   const { settingsOpen, setSettingsOpen } = useCompassStore()
   const theme = useThemeStore((s) => s.theme)
   useKeyboard()
@@ -33,9 +30,7 @@ export function App() {
   return (
     <div className="app">
       <Topbar />
-      {view === 'now' && <NowView />}
-      {view === 'what' && <WhatView />}
-      {view === 'who' && <WhoView />}
+      <ViewSlider />
       <CaptureOverlay />
       <FocusDetailOverlay />
       <HabitDetailOverlay />
@@ -49,3 +44,4 @@ export function App() {
     </div>
   )
 }
+

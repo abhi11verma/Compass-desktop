@@ -81,9 +81,11 @@ export function isHabitDone(h: Habit, now: number = Date.now()): boolean {
 }
 
 type View = 'now' | 'what' | 'who'
+const VIEW_ORDER: View[] = ['now', 'what', 'who']
 
 interface CompassState {
   view: View
+  slideDir: 'left' | 'right' | null
   captureOpen: boolean
   inboxOpen: boolean
   settingsOpen: boolean
@@ -238,6 +240,7 @@ export const useCompassStore = create<CompassState>()(
   persist(
     (set) => ({
       view: 'now',
+      slideDir: null,
       captureOpen: false,
       inboxOpen: false,
       settingsOpen: false,
@@ -252,7 +255,10 @@ export const useCompassStore = create<CompassState>()(
       habits: SEED_HABITS,
       captures: SEED_CAPTURES,
 
-      setView: (view) => set({ view }),
+      setView: (next) => set((state) => ({
+        view: next,
+        slideDir: VIEW_ORDER.indexOf(next) > VIEW_ORDER.indexOf(state.view) ? 'right' : 'left',
+      })),
       setCaptureOpen: (open) => set({ captureOpen: open }),
       setInboxOpen: (open) => set({ inboxOpen: open }),
       setSettingsOpen: (open) => set({ settingsOpen: open }),
@@ -528,6 +534,6 @@ export const useCompassStore = create<CompassState>()(
           captures: [],
         }),
     }),
-    { name: 'compass-store-v5', partialize: (state) => { const { searchQuery: _sq, ...rest } = state; return rest } }
+    { name: 'compass-store-v5', partialize: (state) => { const { searchQuery: _sq, slideDir: _sd, ...rest } = state; return rest } }
   )
 )
