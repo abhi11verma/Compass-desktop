@@ -7,6 +7,7 @@ const host = process.env["TAURI_DEV_HOST"];
 const isTauri = !!(
   process.env["TAURI_ENV_TARGET"] ?? process.env["TAURI_ENV_DEBUG"]
 );
+const basePath = process.env["VITE_BASE_PATH"] ?? "/";
 
 export default defineConfig({
   plugins: [
@@ -30,8 +31,8 @@ export default defineConfig({
               background_color: "#0E0E11",
               display: "standalone",
               orientation: "portrait",
-              start_url: "/",
-              scope: "/",
+              start_url: basePath,
+              scope: basePath,
               icons: [
                 {
                   src: "pwa-64x64.png",
@@ -108,7 +109,7 @@ export default defineConfig({
         ]
       : []),
   ],
-  base: process.env["VITE_BASE_PATH"] ?? "/",
+  base: basePath,
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
