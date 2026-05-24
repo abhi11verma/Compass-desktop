@@ -12,6 +12,7 @@ import { HabitDetailOverlay } from '@/components/overlays/HabitDetailOverlay'
 import { InboxOverlay } from '@/components/overlays/InboxOverlay'
 import { PrincipleDetailOverlay } from '@/components/overlays/PrincipleDetailOverlay'
 import { ValueDetailOverlay } from '@/components/overlays/ValueDetailOverlay'
+import { PwaUpdatePrompt } from '@/components/PwaUpdatePrompt'
 import { useDailyReset } from '@/hooks/useDailyReset'
 import { useKeyboard } from '@/hooks/useKeyboard'
 import { useCompassStore } from '@/store/useCompassStore'
@@ -41,6 +42,7 @@ export function App() {
       <BottomTabBar />
       <CaptureFab />
       <SearchFab />
+      <PwaUpdatePrompt />
     </div>
   )
 }

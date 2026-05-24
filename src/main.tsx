@@ -19,6 +19,7 @@ import "@/styles/overlays/principle-detail.css";
 import "@/styles/overlays/settings.css";
 import "@/styles/responsive.css";
 import "@/styles/platform.css";
+import "@/styles/pwa.css";
 
 const rootElement = document.getElementById("root");
 if (!rootElement) throw new Error("Root element #root not found");
