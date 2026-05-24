@@ -1,0 +1,46 @@
+.pwa-update-prompt {
+  position: fixed;
+  bottom: calc(env(safe-area-inset-bottom) + 80px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+  white-space: nowrap;
+  font-size: 13px;
+  color: var(--ink-2);
+}
+
+.pwa-update-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.pwa-update-btn {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-family: var(--sans);
+  cursor: pointer;
+  border: none;
+  transition: opacity 0.15s;
+}
+
+.pwa-update-btn:hover { opacity: 0.8; }
+
+.pwa-update-btn--primary {
+  background: var(--accent);
+  color: var(--ink-1);
+}
+
+.pwa-update-btn--ghost {
+  background: transparent;
+  color: var(--ink-3);
+  border: 1px solid var(--border);
+}

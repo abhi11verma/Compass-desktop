@@ -60,3 +60,17 @@ build-desk:
 # Usage: just icon-desk assets/icon.png
 icon-desk src:
     npx tauri icon {{src}}
+
+# ── PWA ──────────────────────────────────────────────────────────────────────
+
+# Regenerate PWA icons from public/favicon.svg
+pwa-icons:
+    npx pwa-assets-generator --config pwa-assets.config.ts
+
+# Capture PWA install screenshots (requires `just dev` running first)
+pwa-screenshots:
+    node scripts/pwa-screenshots.mjs
+
+# Preview the production PWA build locally (includes service worker)
+pwa-preview:
+    npm run build && npx vite preview
