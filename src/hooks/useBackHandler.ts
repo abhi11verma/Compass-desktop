@@ -3,54 +3,36 @@ import { useEffect } from 'react'
 import { useCompassStore } from '@/store/useCompassStore'
 
 function pushSentinel() {
-  history.pushState({ compass: true }, '')
+  history.pushState({ compass: true }, '', location.href)
 }
 
 export function useBackHandler() {
-  const {
-    view,
-    setView,
-    captureOpen, setCaptureOpen,
-    inboxOpen, setInboxOpen,
-    focusDetailId, openFocusDetail,
-    habitDetailId, openHabitDetail,
-    valueDetailId, openValueDetail,
-    principleDetailId, openPrincipleDetail,
-  } = useCompassStore()
-
   useEffect(() => {
     pushSentinel()
-  }, [])
 
-  useEffect(() => {
     function onPopState() {
-      if (captureOpen) {
-        setCaptureOpen(false)
-      } else if (focusDetailId !== null) {
-        openFocusDetail(null)
-      } else if (habitDetailId !== null) {
-        openHabitDetail(null)
-      } else if (valueDetailId !== null) {
-        openValueDetail(null)
-      } else if (principleDetailId !== null) {
-        openPrincipleDetail(null)
-      } else if (inboxOpen) {
-        setInboxOpen(false)
-      } else if (view !== 'now') {
-        setView('now')
+      const s = useCompassStore.getState()
+
+      if (s.captureOpen) {
+        s.setCaptureOpen(false)
+      } else if (s.focusDetailId !== null) {
+        s.openFocusDetail(null)
+      } else if (s.habitDetailId !== null) {
+        s.openHabitDetail(null)
+      } else if (s.valueDetailId !== null) {
+        s.openValueDetail(null)
+      } else if (s.principleDetailId !== null) {
+        s.openPrincipleDetail(null)
+      } else if (s.inboxOpen) {
+        s.setInboxOpen(false)
+      } else if (s.view !== 'now') {
+        s.setView('now')
       }
+
       pushSentinel()
     }
 
     window.addEventListener('popstate', onPopState)
     return () => { window.removeEventListener('popstate', onPopState) }
-  }, [
-    view, setView,
-    captureOpen, setCaptureOpen,
-    inboxOpen, setInboxOpen,
-    focusDetailId, openFocusDetail,
-    habitDetailId, openHabitDetail,
-    valueDetailId, openValueDetail,
-    principleDetailId, openPrincipleDetail,
-  ])
+  }, [])
 }
