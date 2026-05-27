@@ -3,11 +3,15 @@ import { useEffect, useRef, useState } from 'react'
 import { useCompassStore } from '@/store/useCompassStore'
 
 export function SearchFab() {
-  const { view, searchQuery, setSearchQuery, inboxOpen } = useCompassStore()
+  const {
+    view, searchQuery, setSearchQuery,
+    captureOpen, inboxOpen, focusDetailId, habitDetailId, valueDetailId, principleDetailId,
+  } = useCompassStore()
   const [open, setOpen] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  const showFab = (view === 'what' || view === 'who') && !inboxOpen
+  const anyOverlayOpen = captureOpen || inboxOpen || focusDetailId !== null || habitDetailId !== null || valueDetailId !== null || principleDetailId !== null
+  const showFab = (view === 'what' || view === 'who') && !anyOverlayOpen
 
   useEffect(() => {
     if (open) {

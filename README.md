@@ -1,10 +1,21 @@
 # Compass
 
+![version](https://img.shields.io/badge/version-0.2.0-blue) ![platform](https://img.shields.io/badge/platform-macOS%20%7C%20Windows%20%7C%20Web-lightgrey)
+
 A personal life-navigation app. Three views — **Now**, **What**, **Who** — keep your daily actions, active focuses, and core identity in one place.
 
 **[Compass Website](https://abhi11verma.github.io/Compass-desktop/) · [Open app →](https://abhi11verma.github.io/Compass-desktop/app/)**
 
 Works entirely in the browser. No account, no server — your data lives in `localStorage`.
+
+---
+
+## Changelog
+
+| Version | Date | Summary |
+|---|---|---|
+| **v0.2.0** | May 2026 | Mobile experience, landing page overhaul, light/dark theme |
+| **v0.1.0** | May 2026 | Initial release |
 
 ---
 

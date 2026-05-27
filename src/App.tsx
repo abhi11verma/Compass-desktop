@@ -12,6 +12,8 @@ import { HabitDetailOverlay } from '@/components/overlays/HabitDetailOverlay'
 import { InboxOverlay } from '@/components/overlays/InboxOverlay'
 import { PrincipleDetailOverlay } from '@/components/overlays/PrincipleDetailOverlay'
 import { ValueDetailOverlay } from '@/components/overlays/ValueDetailOverlay'
+import { PwaUpdatePrompt } from '@/components/PwaUpdatePrompt'
+import { useBackHandler } from '@/hooks/useBackHandler'
 import { useDailyReset } from '@/hooks/useDailyReset'
 import { useKeyboard } from '@/hooks/useKeyboard'
 import { useCompassStore } from '@/store/useCompassStore'
@@ -22,6 +24,7 @@ export function App() {
   const theme = useThemeStore((s) => s.theme)
   useKeyboard()
   useDailyReset()
+  useBackHandler()
 
   useEffect(() => {
     document.documentElement.classList.toggle('light', theme === 'light')
@@ -41,6 +44,7 @@ export function App() {
       <BottomTabBar />
       <CaptureFab />
       <SearchFab />
+      <PwaUpdatePrompt />
     </div>
   )
 }
