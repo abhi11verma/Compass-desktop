@@ -1,9 +1,19 @@
 import { useCompassStore } from '@/store/useCompassStore'
 
 export function CaptureFab() {
-  const { setCaptureOpen, inboxOpen } = useCompassStore()
+  const {
+    setCaptureOpen,
+    captureOpen,
+    inboxOpen,
+    focusDetailId,
+    habitDetailId,
+    valueDetailId,
+    principleDetailId,
+  } = useCompassStore()
 
-  if (inboxOpen) return null
+  const anyOpen = captureOpen || inboxOpen || focusDetailId !== null || habitDetailId !== null || valueDetailId !== null || principleDetailId !== null
+
+  if (anyOpen) return null
 
   return (
     <button
