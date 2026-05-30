@@ -1,10 +1,10 @@
 [package]
 name = "app"
-version = "0.4.0"
-description = "A Tauri App"
-authors = ["you"]
-license = ""
-repository = ""
+version = "0.4.1"
+description = "A personal life-navigation app — track your values, focuses, habits, and principles."
+authors = ["Abhishek Verma"]
+license = "MIT"
+repository = "https://github.com/abhi11verma/Compass-desktop"
 edition = "2021"
 rust-version = "1.77.2"
 

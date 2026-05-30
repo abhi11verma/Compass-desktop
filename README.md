@@ -1,6 +1,6 @@
 # Compass
 
-![version](https://img.shields.io/badge/version-0.2.0-blue) ![platform](https://img.shields.io/badge/platform-macOS%20%7C%20Windows%20%7C%20Web-lightgrey)
+![version](https://img.shields.io/badge/version-0.4.1-blue) ![platform](https://img.shields.io/badge/platform-macOS%20%7C%20Windows%20%7C%20Web-lightgrey)
 
 A personal life-navigation app. Three views — **Now**, **What**, **Who** — keep your daily actions, active focuses, and core identity in one place.
 
@@ -14,6 +14,9 @@ Works entirely in the browser. No account, no server — your data lives in `loc
 
 | Version | Date | Summary |
 |---|---|---|
+| **v0.4.1** | May 2026 | Analytics patch — fix GA4 cookie rejection on GitHub Pages, hide analytics toggle in desktop app |
+| **v0.4.0** | May 2026 | Google Analytics 4, privacy opt-out toggle in Settings, Tauri PWA dev fix |
+| **v0.3.0** | May 2026 | PWA support — installable on Android, iOS, and desktop |
 | **v0.2.0** | May 2026 | Mobile experience, landing page overhaul, light/dark theme |
 | **v0.1.0** | May 2026 | Initial release |
 

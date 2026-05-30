@@ -18,6 +18,7 @@ export function SettingsDialog({ open, onClose }: SettingsDialogProps) {
   const overlayRef = useRef<HTMLDivElement>(null)
   const [confirmReset, setConfirmReset] = useState(false)
   const [confirmClear, setConfirmClear] = useState(false)
+  const isTauri = '__TAURI_INTERNALS__' in window
 
   const showInstallSection = !isInstalled && (isIOS || deferredPrompt !== null)
 
@@ -166,23 +167,27 @@ export function SettingsDialog({ open, onClose }: SettingsDialogProps) {
           </>
         )}
 
-        <div className="settings-section-lbl">Privacy</div>
-        <div className="settings-row">
-          <div>
-            <div className="settings-row-label">Share analytics</div>
-            <div className="settings-row-sub">Helps us improve Compass. No personal data is collected or shared.</div>
-          </div>
-          <label className="settings-toggle" aria-label="Share analytics">
-            <input
-              type="checkbox"
-              checked={analyticsEnabled}
-              onChange={(e) => { setAnalyticsEnabled(e.target.checked) }}
-            />
-            <span className="settings-toggle-track" />
-          </label>
-        </div>
+        {!isTauri && (
+          <>
+            <div className="settings-section-lbl">Privacy</div>
+            <div className="settings-row">
+              <div>
+                <div className="settings-row-label">Share analytics</div>
+                <div className="settings-row-sub">Helps us improve Compass. No personal data is collected or shared.</div>
+              </div>
+              <label className="settings-toggle" aria-label="Share analytics">
+                <input
+                  type="checkbox"
+                  checked={analyticsEnabled}
+                  onChange={(e) => { setAnalyticsEnabled(e.target.checked) }}
+                />
+                <span className="settings-toggle-track" />
+              </label>
+            </div>
 
-        <div className="settings-sep" />
+            <div className="settings-sep" />
+          </>
+        )}
 
         <div className="settings-section-lbl">Data</div>
         <div className="settings-row settings-row-danger">
