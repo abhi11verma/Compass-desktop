@@ -7,6 +7,7 @@ import {
   checkIsStandalone,
   saveDismiss,
   setDeferredPrompt,
+  setShowAndroid,
   setShowIOS,
   wasDismissedRecently,
 } from '@/lib/pwaInstall'
@@ -25,6 +26,16 @@ function AddIcon() {
     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
       <rect x="2.5" y="2.5" width="15" height="15" rx="3.5" stroke="currentColor" strokeWidth="1.6"/>
       <path d="M10 7v6M7 10h6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/>
+    </svg>
+  )
+}
+
+function MenuIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+      <circle cx="10" cy="4" r="1.5" fill="currentColor"/>
+      <circle cx="10" cy="10" r="1.5" fill="currentColor"/>
+      <circle cx="10" cy="16" r="1.5" fill="currentColor"/>
     </svg>
   )
 }
@@ -60,8 +71,39 @@ export function IOSInstallSheet({ onDismiss }: { onDismiss: () => void }) {
   )
 }
 
+export function AndroidInstallSheet({ onDismiss }: { onDismiss: () => void }) {
+  return (
+    <div className="pwa-ios-backdrop" onClick={onDismiss}>
+      <div className="pwa-ios-sheet" onClick={(e) => { e.stopPropagation() }}>
+        <div className="pwa-ios-handle" />
+        <div className="pwa-ios-title">Install Compass</div>
+        <div className="pwa-ios-subtitle">
+          Add to your home screen for the full app experience — no Play Store needed.
+        </div>
+        <div className="pwa-ios-steps">
+          <div className="pwa-ios-step">
+            <div className="pwa-ios-step-icon"><MenuIcon /></div>
+            <div className="pwa-ios-step-text">
+              <span className="pwa-ios-step-num">1</span>
+              Tap the <strong>⋮ menu</strong> in Chrome's top-right corner
+            </div>
+          </div>
+          <div className="pwa-ios-step">
+            <div className="pwa-ios-step-icon"><AddIcon /></div>
+            <div className="pwa-ios-step-text">
+              <span className="pwa-ios-step-num">2</span>
+              Tap <strong>Add to Home screen</strong>
+            </div>
+          </div>
+        </div>
+        <button className="pwa-ios-dismiss" onClick={onDismiss}>Maybe later</button>
+      </div>
+    </div>
+  )
+}
+
 export function PwaInstallPrompt() {
-  const { deferredPrompt, showIOS } = usePwaInstall()
+  const { deferredPrompt, showIOS, showAndroid } = usePwaInstall()
   const [autoBanner, setAutoBanner] = useState(false)
 
   useEffect(() => {
@@ -85,6 +127,7 @@ export function PwaInstallPrompt() {
     saveDismiss()
     setAutoBanner(false)
     setShowIOS(false)
+    setShowAndroid(false)
   }
 
   if (autoBanner && deferredPrompt) {
@@ -106,9 +149,8 @@ export function PwaInstallPrompt() {
     )
   }
 
-  if (showIOS) {
-    return <IOSInstallSheet onDismiss={dismiss} />
-  }
+  if (showIOS) return <IOSInstallSheet onDismiss={dismiss} />
+  if (showAndroid) return <AndroidInstallSheet onDismiss={() => { setShowAndroid(false) }} />
 
   return null
 }

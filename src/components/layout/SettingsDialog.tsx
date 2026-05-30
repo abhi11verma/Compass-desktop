@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 
-import { IOSInstallSheet } from '@/components/PwaInstallPrompt'
+import { AndroidInstallSheet, IOSInstallSheet } from '@/components/PwaInstallPrompt'
 import { usePwaInstall } from '@/hooks/usePwaInstall'
-import { setDeferredPrompt, setShowIOS } from '@/lib/pwaInstall'
+import { setDeferredPrompt, setShowAndroid, setShowIOS } from '@/lib/pwaInstall'
 import { useCompassStore } from '@/store/useCompassStore'
 import { useThemeStore } from '@/store/useThemeStore'
 
@@ -14,13 +14,13 @@ interface SettingsDialogProps {
 export function SettingsDialog({ open, onClose }: SettingsDialogProps) {
   const { theme, setTheme, analyticsEnabled, setAnalyticsEnabled } = useThemeStore()
   const { resetCompass, clearData } = useCompassStore()
-  const { deferredPrompt, showIOS, isIOS, isInstalled } = usePwaInstall()
+  const { deferredPrompt, showIOS, showAndroid, isIOS, isInstalled } = usePwaInstall()
   const overlayRef = useRef<HTMLDivElement>(null)
   const [confirmReset, setConfirmReset] = useState(false)
   const [confirmClear, setConfirmClear] = useState(false)
   const isTauri = '__TAURI_INTERNALS__' in window
 
-  const showInstallSection = !isInstalled && (isIOS || deferredPrompt !== null)
+  const showInstallSection = !isInstalled && !isTauri
 
   useEffect(() => {
     if (!open) return
@@ -149,19 +149,22 @@ export function SettingsDialog({ open, onClose }: SettingsDialogProps) {
                     : 'Add Compass to your home screen or desktop'}
                 </div>
               </div>
-              <button
-                className="settings-install-btn"
-                onClick={() => {
-                  if (isIOS) {
-                    setShowIOS(true)
-                  } else if (deferredPrompt) {
-                    void deferredPrompt.prompt()
-                    setDeferredPrompt(null)
-                  }
-                }}
-              >
-                Install
-              </button>
+              {isIOS ? (
+                <button className="settings-install-btn" onClick={() => { setShowIOS(true) }}>
+                  Install
+                </button>
+              ) : deferredPrompt ? (
+                <button
+                  className="settings-install-btn"
+                  onClick={() => { void deferredPrompt.prompt(); setDeferredPrompt(null) }}
+                >
+                  Install
+                </button>
+              ) : (
+                <button className="settings-install-btn" onClick={() => { setShowAndroid(true) }}>
+                  Install
+                </button>
+              )}
             </div>
             <div className="settings-sep" />
           </>
@@ -227,6 +230,7 @@ export function SettingsDialog({ open, onClose }: SettingsDialogProps) {
       </div>
       </div>
       {showIOS && <IOSInstallSheet onDismiss={() => { setShowIOS(false) }} />}
+      {showAndroid && <AndroidInstallSheet onDismiss={() => { setShowAndroid(false) }} />}
     </>
   )
 }
