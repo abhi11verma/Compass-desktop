@@ -131,7 +131,13 @@ export function SettingsDialog({ open, onClose }: SettingsDialogProps) {
         {showInstallSection && (
           <>
             <div className="settings-section-lbl">Install</div>
-            <div className="settings-row">
+            <div className="settings-row settings-row-install">
+              <div className="settings-install-icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                  <path d="M9 2v9M5.5 7.5 9 11l3.5-3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M2 13v1.5A1.5 1.5 0 003.5 16h11a1.5 1.5 0 001.5-1.5V13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                </svg>
+              </div>
               <div>
                 <div className="settings-row-label">
                   {isIOS ? 'Install on iPhone / iPad' : 'Install App'}
