@@ -44,3 +44,125 @@
   color: var(--ink-3);
   border: 1px solid var(--border);
 }
+
+/* iOS install bottom sheet */
+.pwa-ios-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: flex-end;
+  animation: pwa-fade-in 0.2s ease;
+}
+
+.pwa-ios-sheet {
+  width: 100%;
+  background: var(--bg-card);
+  border-top: 1px solid var(--border-mid);
+  border-radius: 20px 20px 0 0;
+  padding: 12px 24px calc(env(safe-area-inset-bottom) + 28px);
+  box-shadow: 0 -8px 40px rgba(0,0,0,0.4);
+  animation: pwa-slide-up 0.32s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.pwa-ios-handle {
+  width: 36px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--border-mid);
+  margin: 0 auto 22px;
+}
+
+.pwa-ios-title {
+  font-family: var(--sans);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--ink-1);
+  margin-bottom: 6px;
+}
+
+.pwa-ios-subtitle {
+  font-size: 13px;
+  color: var(--ink-3);
+  line-height: 1.55;
+  margin-bottom: 22px;
+}
+
+.pwa-ios-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.pwa-ios-step {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.pwa-ios-step-icon {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 11px;
+  background: var(--accent-dim);
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pwa-ios-step-text {
+  font-size: 14px;
+  color: var(--ink-2);
+  line-height: 1.45;
+}
+
+.pwa-ios-step-text strong {
+  color: var(--ink-1);
+  font-weight: 500;
+}
+
+.pwa-ios-step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  margin-right: 7px;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+.pwa-ios-dismiss {
+  width: 100%;
+  padding: 13px;
+  border-radius: 11px;
+  background: var(--bg-hover);
+  border: 1px solid var(--border);
+  color: var(--ink-3);
+  font-size: 14px;
+  font-family: var(--sans);
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.pwa-ios-dismiss:hover { opacity: 0.75; }
+
+@keyframes pwa-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes pwa-slide-up {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+

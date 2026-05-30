@@ -23,6 +23,7 @@ export default defineConfig({
               "apple-touch-icon-180x180.png",
             ],
             manifest: {
+              id: "/",
               name: "Compass",
               short_name: "Compass",
               description:
@@ -30,6 +31,7 @@ export default defineConfig({
               theme_color: "#0E0E11",
               background_color: "#0E0E11",
               display: "standalone",
+              display_override: ["standalone", "minimal-ui"],
               orientation: "portrait",
               start_url: basePath,
               scope: basePath,
