@@ -20,7 +20,7 @@ export function SettingsDialog({ open, onClose }: SettingsDialogProps) {
   const [confirmClear, setConfirmClear] = useState(false)
   const isTauri = '__TAURI_INTERNALS__' in window
 
-  const showInstallSection = !isInstalled && (isIOS || deferredPrompt !== null)
+  const showInstallSection = !isInstalled && !isTauri
 
   useEffect(() => {
     if (!open) return
@@ -149,19 +149,20 @@ export function SettingsDialog({ open, onClose }: SettingsDialogProps) {
                     : 'Add Compass to your home screen or desktop'}
                 </div>
               </div>
-              <button
-                className="settings-install-btn"
-                onClick={() => {
-                  if (isIOS) {
-                    setShowIOS(true)
-                  } else if (deferredPrompt) {
-                    void deferredPrompt.prompt()
-                    setDeferredPrompt(null)
-                  }
-                }}
-              >
-                Install
-              </button>
+              {isIOS ? (
+                <button className="settings-install-btn" onClick={() => { setShowIOS(true) }}>
+                  Install
+                </button>
+              ) : deferredPrompt ? (
+                <button
+                  className="settings-install-btn"
+                  onClick={() => { void deferredPrompt.prompt(); setDeferredPrompt(null) }}
+                >
+                  Install
+                </button>
+              ) : (
+                <span className="settings-install-hint">Use browser menu</span>
+              )}
             </div>
             <div className="settings-sep" />
           </>
