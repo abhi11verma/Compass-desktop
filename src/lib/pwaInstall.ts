@@ -9,9 +9,10 @@ const COOLDOWN_MS = 7 * 24 * 60 * 60 * 1000
 interface InstallState {
   deferredPrompt: BeforeInstallPromptEvent | null
   showIOS: boolean
+  showAndroid: boolean
 }
 
-const _state: InstallState = { deferredPrompt: null, showIOS: false }
+const _state: InstallState = { deferredPrompt: null, showIOS: false, showAndroid: false }
 const _listeners = new Set<() => void>()
 
 function emit() { _listeners.forEach(fn => fn()) }
@@ -23,6 +24,11 @@ export function setDeferredPrompt(p: BeforeInstallPromptEvent | null) {
 
 export function setShowIOS(v: boolean) {
   _state.showIOS = v
+  emit()
+}
+
+export function setShowAndroid(v: boolean) {
+  _state.showAndroid = v
   emit()
 }
 

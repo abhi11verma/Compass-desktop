@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 
-import { IOSInstallSheet } from '@/components/PwaInstallPrompt'
+import { AndroidInstallSheet, IOSInstallSheet } from '@/components/PwaInstallPrompt'
 import { usePwaInstall } from '@/hooks/usePwaInstall'
-import { setDeferredPrompt, setShowIOS } from '@/lib/pwaInstall'
+import { setDeferredPrompt, setShowAndroid, setShowIOS } from '@/lib/pwaInstall'
 import { useCompassStore } from '@/store/useCompassStore'
 import { useThemeStore } from '@/store/useThemeStore'
 
@@ -14,7 +14,7 @@ interface SettingsDialogProps {
 export function SettingsDialog({ open, onClose }: SettingsDialogProps) {
   const { theme, setTheme, analyticsEnabled, setAnalyticsEnabled } = useThemeStore()
   const { resetCompass, clearData } = useCompassStore()
-  const { deferredPrompt, showIOS, isIOS, isInstalled } = usePwaInstall()
+  const { deferredPrompt, showIOS, showAndroid, isIOS, isInstalled } = usePwaInstall()
   const overlayRef = useRef<HTMLDivElement>(null)
   const [confirmReset, setConfirmReset] = useState(false)
   const [confirmClear, setConfirmClear] = useState(false)
@@ -161,7 +161,9 @@ export function SettingsDialog({ open, onClose }: SettingsDialogProps) {
                   Install
                 </button>
               ) : (
-                <span className="settings-install-hint">Use browser menu</span>
+                <button className="settings-install-btn" onClick={() => { setShowAndroid(true) }}>
+                  Install
+                </button>
               )}
             </div>
             <div className="settings-sep" />
@@ -228,6 +230,7 @@ export function SettingsDialog({ open, onClose }: SettingsDialogProps) {
       </div>
       </div>
       {showIOS && <IOSInstallSheet onDismiss={() => { setShowIOS(false) }} />}
+      {showAndroid && <AndroidInstallSheet onDismiss={() => { setShowAndroid(false) }} />}
     </>
   )
 }
