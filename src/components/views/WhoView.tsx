@@ -1,5 +1,6 @@
 import { useState } from 'react'
 
+import { track } from '@/lib/analytics'
 import { useCompassStore } from '@/store/useCompassStore'
 
 export function WhoView() {
@@ -28,6 +29,7 @@ export function WhoView() {
     const name = newValueName.trim()
     if (!name) { setAddingValue(false); return }
     addValue(name)
+    track('value_added')
     setNewValueName('')
     setAddingValue(false)
   }
@@ -36,6 +38,7 @@ export function WhoView() {
     const cue = newPrincipleCue.trim()
     if (!cue) { setAddingPrinciple(false); return }
     addPrinciple(cue)
+    track('principle_added')
     setNewPrincipleCue('')
     setAddingPrinciple(false)
   }

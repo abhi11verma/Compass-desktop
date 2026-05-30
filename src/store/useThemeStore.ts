@@ -7,6 +7,8 @@ interface ThemeState {
   theme: Theme
   setTheme: (theme: Theme) => void
   toggleTheme: () => void
+  analyticsEnabled: boolean
+  setAnalyticsEnabled: (enabled: boolean) => void
 }
 
 function applyTheme(theme: Theme) {
@@ -26,6 +28,8 @@ export const useThemeStore = create<ThemeState>()(
         applyTheme(next)
         set({ theme: next })
       },
+      analyticsEnabled: true,
+      setAnalyticsEnabled: (enabled) => { set({ analyticsEnabled: enabled }) },
     }),
     {
       name: 'compass-theme',

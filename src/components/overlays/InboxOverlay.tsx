@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 
 import { SheetClose } from '@/components/layout/SheetClose'
+import { track } from '@/lib/analytics'
 import { useCompassStore } from '@/store/useCompassStore'
 
 function formatAge(isoString: string): string {
@@ -65,6 +66,7 @@ export function InboxOverlay() {
   function handleRoute(routedTo: string) {
     if (!selected) return
     routeCapture(selected.id, routedTo)
+    track('capture_routed', { routed_to: 'existing' })
     setQuery('')
     const remaining = unprocessed.filter((c) => c.id !== selected.id)
     setSelectedId(remaining[0]?.id ?? null)
@@ -74,6 +76,7 @@ export function InboxOverlay() {
   function handleCreate(type: 'focus' | 'habit') {
     if (!selected || !query.trim()) return
     createAndRoute(selected.id, type, query.trim())
+    track('capture_routed', { routed_to: 'new' })
     setQuery('')
     const remaining = unprocessed.filter((c) => c.id !== selected.id)
     setSelectedId(remaining[0]?.id ?? null)
