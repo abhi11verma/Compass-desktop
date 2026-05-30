@@ -1,36 +1,15 @@
 import { useEffect, useState } from 'react'
 
-const DISMISS_KEY = 'compass-install-dismissed'
-const COOLDOWN_MS = 7 * 24 * 60 * 60 * 1000
-
-interface BeforeInstallPromptEvent extends Event {
-  prompt: () => Promise<void>
-  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>
-}
-
-function checkIsIOS(): boolean {
-  return /iphone|ipad|ipod/i.test(navigator.userAgent)
-}
-
-function checkIsStandalone(): boolean {
-  if (window.matchMedia('(display-mode: standalone)').matches) return true
-  const nav = navigator as Navigator & { standalone?: boolean }
-  return nav.standalone === true
-}
-
-function wasDismissedRecently(): boolean {
-  try {
-    const ts = localStorage.getItem(DISMISS_KEY)
-    if (!ts) return false
-    return Date.now() - Number(ts) < COOLDOWN_MS
-  } catch {
-    return false
-  }
-}
-
-function saveDismiss() {
-  try { localStorage.setItem(DISMISS_KEY, String(Date.now())) } catch { /* ignore */ }
-}
+import { usePwaInstall } from '@/hooks/usePwaInstall'
+import {
+  type BeforeInstallPromptEvent,
+  checkIsIOS,
+  checkIsStandalone,
+  saveDismiss,
+  setDeferredPrompt,
+  setShowIOS,
+  wasDismissedRecently,
+} from '@/lib/pwaInstall'
 
 function ShareIcon() {
   return (
@@ -50,9 +29,40 @@ function AddIcon() {
   )
 }
 
+export function IOSInstallSheet({ onDismiss }: { onDismiss: () => void }) {
+  return (
+    <div className="pwa-ios-backdrop" onClick={onDismiss}>
+      <div className="pwa-ios-sheet" onClick={(e) => { e.stopPropagation() }}>
+        <div className="pwa-ios-handle" />
+        <div className="pwa-ios-title">Install Compass</div>
+        <div className="pwa-ios-subtitle">
+          Add to your home screen for the full app experience — no App Store needed.
+        </div>
+        <div className="pwa-ios-steps">
+          <div className="pwa-ios-step">
+            <div className="pwa-ios-step-icon"><ShareIcon /></div>
+            <div className="pwa-ios-step-text">
+              <span className="pwa-ios-step-num">1</span>
+              Tap the <strong>Share</strong> button in Safari's toolbar
+            </div>
+          </div>
+          <div className="pwa-ios-step">
+            <div className="pwa-ios-step-icon"><AddIcon /></div>
+            <div className="pwa-ios-step-text">
+              <span className="pwa-ios-step-num">2</span>
+              Tap <strong>Add to Home Screen</strong>
+            </div>
+          </div>
+        </div>
+        <button className="pwa-ios-dismiss" onClick={onDismiss}>Maybe later</button>
+      </div>
+    </div>
+  )
+}
+
 export function PwaInstallPrompt() {
-  const [androidPrompt, setAndroidPrompt] = useState<BeforeInstallPromptEvent | null>(null)
-  const [showIOS, setShowIOS] = useState(false)
+  const { deferredPrompt, showIOS } = usePwaInstall()
+  const [autoBanner, setAutoBanner] = useState(false)
 
   useEffect(() => {
     if (checkIsStandalone() || wasDismissedRecently()) return
@@ -64,7 +74,8 @@ export function PwaInstallPrompt() {
 
     function onBeforeInstallPrompt(e: Event) {
       e.preventDefault()
-      setAndroidPrompt(e as BeforeInstallPromptEvent)
+      setDeferredPrompt(e as BeforeInstallPromptEvent)
+      setAutoBanner(true)
     }
     window.addEventListener('beforeinstallprompt', onBeforeInstallPrompt)
     return () => { window.removeEventListener('beforeinstallprompt', onBeforeInstallPrompt) }
@@ -72,18 +83,18 @@ export function PwaInstallPrompt() {
 
   function dismiss() {
     saveDismiss()
-    setAndroidPrompt(null)
+    setAutoBanner(false)
     setShowIOS(false)
   }
 
-  if (androidPrompt) {
+  if (autoBanner && deferredPrompt) {
     return (
       <div className="pwa-update-prompt">
         <span>Install Compass on your device.</span>
         <div className="pwa-update-actions">
           <button
             className="pwa-update-btn pwa-update-btn--primary"
-            onClick={() => { void androidPrompt.prompt(); dismiss() }}
+            onClick={() => { void deferredPrompt.prompt(); setDeferredPrompt(null); dismiss() }}
           >
             Install
           </button>
@@ -96,34 +107,7 @@ export function PwaInstallPrompt() {
   }
 
   if (showIOS) {
-    return (
-      <div className="pwa-ios-backdrop" onClick={dismiss}>
-        <div className="pwa-ios-sheet" onClick={(e) => { e.stopPropagation() }}>
-          <div className="pwa-ios-handle" />
-          <div className="pwa-ios-title">Install Compass</div>
-          <div className="pwa-ios-subtitle">
-            Add to your home screen for the full app experience — no App Store needed.
-          </div>
-          <div className="pwa-ios-steps">
-            <div className="pwa-ios-step">
-              <div className="pwa-ios-step-icon"><ShareIcon /></div>
-              <div className="pwa-ios-step-text">
-                <span className="pwa-ios-step-num">1</span>
-                Tap the <strong>Share</strong> button in Safari's toolbar
-              </div>
-            </div>
-            <div className="pwa-ios-step">
-              <div className="pwa-ios-step-icon"><AddIcon /></div>
-              <div className="pwa-ios-step-text">
-                <span className="pwa-ios-step-num">2</span>
-                Tap <strong>Add to Home Screen</strong>
-              </div>
-            </div>
-          </div>
-          <button className="pwa-ios-dismiss" onClick={dismiss}>Maybe later</button>
-        </div>
-      </div>
-    )
+    return <IOSInstallSheet onDismiss={dismiss} />
   }
 
   return null

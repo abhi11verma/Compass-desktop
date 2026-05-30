@@ -90,3 +90,11 @@
 
 html.light .theme-opt.active { background: rgba(0,0,0,0.04); }
 html.light .settings-overlay { box-shadow: 0 8px 32px rgba(0,0,0,0.12); }
+
+.settings-install-btn {
+  font-size: 13.8px; font-family: var(--sans);
+  background: var(--accent-dim); border: 1px solid rgba(76,110,245,0.3);
+  border-radius: 6px; padding: 5px 14px; cursor: pointer;
+  color: var(--accent); transition: opacity 0.15s; flex-shrink: 0;
+}
+.settings-install-btn:hover { opacity: 0.75; }
