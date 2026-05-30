@@ -1,6 +1,6 @@
 [package]
 name = "app"
-version = "0.4.1"
+version = "0.4.2"
 description = "A personal life-navigation app — track your values, focuses, habits, and principles."
 authors = ["Abhishek Verma"]
 license = "MIT"

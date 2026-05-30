@@ -2,7 +2,7 @@
   "name": "compass-web",
   "description": "A personal life-navigation app — track your values, focuses, habits, and principles across three views: Now, What, and Who.",
   "private": true,
-  "version": "0.4.1",
+  "version": "0.4.2",
   "type": "module",
   "scripts": {
     "dev": "vite",
