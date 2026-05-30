@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 
 import { useNow } from '@/hooks/useNow'
+import { track } from '@/lib/analytics'
 import { isHabitDone, useCompassStore } from '@/store/useCompassStore'
 
 const DONE_LINGER_MS = 500  // checkmark visible before animation starts
@@ -62,6 +63,7 @@ export function RightTray() {
     if (!habit || isHabitDone(habit, now) || dismissing.has(id)) return
 
     toggleHabit(id)
+    track('habit_checked')
 
     setDismissing((prev) => new Set([...prev, id]))
 

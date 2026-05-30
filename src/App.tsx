@@ -12,6 +12,7 @@ import { HabitDetailOverlay } from '@/components/overlays/HabitDetailOverlay'
 import { InboxOverlay } from '@/components/overlays/InboxOverlay'
 import { PrincipleDetailOverlay } from '@/components/overlays/PrincipleDetailOverlay'
 import { ValueDetailOverlay } from '@/components/overlays/ValueDetailOverlay'
+import { PwaInstallPrompt } from '@/components/PwaInstallPrompt'
 import { PwaUpdatePrompt } from '@/components/PwaUpdatePrompt'
 import { useBackHandler } from '@/hooks/useBackHandler'
 import { useDailyReset } from '@/hooks/useDailyReset'
@@ -45,6 +46,7 @@ export function App() {
       <CaptureFab />
       <SearchFab />
       <PwaUpdatePrompt />
+      <PwaInstallPrompt />
     </div>
   )
 }

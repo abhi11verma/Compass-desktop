@@ -12,6 +12,14 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;1,300&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-BZM9YNEVCR"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-BZM9YNEVCR');
+  </script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -810,7 +818,7 @@
           <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
         </svg>
       </button>
-      <a href="/Compass-desktop/app/" target="_blank" rel="noopener" class="nav-cta">Open App →</a>
+      <a href="/Compass-desktop/app/" target="_blank" rel="noopener" class="nav-cta" data-track="open_app_nav">Open App →</a>
     </div>
   </nav>
 
@@ -836,7 +844,7 @@
       <p class="hero-sub">
         A personal dashboard that shows what matters and hides everything else.
       </p>
-      <a href="/Compass-desktop/app/" target="_blank" rel="noopener" class="hero-cta">Try now →</a>
+      <a href="/Compass-desktop/app/" target="_blank" rel="noopener" class="hero-cta" data-track="hero_try_now">Try now →</a>
 
       <!-- SCREENSHOT -->
       <div class="screenshot-wrap">
@@ -991,13 +999,13 @@
       <div class="download-inner">
 
         <div class="download-actions">
-          <a href="https://github.com/abhi11verma/Compass-desktop/releases/latest" target="_blank" rel="noopener" class="download-btn">
+          <a href="https://github.com/abhi11verma/Compass-desktop/releases/latest" target="_blank" rel="noopener" class="download-btn" data-track="download_desktop">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
               <path d="M8 1v9M4.5 6.5 8 10l3.5-3.5M2 13h12" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
             Download for desktop
           </a>
-          <a href="/Compass-desktop/app/" target="_blank" rel="noopener" class="browser-btn">
+          <a href="/Compass-desktop/app/" target="_blank" rel="noopener" class="browser-btn" data-track="try_in_browser">
             <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
               <circle cx="7.5" cy="7.5" r="6.5" stroke="currentColor" stroke-width="1.2"/>
               <path d="M7.5 1C7.5 1 5 4 5 7.5s2.5 6.5 2.5 6.5M7.5 1C7.5 1 10 4 10 7.5S7.5 14 7.5 14M1 7.5h13" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
@@ -1050,7 +1058,7 @@
     </p>
     <div class="footer-links">
       <a href="https://github.com/abhi11verma/Compass-desktop" target="_blank" rel="noopener" class="footer-link">GitHub</a>
-      <a href="/Compass-desktop/app/" target="_blank" rel="noopener" class="footer-link">Open app →</a>
+      <a href="/Compass-desktop/app/" target="_blank" rel="noopener" class="footer-link" data-track="open_app_footer">Open app →</a>
     </div>
   </footer>
 
@@ -1071,8 +1079,31 @@
     setTheme(localStorage.getItem('lp-theme') === 'light')
 
     toggle.addEventListener('click', () => {
-      setTheme(!html.classList.contains('light'))
+      const isLight = !html.classList.contains('light')
+      setTheme(isLight)
+      gtag('event', 'theme_toggle', { theme: isLight ? 'light' : 'dark' })
     })
+
+    // CTA click tracking
+    document.querySelectorAll('[data-track]').forEach(function(el) {
+      el.addEventListener('click', function() {
+        gtag('event', 'cta_click', { label: el.getAttribute('data-track') })
+      })
+    })
+
+    // Scroll depth tracking (25 / 50 / 75 / 100%)
+    var scrollMilestones = { 25: false, 50: false, 75: false, 100: false }
+    window.addEventListener('scroll', function() {
+      var scrolled = window.scrollY + window.innerHeight
+      var total = document.documentElement.scrollHeight
+      var pct = Math.round((scrolled / total) * 100)
+      Object.keys(scrollMilestones).forEach(function(milestone) {
+        if (!scrollMilestones[milestone] && pct >= milestone) {
+          scrollMilestones[milestone] = true
+          gtag('event', 'scroll_depth', { percent: Number(milestone) })
+        }
+      })
+    }, { passive: true })
   </script>
 </body>
 </html>

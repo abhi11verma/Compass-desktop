@@ -1,3 +1,4 @@
+import { track } from '@/lib/analytics'
 import { useCompassStore } from '@/store/useCompassStore'
 
 export function BottomTabBar() {
@@ -9,7 +10,7 @@ export function BottomTabBar() {
         <button
           key={v}
           className={`bottom-tab${view === v ? ' active' : ''}`}
-          onClick={() => { setView(v) }}
+          onClick={() => { setView(v); track('view_change', { view: v }) }}
         >
           {v.charAt(0).toUpperCase() + v.slice(1)}
         </button>

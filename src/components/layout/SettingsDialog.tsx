@@ -1,5 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 
+import { IOSInstallSheet } from '@/components/PwaInstallPrompt'
+import { usePwaInstall } from '@/hooks/usePwaInstall'
+import { setDeferredPrompt, setShowIOS } from '@/lib/pwaInstall'
 import { useCompassStore } from '@/store/useCompassStore'
 import { useThemeStore } from '@/store/useThemeStore'
 
@@ -9,11 +12,14 @@ interface SettingsDialogProps {
 }
 
 export function SettingsDialog({ open, onClose }: SettingsDialogProps) {
-  const { theme, setTheme } = useThemeStore()
+  const { theme, setTheme, analyticsEnabled, setAnalyticsEnabled } = useThemeStore()
   const { resetCompass, clearData } = useCompassStore()
+  const { deferredPrompt, showIOS, isIOS, isInstalled } = usePwaInstall()
   const overlayRef = useRef<HTMLDivElement>(null)
   const [confirmReset, setConfirmReset] = useState(false)
   const [confirmClear, setConfirmClear] = useState(false)
+
+  const showInstallSection = !isInstalled && (isIOS || deferredPrompt !== null)
 
   useEffect(() => {
     if (!open) return
@@ -49,14 +55,15 @@ export function SettingsDialog({ open, onClose }: SettingsDialogProps) {
   }
 
   return (
-    <div
-      ref={overlayRef}
-      className={`settings-overlay-bg${open ? ' open' : ''}`}
-      onClick={handleBackdropClick}
-      aria-modal="true"
-      role="dialog"
-      aria-label="Settings"
-    >
+    <>
+      <div
+        ref={overlayRef}
+        className={`settings-overlay-bg${open ? ' open' : ''}`}
+        onClick={handleBackdropClick}
+        aria-modal="true"
+        role="dialog"
+        aria-label="Settings"
+      >
       <div className="settings-overlay">
         <div className="settings-hd">
           <span className="settings-title">Settings</span>
@@ -121,6 +128,62 @@ export function SettingsDialog({ open, onClose }: SettingsDialogProps) {
           <div className="settings-sep" />
         </div>
 
+        {showInstallSection && (
+          <>
+            <div className="settings-section-lbl">Install</div>
+            <div className="settings-row settings-row-install">
+              <div className="settings-install-icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                  <path d="M9 2v9M5.5 7.5 9 11l3.5-3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M2 13v1.5A1.5 1.5 0 003.5 16h11a1.5 1.5 0 001.5-1.5V13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                </svg>
+              </div>
+              <div>
+                <div className="settings-row-label">
+                  {isIOS ? 'Install on iPhone / iPad' : 'Install App'}
+                </div>
+                <div className="settings-row-sub">
+                  {isIOS
+                    ? 'Add to your home screen via Safari'
+                    : 'Add Compass to your home screen or desktop'}
+                </div>
+              </div>
+              <button
+                className="settings-install-btn"
+                onClick={() => {
+                  if (isIOS) {
+                    setShowIOS(true)
+                  } else if (deferredPrompt) {
+                    void deferredPrompt.prompt()
+                    setDeferredPrompt(null)
+                  }
+                }}
+              >
+                Install
+              </button>
+            </div>
+            <div className="settings-sep" />
+          </>
+        )}
+
+        <div className="settings-section-lbl">Privacy</div>
+        <div className="settings-row">
+          <div>
+            <div className="settings-row-label">Share analytics</div>
+            <div className="settings-row-sub">Helps us improve Compass. No personal data is collected or shared.</div>
+          </div>
+          <label className="settings-toggle" aria-label="Share analytics">
+            <input
+              type="checkbox"
+              checked={analyticsEnabled}
+              onChange={(e) => { setAnalyticsEnabled(e.target.checked) }}
+            />
+            <span className="settings-toggle-track" />
+          </label>
+        </div>
+
+        <div className="settings-sep" />
+
         <div className="settings-section-lbl">Data</div>
         <div className="settings-row settings-row-danger">
           <div>
@@ -157,6 +220,8 @@ export function SettingsDialog({ open, onClose }: SettingsDialogProps) {
           )}
         </div>
       </div>
-    </div>
+      </div>
+      {showIOS && <IOSInstallSheet onDismiss={() => { setShowIOS(false) }} />}
+    </>
   )
 }

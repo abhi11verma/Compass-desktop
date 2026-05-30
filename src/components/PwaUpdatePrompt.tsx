@@ -1,12 +1,12 @@
-import { useRegisterSW } from "virtual:pwa-register/react";
+import { useRegisterSW } from "virtual:pwa-register/react"
 
 export function PwaUpdatePrompt() {
   const {
     needRefresh: [needRefresh, setNeedRefresh],
     updateServiceWorker,
-  } = useRegisterSW();
+  } = useRegisterSW()
 
-  if (!needRefresh) return null;
+  if (!needRefresh) return null
 
   return (
     <div className="pwa-update-prompt">
@@ -26,5 +26,5 @@ export function PwaUpdatePrompt() {
         </button>
       </div>
     </div>
-  );
+  )
 }
