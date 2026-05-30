@@ -115,6 +115,9 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      ...(isTauri
+        ? { "virtual:pwa-register/react": path.resolve(__dirname, "./src/lib/pwa-register-stub.ts") }
+        : {}),
     },
   },
   clearScreen: false,

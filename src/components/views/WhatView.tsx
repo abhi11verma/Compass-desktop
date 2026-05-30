@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react'
 
+import { track } from '@/lib/analytics'
 import { useCompassStore, type Focus, type Habit } from '@/store/useCompassStore'
 
 const DOT_COLOR: Record<Focus['color'], string> = {
@@ -20,6 +21,7 @@ function AddFocusForm({ onClose }: { onClose: () => void }) {
     const trimmed = name.trim()
     if (!trimmed) return
     addFocus(trimmed, process.trim())
+    track('focus_added')
     onClose()
   }
 
@@ -62,6 +64,7 @@ function AddHabitForm({ onClose }: { onClose: () => void }) {
     const trimmed = name.trim()
     if (!trimmed) return
     addHabit(trimmed)
+    track('habit_added')
     onClose()
   }
 

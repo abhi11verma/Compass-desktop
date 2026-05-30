@@ -1,3 +1,4 @@
+import { track } from '@/lib/analytics'
 import { useCompassStore } from '@/store/useCompassStore'
 
 export function CaptureFab() {
@@ -18,7 +19,7 @@ export function CaptureFab() {
   return (
     <button
       className="capture-fab"
-      onClick={() => { setCaptureOpen(true) }}
+      onClick={() => { setCaptureOpen(true); track('capture_opened') }}
       aria-label="Capture"
     >
       <svg width="18" height="18" viewBox="0 0 10 10" fill="none" aria-hidden="true">
