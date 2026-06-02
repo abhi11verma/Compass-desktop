@@ -101,7 +101,7 @@ export function Topbar() {
         {unrouted > 0 && (
           <button className="inbox-pill" onClick={() => { setInboxOpen(true) }}>
             <div className="inbox-dot">{unrouted}</div>
-            <span>to route</span>
+            <span>inbox</span>
           </button>
         )}
         <button className="cap-btn" onClick={() => { setCaptureOpen(true) }}>

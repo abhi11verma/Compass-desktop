@@ -98,7 +98,7 @@ export function InboxOverlay() {
           </div>
           <div className="ibx-items">
             {unprocessed.length === 0 ? (
-              <div className="ibx-empty">All clear · nothing to route</div>
+              <div className="ibx-empty">All clear · inbox empty</div>
             ) : (
               unprocessed.map((c) => (
                 <button
@@ -119,11 +119,12 @@ export function InboxOverlay() {
           {selected ? (
             <>
               <div className="ibx-pane-hd">
-                <span>Route</span>
+                <span>Organize</span>
               </div>
               <div className="ibx-cap-preview">{selected.text}</div>
               <div className="ibx-sep" />
               <div className="ibx-search-lbl">Tag to focus or habit</div>
+              <div className="ibx-search-hint">Pick from the list or type to create new</div>
               <div className="ibx-search-wrap">
                 <svg className="ibx-search-icon" width="11" height="11" viewBox="0 0 11 11" fill="none" aria-hidden="true">
                   <circle cx="4.5" cy="4.5" r="3.5" stroke="currentColor" strokeWidth="1.2"/>
@@ -209,10 +210,10 @@ export function InboxOverlay() {
               {unprocessed.length === 0 ? (
                 <>
                   <div className="ibx-done-icon">✓</div>
-                  <div>Nothing left to route</div>
+                  <div>Inbox clear</div>
                 </>
               ) : (
-                <div>Select a capture to route it</div>
+                <div>Select an item to organize it</div>
               )}
             </div>
           )}

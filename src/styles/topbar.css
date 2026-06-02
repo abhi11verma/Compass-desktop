@@ -87,14 +87,16 @@ html.light .topbar-search-kbd { background: rgba(0,0,0,0.04); }
   display: flex; align-items: center; justify-content: center;
 }
 .cap-btn {
-  display: flex; align-items: center; gap: 4px;
-  font-size: 14.4px; color: var(--ink-3);
-  background: transparent; border: none;
-  padding: 0 4px; cursor: pointer;
+  display: flex; align-items: center; gap: 5px;
+  font-size: 13.8px; color: var(--ink-2);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 3px 9px; cursor: pointer;
   font-family: var(--mono);
-  transition: color 0.1s; letter-spacing: 0.04em;
+  transition: color 0.1s, border-color 0.1s; letter-spacing: 0.04em;
 }
-.cap-btn:hover { color: var(--ink-2); }
+.cap-btn:hover { color: var(--ink-1); border-color: var(--ink-4); }
 .cap-kbd {
   font-size: 11.9px; color: var(--ink-4);
   background: rgba(255,255,255,0.05);

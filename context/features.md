@@ -166,7 +166,7 @@ Open-surface design — no visible input chrome; the whole card feels like one e
 ### Capture Inbox (`src/components/overlays/InboxOverlay.tsx`)
 Two-pane overlay for reviewing and routing unprocessed captures.
 
-- **Open**: clicking the "to route" pill in the Topbar (visible when `captures.filter(!processed).length > 0`).
+- **Open**: clicking the "inbox" pill in the Topbar (visible when `captures.filter(!processed).length > 0`).
 - **Close**: Escape key · clicking backdrop.
 - **Left pane**: scrollable list of all unprocessed (`processed === false`) captures. Each row shows age + text. Clicking selects it.
 - **Right pane**: shown when a capture is selected.
